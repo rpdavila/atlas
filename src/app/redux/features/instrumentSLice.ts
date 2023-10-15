@@ -5,9 +5,7 @@ import {
   RentStatus,
   OnlyStudentData,
   basicInstrumentData,
-  StudentInfo,
 } from "@/app/types/formTypes";
-import { ACTION_REFRESH } from "next/dist/client/components/router-reducer/router-reducer-types";
 
 type InstrumentState = {
   instrumentList: basicInstrumentData[];
@@ -21,11 +19,7 @@ const initialState: InstrumentState = {
     brand: "",
     serialNumber: "",
     rentStatus: RentStatus.Available,
-    assignedTo: {
-      firstName: "",
-      lastName: "",
-      studentIdNumber: "",
-    },
+    assignedTo: null,
   },
   instrumentList: [],
 };
