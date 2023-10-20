@@ -1,10 +1,13 @@
+import React from "react";
 import "./globals.css";
 import type { Metadata } from "next";
+
 import { Inter } from "next/font/google";
 import { Providers } from "@/app/redux/provider";
 
 import Header from "./components/header/header";
 import SideBar from "./components/sideBar/sideBar";
+
 
 const inter = Inter({ subsets: ["latin"] });
 

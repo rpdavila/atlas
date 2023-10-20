@@ -2,7 +2,7 @@ import React from "react";
 
 type ButtonProps = {
   name: string;
-  type: "submit" | "reset" | "button" | undefined;
+  type: "submit" | "reset" | "button";
   width: string;
 };
 

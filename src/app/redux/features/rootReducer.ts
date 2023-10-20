@@ -2,11 +2,13 @@
 import { combineReducers } from "@reduxjs/toolkit";
 
 import searchOptionsSlice from "../features/searchOptionsSlice";
-import toolsSlice from "./toolsSlice";
+import studentListSlice from "./studentListSlice";
+import instrumentDetailsSlice from "./instrumentSLice";
+
 const rootReducer = combineReducers({
   searchOptions: searchOptionsSlice,
-  tools:  toolsSlice
-})
+  students: studentListSlice,
+  instruments: instrumentDetailsSlice,
+});
 
 export default rootReducer;
-

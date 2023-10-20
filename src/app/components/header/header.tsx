@@ -1,7 +1,6 @@
 "use client";
-import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 import { navList } from "@/app/data/nav-List";
 import Button from "../button/button";

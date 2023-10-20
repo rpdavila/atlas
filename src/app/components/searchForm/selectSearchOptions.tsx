@@ -1,8 +1,11 @@
 "use client";
 //react imports
 import React from "react";
+import { useRouter } from "next/navigation";
+
 // redux imports
 import { useAppSelector, useAppDispatch } from "../../redux/hooks";
+import { RootState } from "@/app/redux/store";
 import {
   setStudentSearch,
   setInstrumentSearch,
@@ -11,7 +14,6 @@ import {
 } from "@/app/redux/features/searchOptionsSlice";
 //component imports
 import CheckBox from "../input/custumInputCheckbox";
-import { RootState } from "@/app/redux/store";
 
 type SearchOptionProps = {
   children: React.ReactNode;
@@ -19,7 +21,8 @@ type SearchOptionProps = {
 
 export default function SelectSearchOptions({ children }: SearchOptionProps) {
   const dispatch = useAppDispatch();
-  
+  const router = useRouter();
+
   const selectInstrumentOption = useAppSelector(
     (state: RootState) => state.searchOptions.searchInstrument
   );
@@ -35,10 +38,12 @@ export default function SelectSearchOptions({ children }: SearchOptionProps) {
 
   const handleChangeStudent = () => {
     dispatch(setStudentSearch(!selectStudentOption));
+    router.push("/search");
   };
 
   const handleChangeInstrument = () => {
     dispatch(setInstrumentSearch(!selectInstrumentOption));
+    router.push("/search");
   };
 
   const handleChangeAddStudent = () => {

@@ -9,9 +9,10 @@ import { InstrumentDetails, RentStatus } from "@/app/types/formTypes";
 
 type InstrumentFormProps = {
   formTitle: string;
+  buttonText: string;
 };
 
-export default function InstrumentForm({ formTitle }: InstrumentFormProps) {
+export default function InstrumentForm({ formTitle, buttonText }: InstrumentFormProps) {
   const [instrumentDetails, setInstrumentDetails] = useState<InstrumentDetails>(
     {
       id: 1,
@@ -65,7 +66,7 @@ export default function InstrumentForm({ formTitle }: InstrumentFormProps) {
         options={RentStatus}
         onChange={handleChange}
       />
-      <Button type="submit" width="60" name="submit" />
+      <Button type="submit" width="60" name={buttonText} />
     </div>
   );
 }

@@ -1,3 +1,4 @@
+import { StudentInfo } from "@/app/types/formTypes";
 import React, { ChangeEventHandler } from "react";
 
 type TextProps = {
@@ -6,7 +7,7 @@ type TextProps = {
   labelName: string;
   placeHolder: string;
   onChange: ChangeEventHandler<HTMLInputElement>;
-  value: string;
+  value: string | number;
 };
 
 export default function TextInput({

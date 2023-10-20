@@ -1,44 +1,45 @@
 "use client";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-  InstrumentDetails,
-  RentStatus,
   OnlyStudentData,
-  basicInstrumentData,
+  InstrumentList,
+  InstrumentDetails,
 } from "@/app/types/formTypes";
 
+import { instrumentDetails } from "@/app/data/instrumentDetails";
+
 type InstrumentState = {
-  instrumentList: basicInstrumentData[];
-  instrumentDetails: InstrumentDetails;
+  instrumentList: InstrumentList;
 };
 
 const initialState: InstrumentState = {
-  instrumentDetails: {
-    id: 0,
-    type: "",
-    brand: "",
-    serialNumber: "",
-    rentStatus: RentStatus.Available,
-    assignedTo: null,
-  },
-  instrumentList: [],
+  instrumentList: instrumentDetails,
 };
 
 export const instrumentDetailsSlice = createSlice({
   name: "instrumentDetails",
   initialState,
   reducers: {
-    setInstrumentDetails: (state, action: PayloadAction<InstrumentDetails>) => {
-      return { ...state, instrumentDetails: action.payload };
-    },
-    setStudentToInstrument: (state, action: PayloadAction<OnlyStudentData>) => {
+    assignToStudent: (state, action: PayloadAction<OnlyStudentData>) => {
       return { ...state, assignedTo: action.payload };
     },
-    addInstrument: (state, action: PayloadAction<basicInstrumentData>) => {
+    addInstrument: (state, action: PayloadAction<InstrumentDetails>) => {
       return {
         ...state,
         instrumentList: [...state.instrumentList, action.payload],
       };
     },
+    searchForType: (state, action: PayloadAction<InstrumentDetails>) => {
+      state.instrumentList.filter((instrument) => {
+        if (instrument.type === action.payload.type) {
+          return instrument;
+        }
+      });
+    },
   },
 });
+
+export const { assignToStudent, addInstrument, searchForType } =
+  instrumentDetailsSlice.actions;
+
+export default instrumentDetailsSlice.reducer;

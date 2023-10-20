@@ -1,38 +1,44 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 
 import { RootState } from "@/app/redux/store";
-import { useAppSelector } from "../../redux/hooks";
+import { useAppSelector, useAppDispatch } from "../../redux/hooks";
+import { addStudent } from "@/app/redux/features/studentListSlice";
 
 import TextInput from "../input/customTextInput";
 import Button from "../button/button";
-import Select from "../input//customSelection";
-
-import { StudentInfo } from "@/app/types/formTypes";
-import { instrumentDetails } from "@/app/data/instrumentDetails";
 
 type StudentFormProps = {
   formTitle: string;
+  buttonText: string;
 };
 
-export default function StudentForm({ formTitle }: StudentFormProps) {
+export default function StudentForm({
+  formTitle,
+  buttonText,
+}: StudentFormProps) {
+  const dispatch = useAppDispatch();
+
+  const selectStudentInfo = useAppSelector(
+    (state: RootState) => state.students.studentInfo
+  );
+  const selectStudentList = useAppSelector(
+    (state: RootState) => state.students.studentList
+  );
   const selectAddStudentOption = useAppSelector(
     (state: RootState) => state.searchOptions.addStudent
   );
-  const [studentInfo, setStudentInfo] = useState<StudentInfo>({
-    id: 1,
-    firstName: "",
-    lastName: "",
-    studentIdNumber: "",
-    instrument: null,
-  });
+
+  const selectSearchStudentOption = useAppSelector(
+    (state: RootState) => state.searchOptions.searchStudent
+  );
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setStudentInfo({ ...studentInfo, [name]: value });
-    // query goes here
-    // convert to redux
+    if (selectAddStudentOption || selectSearchStudentOption) {
+      dispatch(addStudent({ ...selectStudentInfo, [name]: value }));
+    }
   };
 
   return (
@@ -44,7 +50,7 @@ export default function StudentForm({ formTitle }: StudentFormProps) {
         labelName="First Name"
         type="text"
         name="firstName"
-        value={studentInfo.firstName}
+        value={selectStudentInfo.firstName}
         placeHolder="First Name"
         onChange={handleChange}
       />
@@ -52,7 +58,7 @@ export default function StudentForm({ formTitle }: StudentFormProps) {
         type="text"
         labelName="Last Name"
         name="lastName"
-        value={studentInfo.lastName}
+        value={selectStudentInfo.lastName}
         placeHolder="Last Name"
         onChange={handleChange}
       />
@@ -60,12 +66,12 @@ export default function StudentForm({ formTitle }: StudentFormProps) {
         labelName="Student ID Number"
         type="text"
         name="studentIdNumber"
-        value={studentInfo.studentIdNumber}
+        value={selectStudentInfo.studentIdNumber}
         placeHolder="Student Number"
         onChange={handleChange}
       />
 
-      <Button type="submit" width="60" name="submit" />
+      <Button type="submit" width="60" name={buttonText} />
     </div>
   );
 }

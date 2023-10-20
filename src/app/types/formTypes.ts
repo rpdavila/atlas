@@ -7,7 +7,7 @@ export type InstrumentDetails = {
   assignedTo: OnlyStudentData | null;
 };
 
-export type InstrumentList = Array<basicInstrumentData>;
+export type InstrumentList = Array<InstrumentDetails>;
 
 export enum RentStatus {
   Rented = "Rented",
@@ -20,16 +20,11 @@ export type StudentInfo = {
   lastName: string;
   studentIdNumber: string;
   instrument: OnlyInstrumentData | null;
-  studentList: StudentList;
 };
 
 export type StudentList = Array<StudentInfo>;
-export type OnlyStudentData = Omit<
-  StudentInfo,
-  "instrument" | "id" | "studentList"
->;
+export type OnlyStudentData = Omit<StudentInfo, "instrument" | "id">;
 export type OnlyInstrumentData = Omit<
   InstrumentDetails,
   "rentStatus" | "assignedTo" | "id" | "instrumentList"
 >;
-export type basicInstrumentData = Omit<InstrumentDetails, "instrumentList">;
