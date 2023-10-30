@@ -60,25 +60,21 @@ export default function SelectSearchOptions({ children }: SearchOptionProps) {
         <h2 className="underline">Tool Bar:</h2>
         <fieldset>
           <CheckBox
-            type="checkbox"
             labelName="Search Student"
             checked={selectStudentOption}
             onChange={handleChangeStudent}
           />
           <CheckBox
-            type="checkbox"
             labelName="Search Instrument"
             checked={selectInstrumentOption}
             onChange={handleChangeInstrument}
           />
           <CheckBox
-            type="checkbox"
             labelName="Add Student"
             checked={selectAddStudentOption}
             onChange={handleChangeAddStudent}
           />
           <CheckBox
-            type="checkbox"
             labelName="Add Instrument"
             checked={selectAddInstrumentOption}
             onChange={handleCHangeAddInstrument}

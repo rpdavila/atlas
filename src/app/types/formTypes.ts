@@ -28,3 +28,8 @@ export type OnlyInstrumentData = Omit<
   InstrumentDetails,
   "rentStatus" | "assignedTo" | "id" | "instrumentList"
 >;
+
+export type OnlyInstrumentType = Omit<
+  InstrumentDetails,
+  "id" | "brand" | "serialNumber" | "rentStatus" | "assignedTo"
+>;

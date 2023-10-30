@@ -2,31 +2,23 @@
 
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { studentList } from "@/app/data/studentDetails";
-import { StudentList, StudentInfo } from "@/app/types/formTypes";
+import {
+  StudentList,
+  StudentInfo,
+  OnlyInstrumentData,
+} from "@/app/types/formTypes";
 
 type StudentState = {
   studentList: StudentList;
-  studentInfo: StudentInfo;
 };
 const initialState: StudentState = {
   studentList: studentList,
-  studentInfo: {
-    id: 1,
-    firstName: "",
-    lastName: "",
-    studentIdNumber: "",
-    instrument: null,
-  },
 };
 
 export const studentListSlice = createSlice({
   name: "studentList",
   initialState,
   reducers: {
-    addStudent: (state, action: PayloadAction<StudentInfo>) => {
-      return { ...state, studentInfo: action.payload };
-    },
-
     addStudentToList: (state, action: PayloadAction<StudentInfo>) => {
       return {
         ...state,
@@ -34,13 +26,16 @@ export const studentListSlice = createSlice({
       };
     },
 
-    studentInfoReset: (state) => {
-      return { ...state, studentInfo: initialState.studentInfo };
+    assignStudentToInstrument: (
+      state,
+      action: PayloadAction<OnlyInstrumentData>
+    ) => {
+      return { ...state, instrument: action.payload };
     },
   },
 });
 
-export const { addStudent, addStudentToList, studentInfoReset } =
+export const { addStudentToList, assignStudentToInstrument } =
   studentListSlice.actions;
 
 export default studentListSlice.reducer;

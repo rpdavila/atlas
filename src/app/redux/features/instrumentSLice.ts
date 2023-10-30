@@ -1,9 +1,12 @@
 "use client";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { useAppSelector } from "../hooks";
 import {
   OnlyStudentData,
   InstrumentList,
   InstrumentDetails,
+  RentStatus,
+  OnlyInstrumentType,
 } from "@/app/types/formTypes";
 
 import { instrumentDetails } from "@/app/data/instrumentDetails";
@@ -20,26 +23,23 @@ export const instrumentDetailsSlice = createSlice({
   name: "instrumentDetails",
   initialState,
   reducers: {
-    assignToStudent: (state, action: PayloadAction<OnlyStudentData>) => {
+    assignInstrumentToStudent: (
+      state,
+      action: PayloadAction<OnlyStudentData>
+    ) => {
       return { ...state, assignedTo: action.payload };
     },
-    addInstrument: (state, action: PayloadAction<InstrumentDetails>) => {
+
+    addInstrumentToList: (state, action: PayloadAction<InstrumentDetails>) => {
       return {
         ...state,
-        instrumentList: [...state.instrumentList, action.payload],
+        instrumentList: state.instrumentList.concat(action.payload),
       };
-    },
-    searchForType: (state, action: PayloadAction<InstrumentDetails>) => {
-      state.instrumentList.filter((instrument) => {
-        if (instrument.type === action.payload.type) {
-          return instrument;
-        }
-      });
     },
   },
 });
 
-export const { assignToStudent, addInstrument, searchForType } =
+export const { assignInstrumentToStudent, addInstrumentToList } =
   instrumentDetailsSlice.actions;
 
 export default instrumentDetailsSlice.reducer;

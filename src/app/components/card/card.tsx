@@ -1,20 +1,24 @@
 "use client";
-import { useAppDispatch } from "@/app/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 
-import { InstrumentDetails } from "@/app/types/formTypes";
+import {
+  InstrumentDetails,
+  OnlyStudentData,
+  OnlyInstrumentData,
+} from "@/app/types/formTypes";
 import { studentList } from "@/app/data/studentDetails";
 
-
 import Select from "../input/customSelection";
+import CheckBox from "../input/custumInputCheckbox";
 
 type CardProps = {
   instrument: InstrumentDetails;
 };
+
 export default function Card({ instrument }: CardProps) {
   const dispatch = useAppDispatch();
-  const handleSelect = () => {
+  const handleSelect = () => {};
 
-  };
   return (
     <div className="flex flex-row bg-white">
       <div className="flex flex-col justify-center items-center border-white">
@@ -32,7 +36,9 @@ export default function Card({ instrument }: CardProps) {
       ) : (
         <Select
           category="Available Students"
-          options={studentList}
+          options={studentList.map((student) => {
+            return { firstName: student.firstName, lastName: student.lastName };
+          })}
           onChange={handleSelect}
           placeHolder="Available Students"
         />

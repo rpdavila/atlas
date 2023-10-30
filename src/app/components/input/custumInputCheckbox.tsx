@@ -1,22 +1,21 @@
-type RadioProps = {
-  type: string;
+type CheckProps = {
+  
   labelName: string;
-  onChange?: () => void;
+  onChange: () => void;
   checked: boolean;
 };
 
 export default function CheckBox({
-  type,
   labelName,
   checked,
   onChange,
-}: RadioProps): React.JSX.Element {
+}: CheckProps): React.JSX.Element {
   return (
     <>
       <fieldset className="flex flex-row-reverse items-center justify-end">
         <label>{labelName}</label>
         <input
-          type={type}
+          type="checkbox"
           checked={checked}
           onChange={onChange}
           className="mr-2"
