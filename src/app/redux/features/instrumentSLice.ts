@@ -1,22 +1,22 @@
 "use client";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { useAppSelector } from "../hooks";
+
 import {
   OnlyStudentData,
   InstrumentList,
   InstrumentDetails,
-  RentStatus,
-  OnlyInstrumentType,
 } from "@/app/types/formTypes";
 
 import { instrumentDetails } from "@/app/data/instrumentDetails";
 
 type InstrumentState = {
   instrumentList: InstrumentList;
+  instrumentSearch: string;
 };
 
 const initialState: InstrumentState = {
   instrumentList: instrumentDetails,
+  instrumentSearch: "",
 };
 
 export const instrumentDetailsSlice = createSlice({
@@ -36,10 +36,17 @@ export const instrumentDetailsSlice = createSlice({
         instrumentList: state.instrumentList.concat(action.payload),
       };
     },
+
+    clearSearchInstrument: (state) => {
+      return { ...state, result: [] };
+    },
   },
 });
 
-export const { assignInstrumentToStudent, addInstrumentToList } =
-  instrumentDetailsSlice.actions;
+export const {
+  assignInstrumentToStudent,
+  addInstrumentToList,
+  clearSearchInstrument,
+} = instrumentDetailsSlice.actions;
 
 export default instrumentDetailsSlice.reducer;

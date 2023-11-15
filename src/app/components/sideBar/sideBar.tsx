@@ -7,39 +7,24 @@ import InstrumentForm from "../forms/instrumentForm";
 import React from "react";
 
 export default function SideBar() {
-
-  const selectStudentOption = useAppSelector(
-    (state) => state.searchOptions.searchStudent
-  );
-
-  const selectInstrumentOption = useAppSelector(
-    (state) => state.searchOptions.searchInstrument
-  );
-
-  const selectAddStudentOption = useAppSelector(
-    (state) => state.searchOptions.addStudent
-  );
-
-  const selectAddInstrumentOption = useAppSelector(
-    (state) => state.searchOptions.addInstrument
-  );
+  const selectOption = useAppSelector((state) => state.searchOptions.type);
 
   return (
     <aside className="flex flex-col basis-1/4 items-center bg-slate-700 mt-2 rounded-lg">
       <SelectSearchOptions>
-        {selectStudentOption && (
+        {selectOption === "Search Student" && (
           <StudentForm formTitle="Search Student" buttonText="Search Student" />
         )}
-        {selectInstrumentOption && (
+        {selectOption === "Search Instrument" && (
           <InstrumentForm
             formTitle="Search Instrument"
             buttonText="Search Instrument"
           />
         )}
-        {selectAddStudentOption && (
+        {selectOption === "Add Student" && (
           <StudentForm formTitle="Add Student" buttonText="Add Student" />
         )}
-        {selectAddInstrumentOption && (
+        {selectOption === "Add Instrument" && (
           <InstrumentForm
             formTitle="Add Instrument"
             buttonText="Add Instrument"

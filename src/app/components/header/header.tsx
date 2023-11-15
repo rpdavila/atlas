@@ -28,7 +28,7 @@ export default function Header() {
               </li>
             );
           })}
-          <Button type="button" width="auto" name="Sign In" />
+          {/* <Button type="button" width="auto" name="Sign In" /> */}
         </ul>
       </nav>
     </header>

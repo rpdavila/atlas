@@ -2,12 +2,13 @@
 
 import React, { useState } from "react";
 
-import { useAppDispatch } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { addStudentToList } from "@/app/redux/features/studentListSlice";
 
 import TextInput from "../input/customTextInput";
 import Button from "../button/button";
 import { StudentInfo } from "@/app/types/formTypes";
+import { setSearch } from "@/app/redux/features/searchOptionsSlice";
 
 type StudentFormProps = {
   formTitle: string;
@@ -19,6 +20,9 @@ export default function StudentForm({
   buttonText,
 }: StudentFormProps) {
   const dispatch = useAppDispatch();
+  const selectOption = useAppSelector((state) => state.searchOptions.type);
+  const searchResult = useAppSelector((state) => state.searchOptions.search);
+  const studentlist = useAppSelector((state) => state.students.studentList);
 
   const initialState: StudentInfo = {
     id: 1,
@@ -32,10 +36,12 @@ export default function StudentForm({
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setStudentInfo({ ...studentInfo, [name]: value });
+    selectOption === "Search Student"
+      ? dispatch(setSearch(value))
+      : setStudentInfo({ ...studentInfo, [name]: value });
   };
 
-  const handleClick = () => {
+  const handleAddStudent = () => {
     dispatch(addStudentToList(studentInfo));
     alert("Student Added");
   };
@@ -45,37 +51,53 @@ export default function StudentForm({
       <h1 className="bg-blue-500 rounded-t-lg w-full self-center text-white text-center">
         {formTitle}
       </h1>
-      <TextInput
-        labelName="First Name"
-        type="text"
-        name="firstName"
-        value={studentInfo.firstName}
-        placeHolder="First Name"
-        onChange={handleChange}
-      />
-      <TextInput
-        type="text"
-        labelName="Last Name"
-        name="lastName"
-        value={studentInfo.lastName}
-        placeHolder="Last Name"
-        onChange={handleChange}
-      />
-      <TextInput
-        labelName="Student ID Number"
-        type="text"
-        name="studentIdNumber"
-        value={studentInfo.studentIdNumber}
-        placeHolder="Student ID Number"
-        onChange={handleChange}
-      />
+      {selectOption === "Search Student" && (
+        <div>
+          <TextInput
+            labelName="Search"
+            type="text"
+            name="search"
+            value={searchResult}
+            placeHolder="Search Instrument"
+            onChange={handleChange}
+          />
+        </div>
+      )}
+      {selectOption === "Add Student" && (
+        <div>
+          <TextInput
+            labelName="First Name"
+            type="text"
+            name="firstName"
+            value={studentInfo.firstName}
+            placeHolder="First Name"
+            onChange={handleChange}
+          />
+          <TextInput
+            type="text"
+            labelName="Last Name"
+            name="lastName"
+            value={studentInfo.lastName}
+            placeHolder="Last Name"
+            onChange={handleChange}
+          />
+          <TextInput
+            labelName="Student ID Number"
+            type="text"
+            name="studentIdNumber"
+            value={studentInfo.studentIdNumber}
+            placeHolder="Student ID Number"
+            onChange={handleChange}
+          />
 
-      <Button
-        type="submit"
-        width="60"
-        name={buttonText}
-        onClick={handleClick}
-      />
+          <Button
+            type="submit"
+            width="60"
+            name={buttonText}
+            onClick={handleAddStudent}
+          />
+        </div>
+      )}
     </div>
   );
 }

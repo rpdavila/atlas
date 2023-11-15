@@ -2,50 +2,29 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type SearchOptionsState = {
-  searchStudent: boolean;
-  searchInstrument: boolean;
-  addStudent: boolean;
-  addInstrument: boolean;
-  assignInstrumentToStudent: boolean;
+  type: string;
+  search: string;
 };
 
 const initialState: SearchOptionsState = {
-  searchStudent: false,
-  searchInstrument: false,
-  addStudent: false,
-  addInstrument: false,
-  assignInstrumentToStudent: false,
+  type: "",
+  search: "",
 };
 
 export const searchOptionsSlice = createSlice({
   name: "searchOptions",
   initialState,
   reducers: {
-    setStudentSearch: (state, action: PayloadAction<boolean>) => {
-      return { ...state, searchStudent: action.payload };
-    },
-    setInstrumentSearch: (state, action: PayloadAction<boolean>) => {
-      return { ...state, searchInstrument: action.payload };
-    },
-    setStudent: (state, action: PayloadAction<boolean>) => {
-      return { ...state, addStudent: action.payload };
-    },
-    setInstrument: (state, action: PayloadAction<boolean>) => {
-      return { ...state, addInstrument: action.payload };
+    setType: (state, action: PayloadAction<string>) => {
+      return { ...state, type: action.payload };
     },
 
-    assignInstrumentToStudent: (state, action: PayloadAction<boolean>) => {
-      return { ...state, assignInstrumentToStudent: action.payload };
+    setSearch: (state, action: PayloadAction<string>) => {
+      return { ...state, search: action.payload };
     },
   },
 });
 
-export const {
-  setStudentSearch,
-  setInstrumentSearch,
-  setStudent,
-  setInstrument,
-  assignInstrumentToStudent
-} = searchOptionsSlice.actions;
+export const { setType, setSearch } = searchOptionsSlice.actions;
 
 export default searchOptionsSlice.reducer;

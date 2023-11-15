@@ -1,3 +1,4 @@
+import { StudentInfo } from "@/app/types/formTypes";
 import React from "react";
 
 type ButtonProps = {
@@ -11,7 +12,7 @@ export default function Button({
   name,
   type,
   width,
-  onClick
+  onClick,
 }: ButtonProps): React.JSX.Element {
   return (
     <button

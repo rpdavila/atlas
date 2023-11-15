@@ -1,24 +1,30 @@
 type CheckProps = {
-  
   labelName: string;
-  onChange: () => void;
   checked: boolean;
+  disabled?: boolean;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 export default function CheckBox({
   labelName,
+  disabled,
+  value,
   checked,
   onChange,
 }: CheckProps): React.JSX.Element {
   return (
     <>
       <fieldset className="flex flex-row-reverse items-center justify-end">
-        <label>{labelName}</label>
+        <label htmlFor={labelName}>{labelName}</label>
         <input
-          type="checkbox"
+          type="radio"
+          className="mr-2"
+          disabled={disabled}
+          value={value}
           checked={checked}
           onChange={onChange}
-          className="mr-2"
+          id={labelName}
         />
       </fieldset>
     </>

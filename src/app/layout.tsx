@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import "./globals.css";
 import type { Metadata } from "next";
 
@@ -7,7 +7,6 @@ import { Providers } from "@/app/redux/provider";
 
 import Header from "./components/header/header";
 import SideBar from "./components/sideBar/sideBar";
-
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,7 +27,7 @@ export default function RootLayout({
           <Header />
           <div className="flex flex-row gap-2 bg-slate-700">
             <SideBar />
-            {children}
+            <Suspense fallback={<p>Loading Page...</p>}>{children}</Suspense>
           </div>
         </Providers>
       </body>
