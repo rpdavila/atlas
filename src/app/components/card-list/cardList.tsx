@@ -1,6 +1,3 @@
-"use client";
-import { useAppSelector } from "@/app/redux/hooks";
-
 import InstrumentCard from "../cards/instrumentCard";
 import { InstrumentList, StudentList } from "@/app/types/formTypes";
 import StudentCard from "../cards/studentCard";
@@ -8,12 +5,14 @@ import StudentCard from "../cards/studentCard";
 type CardListProps = {
   instrumentSearchResults?: InstrumentList;
   studentSearchResult?: StudentList;
+  selectOption: "Search Student" | "Search Instrument";
 };
+
 export default function CardList({
   instrumentSearchResults,
   studentSearchResult,
+  selectOption,
 }: CardListProps) {
-  const selectOption = useAppSelector((state) => state.searchOptions.type);
   return (
     <>
       {selectOption === "Search Instrument" &&

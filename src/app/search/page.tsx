@@ -1,5 +1,5 @@
 "use client";
-
+import { Suspense } from "react";
 import { useAppSelector } from "@/app/redux/hooks";
 import { RootState } from "@/app/redux/store";
 
@@ -38,14 +38,23 @@ export default function Search() {
       student.studentIdNumber.includes(searchfield)
     );
   });
+
   return (
     <main className="flex min-h-screen justify-center items-center flex-col basis-3/4 mt-2 rounded-lg">
-      {selectOption === "Search Instrument" && (
-        <CardList instrumentSearchResults={instrumentSearchResults} />
-      )}
-      {selectOption === "Search Student" && (
-        <CardList studentSearchResult={studentSearchResults} />
-      )}
+      <Suspense fallback={<p>Loading...</p>}>
+        {selectOption === "Search Instrument" && (
+          <CardList
+            instrumentSearchResults={instrumentSearchResults}
+            selectOption={selectOption}
+          />
+        )}
+        {selectOption === "Search Student" && (
+          <CardList
+            studentSearchResult={studentSearchResults}
+            selectOption={selectOption}
+          />
+        )}
+      </Suspense>
     </main>
   );
 }
