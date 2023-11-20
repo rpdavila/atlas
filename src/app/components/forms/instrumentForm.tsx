@@ -2,11 +2,7 @@
 import React, { useState } from "react";
 
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
-import {
-  addInstrumentToList,
-  searchInstrument,
-  clearSearchInstrument,
-} from "@/app/redux/features/instrumentSLice";
+import { addInstrumentToList } from "@/app/redux/features/instrumentSLice";
 
 import TextInput from "../input/customTextInput";
 import Button from "../button/button";
