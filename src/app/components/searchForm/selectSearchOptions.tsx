@@ -8,8 +8,7 @@ import { useAppSelector, useAppDispatch } from "../../redux/hooks";
 import { RootState } from "@/app/redux/store";
 import { setType } from "@/app/redux/features/searchOptionsSlice";
 //component imports
-import CheckBox from "../input/custumInputCheckbox";
-import { requestToBodyStream } from "next/dist/server/body-streams";
+import Radio from "../input/custumInputRadio";
 
 type SearchOptionProps = {
   children: React.ReactNode;
@@ -36,25 +35,25 @@ export default function SelectSearchOptions({ children }: SearchOptionProps) {
       <div className="flex flex-col bg-white rounded-lg p-2 items-center w-full">
         <h2 className="underline">Tool Bar:</h2>
         <div>
-          <CheckBox
+          <Radio
             labelName="Search Student"
             checked={selectOption === "Search Student"}
             value="Search Student"
             onChange={handleChange}
           />
-          <CheckBox
+          <Radio
             labelName="Search Instrument"
             checked={selectOption === "Search Instrument"}
             value="Search Instrument"
             onChange={handleChange}
           />
-          <CheckBox
+          <Radio
             labelName="Add Student"
             checked={selectOption === "Add Student"}
             value="Add Student"
             onChange={handleChange}
           />
-          <CheckBox
+          <Radio
             labelName="Add Instrument"
             checked={selectOption === "Add Instrument"}
             value="Add Instrument"

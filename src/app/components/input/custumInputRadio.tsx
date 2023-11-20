@@ -6,7 +6,7 @@ type CheckProps = {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-export default function CheckBox({
+export default function Radio({
   labelName,
   disabled,
   value,
