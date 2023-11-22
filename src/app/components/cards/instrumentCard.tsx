@@ -15,8 +15,11 @@ export default function InstrumentCard({ instrument }: CardProps) {
 
   return (
     <div className="flex flex-row justify-evenly bg-white w-3/4 rounded-lg m-4 basis-1/3">
-      <div className="flex flex-col w-1/3 items-center justify-center">
-        <h1 className="text-2xl font-bold">{instrument?.type}</h1>
+      <div className="flex flex-col w-1/3 items-start justify-center">
+        <p>
+          <strong>Instrument type: </strong>
+          {instrument?.type}
+        </p>
         <p>
           <strong>Brand: </strong>
           {instrument?.brand}
@@ -49,7 +52,7 @@ export default function InstrumentCard({ instrument }: CardProps) {
           category="Available Students"
           options={studentList}
           onChange={handleSelect}
-          placeHolder="Available Students"
+          placeHolder="Student List"
         />
       )}
     </div>
