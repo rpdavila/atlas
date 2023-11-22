@@ -5,13 +5,21 @@ import { InstrumentDetails, StudentInfo } from "@/app/types/formTypes";
 
 import Select from "../input/customSelection";
 import { studentList } from "@/app/data/studentDetails";
+import React from "react";
 
 type CardProps = {
   instrument?: InstrumentDetails;
 };
 
 export default function InstrumentCard({ instrument }: CardProps) {
-  const handleSelect = () => {};
+  const handleSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value.split(" ");
+    // display students that are not selected
+    const selectedStudent = studentList.filter((student) => {
+      return student.firstName !== value.at(0);
+    });
+    console.log(selectedStudent);
+  };
 
   return (
     <div className="flex flex-row justify-evenly bg-white w-3/4 rounded-lg m-4 basis-1/3">
