@@ -8,17 +8,16 @@ import { Providers } from "@/app/redux/provider";
 
 import { Amplify } from "aws-amplify";
 
+import config from "../amplifyconfiguration.json";
 import Header from "./components/header/header";
 import SideBar from "./components/sideBar/sideBar";
-
+Amplify.configure(config);
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Music Inventory Solutions",
   description: "Manage your music classroom inventory more efficiantly",
 };
-
-Amplify.getConfig();
 
 export default function RootLayout({
   children,
