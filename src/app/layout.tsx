@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   description: "Manage your music classroom inventory more efficiantly",
 };
 
-Amplify.configure(config);
+Amplify.configure(config, {ssr:true});
 
 export default function RootLayout({
   children,

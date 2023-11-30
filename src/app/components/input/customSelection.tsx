@@ -1,4 +1,3 @@
-import React, {useEffect} from "react";
 type SelectProps = {
   category: string;
   options: Object | string[] | number[];
@@ -14,9 +13,6 @@ export default function Select({
   placeHolder,
   onChange,
 }: SelectProps): React.JSX.Element {
-
-  
-
   return (
     <div className="flex flex-col justify-center">
       <label htmlFor="select" className="block text-gray-700 text-sm font-bold">
@@ -28,7 +24,9 @@ export default function Select({
         name={category}
         onChange={onChange}
       >
-        <option value="">{placeHolder}</option>
+        <option value="" disabled>
+          {placeHolder}
+        </option>
         {Array.isArray(options)
           ? options.map((item) => (
               <option key={item.id} value={item.type || item.firsName}>

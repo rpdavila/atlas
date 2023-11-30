@@ -18,7 +18,7 @@ export default function InstrumentCard({ instrument }: CardProps) {
     const selectedStudent = studentList.filter((student) => {
       return student.firstName !== value.at(0);
     });
-    console.log(selectedStudent);
+    
   };
 
   return (
