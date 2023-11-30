@@ -8,8 +8,6 @@ import { Providers } from "@/app/redux/provider";
 
 import { Amplify } from "aws-amplify";
 
-import config from "../amplifyconfiguration.json";
-
 import Header from "./components/header/header";
 import SideBar from "./components/sideBar/sideBar";
 
