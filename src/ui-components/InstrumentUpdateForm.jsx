@@ -6,7 +6,13 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
+import {
+  Button,
+  Flex,
+  Grid,
+  SelectField,
+  TextField,
+} from "@aws-amplify/ui-react";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
 import { generateClient } from "aws-amplify/api";
 import { getInstrument } from "../graphql/queries";
@@ -232,10 +238,10 @@ export default function InstrumentUpdateForm(props) {
         hasError={errors.serialNumber?.hasError}
         {...getOverrideProps(overrides, "serialNumber")}
       ></TextField>
-      <TextField
+      <SelectField
         label="Rent status"
-        isRequired={true}
-        isReadOnly={false}
+        placeholder="Please select an option"
+        isDisabled={false}
         value={rentStatus}
         onChange={(e) => {
           let { value } = e.target;
@@ -258,7 +264,18 @@ export default function InstrumentUpdateForm(props) {
         errorMessage={errors.rentStatus?.errorMessage}
         hasError={errors.rentStatus?.hasError}
         {...getOverrideProps(overrides, "rentStatus")}
-      ></TextField>
+      >
+        <option
+          children="Rented"
+          value="RENTED"
+          {...getOverrideProps(overrides, "rentStatusoption0")}
+        ></option>
+        <option
+          children="Available"
+          value="AVAILABLE"
+          {...getOverrideProps(overrides, "rentStatusoption1")}
+        ></option>
+      </SelectField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

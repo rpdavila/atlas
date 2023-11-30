@@ -5,7 +5,7 @@
  **************************************************************************/
 
 import * as React from "react";
-import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { GridProps, SelectFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { Instrument } from "../API.ts";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
@@ -40,7 +40,7 @@ export declare type InstrumentUpdateFormOverridesProps = {
     type?: PrimitiveOverrideProps<TextFieldProps>;
     brand?: PrimitiveOverrideProps<TextFieldProps>;
     serialNumber?: PrimitiveOverrideProps<TextFieldProps>;
-    rentStatus?: PrimitiveOverrideProps<TextFieldProps>;
+    rentStatus?: PrimitiveOverrideProps<SelectFieldProps>;
 } & EscapeHatchProps;
 export declare type InstrumentUpdateFormProps = React.PropsWithChildren<{
     overrides?: InstrumentUpdateFormOverridesProps | undefined | null;
