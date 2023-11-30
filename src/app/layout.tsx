@@ -6,7 +6,6 @@ import { Inter } from "next/font/google";
 
 import { Providers } from "@/app/redux/provider";
 
-import config from "../aws-exports";
 import Header from "./components/header/header";
 import SideBar from "./components/sideBar/sideBar";
 
