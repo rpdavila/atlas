@@ -63,7 +63,7 @@ export default function InstrumentForm({
         {formTitle}
       </h1>
       {selectOption === "Search Instrument" && (
-        <div>
+        <section>
           <TextInput
             labelName="Search"
             type="text"
@@ -72,10 +72,10 @@ export default function InstrumentForm({
             placeHolder="Search Instrument"
             onChange={handleChange}
           />
-        </div>
+        </section>
       )}
       {selectOption === "Add Instrument" && (
-        <div>
+        <section>
           <TextInput
             labelName="Type"
             type="text"
@@ -107,13 +107,8 @@ export default function InstrumentForm({
             options={RentStatus}
             onChange={handleChange}
           />
-          <Button
-            type="button"
-            width="60"
-            name={buttonText}
-            onClick={handleClick}
-          />
-        </div>
+          <Button type="button" name={buttonText} onClick={handleClick} marginTop="5" />
+        </section>
       )}
     </div>
   );

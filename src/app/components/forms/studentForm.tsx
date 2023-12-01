@@ -92,7 +92,7 @@ export default function StudentForm({
 
           <Button
             type="submit"
-            width="60"
+            marginTop="5"
             name={buttonText}
             onClick={handleAddStudent}
           />

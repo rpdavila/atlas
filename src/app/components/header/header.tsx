@@ -45,8 +45,8 @@ export default function Header() {
           })}
           <Button
             type="button"
-            width="auto"
             name="Sign In"
+            marginTop="0"
             onClick={handleClickSignIn}
           />
         </ul>

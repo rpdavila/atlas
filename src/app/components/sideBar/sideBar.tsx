@@ -10,7 +10,7 @@ export default function SideBar() {
   const selectOption = useAppSelector((state) => state.searchOptions.type);
 
   return (
-    <aside className="flex flex-col basis-1/4 items-center bg-slate-700 mt-2 rounded-lg">
+    <aside className="flex flex-col basis-1/4 items-center bg-slate-700 mt-2 ml-2 rounded-lg">
       <SelectSearchOptions>
         {selectOption === "Search Student" && (
           <StudentForm formTitle="Search Student" buttonText="Search Student" />
