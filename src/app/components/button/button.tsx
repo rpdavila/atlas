@@ -1,21 +1,20 @@
-import React from "react";
-
 type ButtonProps = {
   name: string;
+  marginTop: string;
   type: "submit" | "reset" | "button";
-  width: string;
+  onClick: () => void;
 };
 
 export default function Button({
   name,
   type,
-  width,
+  marginTop,
+  onClick,
 }: ButtonProps): React.JSX.Element {
+  const buttonClass = `bg-blue-500 hover:bg-blue-700 text-white p-2 mt-${marginTop} w-full rounded-lg`;
+
   return (
-    <button
-      className={`bg-blue-500 hover:bg-blue-700 text-white p-2 m-5 w-${width} rounded-lg`}
-      type={type}
-    >
+    <button className={buttonClass} type={type} onClick={onClick}>
       {name}
     </button>
   );

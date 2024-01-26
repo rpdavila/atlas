@@ -1,4 +1,3 @@
-import { StudentInfo } from "@/app/types/formTypes";
 import React, { ChangeEventHandler } from "react";
 
 type TextProps = {
@@ -7,7 +6,7 @@ type TextProps = {
   labelName: string;
   placeHolder: string;
   onChange: ChangeEventHandler<HTMLInputElement>;
-  value: string | number;
+  value: string | number | undefined;
 };
 
 export default function TextInput({
@@ -20,7 +19,10 @@ export default function TextInput({
 }: TextProps): React.JSX.Element {
   return (
     <div className="flex flex-col mt-2">
-      <label className="block text-gray-700 text-sm font-bold m-2">
+      <label
+        htmlFor={name}
+        className="block text-gray-700 text-sm font-bold m-2"
+      >
         {labelName}
       </label>
       <input
@@ -29,6 +31,7 @@ export default function TextInput({
         name={name}
         value={value}
         placeholder={placeHolder}
+        id={name}
         onChange={onChange}
       />
     </div>

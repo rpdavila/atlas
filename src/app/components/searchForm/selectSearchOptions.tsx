@@ -1,19 +1,14 @@
 "use client";
 //react imports
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 // redux imports
 import { useAppSelector, useAppDispatch } from "../../redux/hooks";
 import { RootState } from "@/app/redux/store";
-import {
-  setStudentSearch,
-  setInstrumentSearch,
-  setStudent,
-  setInstrument,
-} from "@/app/redux/features/searchOptionsSlice";
+import { setType } from "@/app/redux/features/searchOptionsSlice";
 //component imports
-import CheckBox from "../input/custumInputCheckbox";
+import Radio from "../input/custumInputRadio";
 
 type SearchOptionProps = {
   children: React.ReactNode;
@@ -23,67 +18,48 @@ export default function SelectSearchOptions({ children }: SearchOptionProps) {
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const selectInstrumentOption = useAppSelector(
-    (state: RootState) => state.searchOptions.searchInstrument
-  );
-  const selectStudentOption = useAppSelector(
-    (state: RootState) => state.searchOptions.searchStudent
-  );
-  const selectAddStudentOption = useAppSelector(
-    (state: RootState) => state.searchOptions.addStudent
-  );
-  const selectAddInstrumentOption = useAppSelector(
-    (state: RootState) => state.searchOptions.addInstrument
+  const selectOption = useAppSelector(
+    (state: RootState) => state.searchOptions.type
   );
 
-  const handleChangeStudent = () => {
-    dispatch(setStudentSearch(!selectStudentOption));
-    router.push("/search");
-  };
-
-  const handleChangeInstrument = () => {
-    dispatch(setInstrumentSearch(!selectInstrumentOption));
-    router.push("/search");
-  };
-
-  const handleChangeAddStudent = () => {
-    dispatch(setStudent(!selectAddStudentOption));
-  };
-
-  const handleCHangeAddInstrument = () => {
-    dispatch(setInstrument(!selectAddInstrumentOption));
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    dispatch(setType(value));
+    if (selectOption === "Search Student" || "Search Instrument") {
+      router.push("/search");
+    }
   };
 
   return (
     <>
       <div className="flex flex-col bg-white rounded-lg p-2 items-center w-full">
         <h2 className="underline">Tool Bar:</h2>
-        <fieldset>
-          <CheckBox
-            type="checkbox"
+        <div>
+          <Radio
             labelName="Search Student"
-            checked={selectStudentOption}
-            onChange={handleChangeStudent}
+            checked={selectOption === "Search Student"}
+            value="Search Student"
+            onChange={handleChange}
           />
-          <CheckBox
-            type="checkbox"
+          <Radio
             labelName="Search Instrument"
-            checked={selectInstrumentOption}
-            onChange={handleChangeInstrument}
+            checked={selectOption === "Search Instrument"}
+            value="Search Instrument"
+            onChange={handleChange}
           />
-          <CheckBox
-            type="checkbox"
+          <Radio
             labelName="Add Student"
-            checked={selectAddStudentOption}
-            onChange={handleChangeAddStudent}
+            checked={selectOption === "Add Student"}
+            value="Add Student"
+            onChange={handleChange}
           />
-          <CheckBox
-            type="checkbox"
+          <Radio
             labelName="Add Instrument"
-            checked={selectAddInstrumentOption}
-            onChange={handleCHangeAddInstrument}
+            checked={selectOption === "Add Instrument"}
+            value="Add Instrument"
+            onChange={handleChange}
           />
-        </fieldset>
+        </div>
       </div>
       {children}
     </>

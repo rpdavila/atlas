@@ -1,66 +1,44 @@
 "use client";
-import { useAppSelector, useAppDispatch } from "@/app/redux/hooks";
-import {
-  addStudentToList,
-  studentInfoReset,
-} from "@/app/redux/features/studentListSlice";
+import { useAppSelector } from "@/app/redux/hooks";
+
 import SelectSearchOptions from "../searchForm/selectSearchOptions";
 import StudentForm from "../forms/studentForm";
 import InstrumentForm from "../forms/instrumentForm";
-import React from "react";
+
 export default function SideBar() {
-  const dispatch = useAppDispatch();
+  const selectOption = useAppSelector((state) => state.searchOptions.type);
 
-  const selectStudentInfo = useAppSelector(
-    (state) => state.students.studentInfo
-  );
-  const selectStudentOption = useAppSelector(
-    (state) => state.searchOptions.searchStudent
-  );
+  function getFormComponent(selectOption: string) {
+    switch (selectOption) {
+      case "Search Student":
+        return (
+          <StudentForm formTitle="Search Student" buttonText="Search Student" />
+        );
 
-  const selectInstrumentOption = useAppSelector(
-    (state) => state.searchOptions.searchInstrument
-  );
+      case "Search Instrument":
+        return (
+          <InstrumentForm
+            formTitle="Search Instrument"
+            buttonText="Search Instrument"
+          />
+        );
 
-  const selectAddStudentOption = useAppSelector(
-    (state) => state.searchOptions.addStudent
-  );
+      case "Add Student":
+        return <StudentForm formTitle="Add Student" buttonText="Add Student" />;
 
-  const selectAddInstrumentOption = useAppSelector(
-    (state) => state.searchOptions.addInstrument
-  );
-
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    selectAddStudentOption && dispatch(addStudentToList(selectStudentInfo));
-    selectAddStudentOption && dispatch(studentInfoReset());
-  };
+      case "Add Instrument":
+        return (
+          <InstrumentForm
+            formTitle="Add Instrument"
+            buttonText="Add Instrument"
+          />
+        );
+    }
+  }
   return (
-    <aside className="flex flex-col basis-1/4 items-center bg-slate-700 mt-2 rounded-lg">
+    <aside className="flex flex-col basis-1/4 items-center bg-slate-700 mt-2 ml-2 rounded-lg">
       <SelectSearchOptions>
-        <form onSubmit={onSubmit} className="w-full">
-          {selectStudentOption && (
-            <StudentForm
-              formTitle="Search Student"
-              buttonText="Search Student"
-            />
-          )}
-          {selectInstrumentOption && (
-            <InstrumentForm
-              formTitle="Search Instrument"
-              buttonText="Search Instrument"
-            />
-          )}
-          {selectAddStudentOption && (
-            <StudentForm formTitle="Add Student" buttonText="Add Student" />
-          )}
-          {selectAddInstrumentOption && (
-            <InstrumentForm
-              formTitle="Add Instrument"
-              buttonText="Add Instrument"
-            />
-          )}
-        </form>
+        {getFormComponent(selectOption)}
       </SelectSearchOptions>
     </aside>
   );
