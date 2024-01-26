@@ -1,24 +1,63 @@
 "use client";
+import { useRef } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
-
-import { InstrumentDetails, StudentInfo } from "@/app/types/formTypes";
-
-import Select from "../input/customSelection";
+import { addStudentToInstrument } from "@/app/redux/features/instrumentSLice";
+import { InstrumentDetails, OnlyStudentData } from "@/app/types/formTypes";
 import { studentList } from "@/app/data/studentDetails";
-import React from "react";
+import Select from "../input/customSelection";
+import { filterStudentList } from "@/app/redux/features/studentListSlice";
 
 type CardProps = {
-  instrument?: InstrumentDetails;
+  instrument: InstrumentDetails;
 };
 
 export default function InstrumentCard({ instrument }: CardProps) {
+  let dispatch = useAppDispatch();
+  const displayInstruments = useAppSelector(
+    (state) => state.instruments.instrumentList
+  );
+  const displayStudents = useAppSelector((state) => state.students.studentList);
+
   const handleSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.split(" ");
-    // display students that are not selected
-    const selectedStudent = studentList.filter((student) => {
-      return student.firstName !== value.at(0);
+    // get a matching student
+    const matchingStudent = displayStudents.find((student: OnlyStudentData) => {
+      if (student.firstName === value[0] && student.lastName === value[1]) {
+        return {
+          firstName: student.firstName,
+          lastName: student.lastName,
+          studentIdNumber: student.studentIdNumber,
+        };
+      }
     });
-    
+
+    //get a matching instrument
+    const matchingInstrument = displayInstruments.find((item) => {
+      if (item.id === instrument.id) {
+        return item.id;
+      }
+    });
+
+    dispatch(
+      addStudentToInstrument({
+        studentInfo: {
+          firstName: matchingStudent?.firstName,
+          lastName: matchingStudent?.lastName,
+          studentIdNumber: matchingStudent?.studentIdNumber,
+        },
+        instrumentInfo: {
+          id: matchingInstrument?.id,
+        },
+      })
+    );
+
+    dispatch(
+      filterStudentList({
+        firstName: matchingStudent?.firstName,
+        lastName: matchingStudent?.lastName,
+        studentIdNumber: matchingStudent?.studentIdNumber,
+      })
+    );
   };
 
   return (
@@ -42,7 +81,10 @@ export default function InstrumentCard({ instrument }: CardProps) {
         </p>
       </div>
       {instrument?.rentStatus === "Rented" ? (
-        <div className="flex flex-col">
+        <div className="flex flex-col items-start justify-center">
+          <strong>
+            <h1>Assign to: </h1>
+          </strong>
           <p>
             <strong>First Name:</strong>
             {instrument.assignedTo?.firstName}
@@ -58,9 +100,9 @@ export default function InstrumentCard({ instrument }: CardProps) {
       ) : (
         <Select
           category="Available Students"
-          options={studentList}
+          options={displayStudents}
           onChange={handleSelect}
-          placeHolder="Student List"
+          placeHolder="Assign to student"
         />
       )}
     </div>

@@ -24,7 +24,7 @@ export default function Select({
         name={category}
         onChange={onChange}
       >
-        <option value="" disabled>
+        <option value="" disabled selected>
           {placeHolder}
         </option>
         {Array.isArray(options)

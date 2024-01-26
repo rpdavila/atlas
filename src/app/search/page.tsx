@@ -5,6 +5,8 @@ import { RootState } from "@/app/redux/store";
 
 import CardList from "../components/card-list/cardList";
 
+
+
 export default function Search() {
   const displayStudents = useAppSelector(
     (state: RootState) => state.students.studentList

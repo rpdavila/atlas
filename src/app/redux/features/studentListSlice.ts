@@ -6,6 +6,7 @@ import {
   StudentList,
   StudentInfo,
   OnlyInstrumentData,
+  OnlyStudentData,
 } from "@/app/types/formTypes";
 
 type StudentState = {
@@ -32,10 +33,21 @@ export const studentListSlice = createSlice({
     ) => {
       return { ...state, instrument: action.payload };
     },
+
+    filterStudentList: (state, action: PayloadAction<OnlyStudentData>) => {
+      const { studentIdNumber } = action.payload;
+      const filteredList = state.studentList.filter(
+        (list) => list.studentIdNumber !== studentIdNumber
+      );
+      return { ...state, studentList: filteredList };
+    },
   },
 });
 
-export const { addStudentToList, assignStudentToInstrument } =
-  studentListSlice.actions;
+export const {
+  addStudentToList,
+  assignStudentToInstrument,
+  filterStudentList,
+} = studentListSlice.actions;
 
 export default studentListSlice.reducer;

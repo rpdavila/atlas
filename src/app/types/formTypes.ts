@@ -1,8 +1,8 @@
 export type InstrumentDetails = {
-  id: number;
-  type: string;
-  brand: string;
-  serialNumber: string;
+  id: number | undefined;
+  type: string | undefined;
+  brand: string | undefined;
+  serialNumber: string | undefined;
   rentStatus: RentStatus;
   assignedTo: OnlyStudentData | null;
 };
@@ -16,20 +16,31 @@ export enum RentStatus {
 
 export type StudentInfo = {
   id: number;
-  firstName: string;
-  lastName: string;
-  studentIdNumber: string;
+  firstName: string | undefined;
+  lastName: string | undefined;
+  studentIdNumber: string | undefined;
   instrument: OnlyInstrumentData | null;
 };
 
 export type StudentList = Array<StudentInfo>;
+
 export type OnlyStudentData = Omit<StudentInfo, "instrument" | "id">;
+
 export type OnlyInstrumentData = Omit<
   InstrumentDetails,
   "rentStatus" | "assignedTo" | "id" | "instrumentList"
 >;
+export type Getinfo = {
+  studentInfo: OnlyStudentData;
+  instrumentInfo: OnlyInstrumentId;
+};
 
 export type OnlyInstrumentType = Omit<
   InstrumentDetails,
   "id" | "brand" | "serialNumber" | "rentStatus" | "assignedTo"
+>;
+
+export type OnlyInstrumentId = Omit<
+  InstrumentDetails,
+  "serialNumber" | "brand" | "rentStatus" | "assignedTo" | "type"
 >;

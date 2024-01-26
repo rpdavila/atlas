@@ -11,12 +11,10 @@ export default function Button({
   marginTop,
   onClick,
 }: ButtonProps): React.JSX.Element {
+  const buttonClass = `bg-blue-500 hover:bg-blue-700 text-white p-2 mt-${marginTop} w-full rounded-lg`;
+
   return (
-    <button
-      className={`bg-blue-500 hover:bg-blue-700 text-white p-2 mt-${marginTop} w-full rounded-lg`}
-      type={type}
-      onClick={onClick}
-    >
+    <button className={buttonClass} type={type} onClick={onClick}>
       {name}
     </button>
   );

@@ -2,12 +2,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import {
-  OnlyStudentData,
+  Getinfo,
   InstrumentList,
   InstrumentDetails,
+  RentStatus,
 } from "@/app/types/formTypes";
 
 import { instrumentDetails } from "@/app/data/instrumentDetails";
+import StudentForm from "@/app/components/forms/studentForm";
 
 type InstrumentState = {
   instrumentList: InstrumentList;
@@ -23,13 +25,6 @@ export const instrumentDetailsSlice = createSlice({
   name: "instrumentDetails",
   initialState,
   reducers: {
-    assignInstrumentToStudent: (
-      state,
-      action: PayloadAction<OnlyStudentData>
-    ) => {
-      return { ...state, assignedTo: action.payload };
-    },
-
     addInstrumentToList: (state, action: PayloadAction<InstrumentDetails>) => {
       return {
         ...state,
@@ -40,13 +35,21 @@ export const instrumentDetailsSlice = createSlice({
     clearSearchInstrument: (state) => {
       return { ...state, result: [] };
     },
+
+    addStudentToInstrument: (state, action: PayloadAction<Getinfo>) => {
+      const { studentInfo, instrumentInfo } = action.payload;
+      const instrument = state.instrumentList.find((instrument) => {
+        return instrument.id === instrumentInfo.id;
+      });
+      if (instrument) {
+        instrument.assignedTo = studentInfo;
+        instrument.rentStatus = RentStatus.Rented;
+      }
+    },
   },
 });
 
-export const {
-  assignInstrumentToStudent,
-  addInstrumentToList,
-  clearSearchInstrument,
-} = instrumentDetailsSlice.actions;
+export const { addInstrumentToList, addStudentToInstrument } =
+  instrumentDetailsSlice.actions;
 
 export default instrumentDetailsSlice.reducer;

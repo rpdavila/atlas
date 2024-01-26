@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useCallback, useState, useMemo } from "react";
 
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { addInstrumentToList } from "@/app/redux/features/instrumentSLice";
@@ -29,18 +29,16 @@ export default function InstrumentForm({
   const selectOption = useAppSelector((state) => state.searchOptions.type);
   const searchResult = useAppSelector((state) => state.searchOptions.search);
 
-  const getInstrumentList = useAppSelector(
-    (state) => state.instruments.instrumentList
-  );
-
-  const initialState: InstrumentDetails = {
-    id: 1,
-    type: "",
-    brand: "",
-    serialNumber: "",
-    rentStatus: RentStatus.Available,
-    assignedTo: null,
-  };
+  const initialState = useMemo(() => {
+    return {
+      id: 1,
+      type: "",
+      brand: "",
+      serialNumber: "",
+      rentStatus: RentStatus.Available,
+      assignedTo: null,
+    };
+  }, []);
 
   const [instrumentDetails, setInstrumentDetails] =
     useState<InstrumentDetails>(initialState);
@@ -52,11 +50,12 @@ export default function InstrumentForm({
       : setInstrumentDetails({ ...instrumentDetails, [name]: value });
   };
 
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     dispatch(addInstrumentToList(instrumentDetails));
     setInstrumentDetails(initialState);
     alert(`${instrumentDetails} Added to database`);
-  };
+  }, [dispatch, initialState, instrumentDetails]);
+
   return (
     <div className="flex flex-col bg-white rounded-lg items-center w-full pb-2 mt-2">
       <h1 className="bg-blue-500 rounded-t-lg w-full self-center text-white text-center">
@@ -107,7 +106,12 @@ export default function InstrumentForm({
             options={RentStatus}
             onChange={handleChange}
           />
-          <Button type="button" name={buttonText} onClick={handleClick} marginTop="5" />
+          <Button
+            type="button"
+            name={buttonText}
+            onClick={handleClick}
+            marginTop="5"
+          />
         </section>
       )}
     </div>
