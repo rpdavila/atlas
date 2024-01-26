@@ -5,8 +5,6 @@ import { RootState } from "@/app/redux/store";
 
 import CardList from "../components/card-list/cardList";
 
-
-
 export default function Search() {
   const displayStudents = useAppSelector(
     (state: RootState) => state.students.studentList
@@ -26,18 +24,18 @@ export default function Search() {
 
   const instrumentSearchResults = displayInstruments.filter((instrument) => {
     return (
-      instrument.type.includes(searchfield) ||
-      instrument.brand.includes(searchfield) ||
-      instrument.serialNumber.includes(searchfield) ||
+      instrument.type?.includes(searchfield) ||
+      instrument.brand?.includes(searchfield) ||
+      instrument.serialNumber?.includes(searchfield) ||
       instrument.rentStatus.includes(searchfield)
     );
   });
 
   const studentSearchResults = displayStudents.filter((student) => {
     return (
-      student.firstName.includes(searchfield) ||
-      student.lastName.includes(searchfield) ||
-      student.studentIdNumber.includes(searchfield)
+      student.firstName?.includes(searchfield) ||
+      student.lastName?.includes(searchfield) ||
+      student.studentIdNumber?.includes(searchfield)
     );
   });
 
