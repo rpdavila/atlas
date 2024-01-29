@@ -4,7 +4,7 @@ export type InstrumentDetails = {
   brand: string | undefined;
   serialNumber: string | undefined;
   rentStatus: RentStatus;
-  assignedTo: OnlyStudentData | null;
+  assignedTo: OnlyStudentData | undefined;
 };
 
 export type InstrumentList = Array<InstrumentDetails>;

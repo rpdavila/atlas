@@ -22,14 +22,13 @@ export default function StudentForm({
   const dispatch = useAppDispatch();
   const selectOption = useAppSelector((state) => state.searchOptions.type);
   const searchResult = useAppSelector((state) => state.searchOptions.search);
-  const studentlist = useAppSelector((state) => state.students.studentList);
 
   const initialState: StudentInfo = {
     id: 1,
     firstName: "",
     lastName: "",
     studentIdNumber: "",
-    instrument: null,
+    instrument: undefined,
   };
 
   const [studentInfo, setStudentInfo] = useState<StudentInfo>(initialState);
