@@ -1,24 +1,28 @@
 "use client";
-import { useRef } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { addStudentToInstrument } from "@/app/redux/features/instrumentSLice";
 import { InstrumentDetails, OnlyStudentData } from "@/app/types/formTypes";
-import { studentList } from "@/app/data/studentDetails";
 import Select from "../input/customSelection";
-import { filterStudentList } from "@/app/redux/features/studentListSlice";
+import {
+  assignInstrumentToStudent,
+  filterStudentList,
+} from "@/app/redux/features/studentListSlice";
 
 type CardProps = {
   instrument: InstrumentDetails;
 };
 
 export default function InstrumentCard({ instrument }: CardProps) {
-  let dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   const displayInstruments = useAppSelector(
     (state) => state.instruments.instrumentList
   );
-  const displayStudents = useAppSelector((state) => state.students.studentList);
+  const displayStudents = useAppSelector(
+    (state) => state.students.filteredList
+  );
 
   const handleSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    // MUST BE MODIFIED TO USE DB INSTANCE. IT IS CURRENTLY USING DUMMY DATA PROVIDED IN THE DATA FOLDER
     const value = event.target.value.split(" ");
     // get a matching student
     const matchingStudent = displayStudents.find((student: OnlyStudentData) => {
@@ -34,10 +38,11 @@ export default function InstrumentCard({ instrument }: CardProps) {
     //get a matching instrument
     const matchingInstrument = displayInstruments.find((item) => {
       if (item.id === instrument.id) {
-        return item.id;
+        return item;
       }
     });
 
+    // dispatch and add the student to instrument
     dispatch(
       addStudentToInstrument({
         studentInfo: {
@@ -51,11 +56,26 @@ export default function InstrumentCard({ instrument }: CardProps) {
       })
     );
 
+    // filter students in the student list select option
     dispatch(
       filterStudentList({
         firstName: matchingStudent?.firstName,
         lastName: matchingStudent?.lastName,
         studentIdNumber: matchingStudent?.studentIdNumber,
+      })
+    );
+
+    // add instrument to student info
+    dispatch(
+      assignInstrumentToStudent({
+        studentInfo: {
+          studentIdNumber: matchingStudent?.studentIdNumber,
+        },
+        instrumentInfo: {
+          type: matchingInstrument?.type,
+          brand: matchingInstrument?.brand,
+          serialNumber: matchingInstrument?.serialNumber,
+        },
       })
     );
   };

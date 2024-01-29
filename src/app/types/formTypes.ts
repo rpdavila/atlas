@@ -19,7 +19,7 @@ export type StudentInfo = {
   firstName: string | undefined;
   lastName: string | undefined;
   studentIdNumber: string | undefined;
-  instrument: OnlyInstrumentData | null;
+  instrument: OnlyInstrumentData | undefined;
 };
 
 export type StudentList = Array<StudentInfo>;
@@ -35,6 +35,11 @@ export type Getinfo = {
   instrumentInfo: OnlyInstrumentId;
 };
 
+export type AssignStudentToInstrument = {
+  studentInfo: OnlyStudentId | undefined;
+  instrumentInfo: OnlyInstrumentData | undefined;
+};
+
 export type OnlyInstrumentType = Omit<
   InstrumentDetails,
   "id" | "brand" | "serialNumber" | "rentStatus" | "assignedTo"
@@ -43,4 +48,9 @@ export type OnlyInstrumentType = Omit<
 export type OnlyInstrumentId = Omit<
   InstrumentDetails,
   "serialNumber" | "brand" | "rentStatus" | "assignedTo" | "type"
+>;
+
+export type OnlyStudentId = Omit<
+  StudentInfo,
+  "instrument" | "id" | "firstName" | "lastName"
 >;

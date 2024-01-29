@@ -5,15 +5,17 @@ import { studentList } from "@/app/data/studentDetails";
 import {
   StudentList,
   StudentInfo,
-  OnlyInstrumentData,
   OnlyStudentData,
+  AssignStudentToInstrument,
 } from "@/app/types/formTypes";
 
 type StudentState = {
   studentList: StudentList;
+  filteredList: StudentList;
 };
 const initialState: StudentState = {
   studentList: studentList,
+  filteredList: studentList,
 };
 
 export const studentListSlice = createSlice({
@@ -27,11 +29,17 @@ export const studentListSlice = createSlice({
       };
     },
 
-    assignStudentToInstrument: (
+    assignInstrumentToStudent: (
       state,
-      action: PayloadAction<OnlyInstrumentData>
+      action: PayloadAction<AssignStudentToInstrument>
     ) => {
-      return { ...state, instrument: action.payload };
+      const { studentInfo, instrumentInfo } = action.payload;
+      const student = state.studentList.find(
+        (student) => student.studentIdNumber === studentInfo?.studentIdNumber
+      );
+      if (student) {
+        student.instrument = instrumentInfo;
+      }
     },
 
     filterStudentList: (state, action: PayloadAction<OnlyStudentData>) => {
@@ -39,14 +47,14 @@ export const studentListSlice = createSlice({
       const filteredList = state.studentList.filter(
         (list) => list.studentIdNumber !== studentIdNumber
       );
-      return { ...state, studentList: filteredList };
+      return { ...state, filteredList: filteredList };
     },
   },
 });
 
 export const {
   addStudentToList,
-  assignStudentToInstrument,
+  assignInstrumentToStudent,
   filterStudentList,
 } = studentListSlice.actions;
 
