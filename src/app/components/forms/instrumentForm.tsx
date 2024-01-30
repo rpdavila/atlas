@@ -36,7 +36,7 @@ export default function InstrumentForm({
       brand: "",
       serialNumber: "",
       rentStatus: RentStatus.Available,
-      assignedTo: null,
+      assignedTo: undefined,
     };
   }, []);
 
