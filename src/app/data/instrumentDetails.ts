@@ -1,5 +1,4 @@
-import {RentStatus, InstrumentList } from "../types/formTypes";
-
+import { RentStatus, InstrumentList } from "../types/formTypes";
 
 export const instrumentDetails: InstrumentList = [
   {
@@ -8,7 +7,7 @@ export const instrumentDetails: InstrumentList = [
     brand: "Yamaha",
     serialNumber: "YM-001",
     rentStatus: RentStatus.Available,
-    assignedTo: null,
+    assignedTo: undefined,
   },
   {
     id: 2,
@@ -16,7 +15,7 @@ export const instrumentDetails: InstrumentList = [
     brand: "Fender",
     serialNumber: "FN-001",
     rentStatus: RentStatus.Available,
-    assignedTo: null,
+    assignedTo: undefined,
   },
   {
     id: 3,
@@ -24,7 +23,7 @@ export const instrumentDetails: InstrumentList = [
     brand: "Korg",
     serialNumber: "KO-001",
     rentStatus: RentStatus.Available,
-    assignedTo: null,
+    assignedTo: undefined,
   },
   {
     id: 4,
@@ -32,7 +31,7 @@ export const instrumentDetails: InstrumentList = [
     brand: "Yamaha",
     serialNumber: "YM-002",
     rentStatus: RentStatus.Available,
-    assignedTo: null,
+    assignedTo: undefined,
   },
   {
     id: 5,
@@ -40,7 +39,7 @@ export const instrumentDetails: InstrumentList = [
     brand: "Fender",
     serialNumber: "FN-002",
     rentStatus: RentStatus.Available,
-    assignedTo: null,
+    assignedTo: undefined,
   },
   {
     id: 6,
@@ -48,7 +47,7 @@ export const instrumentDetails: InstrumentList = [
     brand: "Yamaha",
     serialNumber: "YM-003",
     rentStatus: RentStatus.Available,
-    assignedTo: null,
+    assignedTo: undefined,
   },
   {
     id: 7,
@@ -56,7 +55,7 @@ export const instrumentDetails: InstrumentList = [
     brand: "Fender",
     serialNumber: "FN-003",
     rentStatus: RentStatus.Available,
-    assignedTo: null,
+    assignedTo: undefined,
   },
   {
     id: 8,
@@ -64,7 +63,7 @@ export const instrumentDetails: InstrumentList = [
     brand: "Yamaha",
     serialNumber: "YM-004",
     rentStatus: RentStatus.Available,
-    assignedTo: null,
+    assignedTo: undefined,
   },
   {
     id: 9,
@@ -72,7 +71,7 @@ export const instrumentDetails: InstrumentList = [
     brand: "Fender",
     serialNumber: "FN-004",
     rentStatus: RentStatus.Available,
-    assignedTo: null,
+    assignedTo: undefined,
   },
   {
     id: 10,
@@ -80,7 +79,7 @@ export const instrumentDetails: InstrumentList = [
     brand: "Yamaha",
     serialNumber: "YM-005",
     rentStatus: RentStatus.Available,
-    assignedTo: null,
+    assignedTo: undefined,
   },
   {
     id: 11,
@@ -88,7 +87,7 @@ export const instrumentDetails: InstrumentList = [
     brand: "Fender",
     serialNumber: "FN-005",
     rentStatus: RentStatus.Available,
-    assignedTo: null,
+    assignedTo: undefined,
   },
   {
     id: 12,
@@ -96,7 +95,7 @@ export const instrumentDetails: InstrumentList = [
     brand: "Yamaha",
     serialNumber: "YM-006",
     rentStatus: RentStatus.Available,
-    assignedTo: null,
+    assignedTo: undefined,
   },
   {
     id: 13,
@@ -104,7 +103,7 @@ export const instrumentDetails: InstrumentList = [
     brand: "Fender",
     serialNumber: "FN-006",
     rentStatus: RentStatus.Available,
-    assignedTo: null,
+    assignedTo: undefined,
   },
   {
     id: 14,
@@ -112,7 +111,7 @@ export const instrumentDetails: InstrumentList = [
     brand: "Korg",
     serialNumber: "KO-002",
     rentStatus: RentStatus.Available,
-    assignedTo: null,
+    assignedTo: undefined,
   },
   {
     id: 15,
@@ -120,7 +119,7 @@ export const instrumentDetails: InstrumentList = [
     brand: "Yamaha",
     serialNumber: "YM-007",
     rentStatus: RentStatus.Available,
-    assignedTo: null,
+    assignedTo: undefined,
   },
   {
     id: 16,
@@ -128,7 +127,7 @@ export const instrumentDetails: InstrumentList = [
     brand: "Fender",
     serialNumber: "FN-007",
     rentStatus: RentStatus.Available,
-    assignedTo: null,
+    assignedTo: undefined,
   },
   {
     id: 17,
@@ -136,7 +135,7 @@ export const instrumentDetails: InstrumentList = [
     brand: "Yamaha",
     serialNumber: "YM-008",
     rentStatus: RentStatus.Available,
-    assignedTo: null,
+    assignedTo: undefined,
   },
   {
     id: 18,
@@ -144,7 +143,7 @@ export const instrumentDetails: InstrumentList = [
     brand: "Fender",
     serialNumber: "FN-008",
     rentStatus: RentStatus.Available,
-    assignedTo: null,
+    assignedTo: undefined,
   },
   {
     id: 19,
@@ -152,6 +151,6 @@ export const instrumentDetails: InstrumentList = [
     brand: "Yamaha",
     serialNumber: "YM-009",
     rentStatus: RentStatus.Available,
-    assignedTo: null,
+    assignedTo: undefined,
   },
 ];
