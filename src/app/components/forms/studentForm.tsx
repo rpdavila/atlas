@@ -29,7 +29,7 @@ export default function StudentForm({
     firstName: "",
     lastName: "",
     studentIdNumber: "",
-    instrument: null,
+    instrument: undefined,
   };
 
   const [studentInfo, setStudentInfo] = useState<StudentInfo>(initialState);

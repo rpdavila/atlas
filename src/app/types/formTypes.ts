@@ -19,7 +19,7 @@ export type StudentInfo = {
   firstName: string | undefined;
   lastName: string | undefined;
   studentIdNumber: string | undefined;
-  instrument: OnlyInstrumentData | null;
+  instrument: OnlyInstrumentData | undefined;
 };
 
 export type StudentList = Array<StudentInfo>;
