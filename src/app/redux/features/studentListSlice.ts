@@ -44,7 +44,7 @@ export const studentListSlice = createSlice({
 
     filterStudentList: (state, action: PayloadAction<OnlyStudentData>) => {
       const { studentIdNumber } = action.payload;
-      const filteredList = state.studentList.filter(
+      const filteredList = state.filteredList.filter(
         (list) => list.studentIdNumber !== studentIdNumber
       );
       return { ...state, filteredList: filteredList };
