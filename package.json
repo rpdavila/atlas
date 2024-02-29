@@ -9,21 +9,27 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@apollo/client": "^3.9.2",
+    "@auth/mongodb-adapter": "^2.4.0",
     "@reduxjs/toolkit": "^1.9.6",
     "@types/redux-logger": "^3.0.10",
-    "next": "^13.5.4",
-    "react": "latest",
-    "react-dom": "latest",
+    "graphql": "^16.8.1",
+    "mongodb": "^6.3.0",
+    "next": "^14.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-redux": "^8.1.2",
-    "redux-logger": "^3.0.6"
+    "realm-web": "^2.0.0",
+    "redux-logger": "^3.0.6",
+    "redux-persist": "^6.0.0"
   },
   "devDependencies": {
     "@types/node": "latest",
-    "@types/react": "latest",
-    "@types/react-dom": "latest",
+    "@types/react": "^18.2.48",
+    "@types/react-dom": "^18.2.18",
     "autoprefixer": "latest",
     "eslint": "latest",
-    "eslint-config-next": "latest",
+    "eslint-config-next": "^14.1.0",
     "postcss": "latest",
     "tailwindcss": "latest",
     "typescript": "latest"

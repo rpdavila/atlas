@@ -24,7 +24,7 @@ export default function Search() {
 
   const instrumentSearchResults = displayInstruments.filter((instrument) => {
     return (
-      instrument.type?.includes(searchfield) ||
+      instrument.classification?.includes(searchfield) ||
       instrument.brand?.includes(searchfield) ||
       instrument.serialNumber?.includes(searchfield) ||
       instrument.rentStatus.includes(searchfield)

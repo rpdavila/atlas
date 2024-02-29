@@ -1,0 +1,555 @@
+type InstrumentInfo {
+  _id: ObjectId
+  assignedTo: StudentInfo
+  brand: String!
+  classification: String!
+  rentStatus: String!
+  serialNumber: String!
+}
+
+type User {
+  _id: ObjectId
+  district: String
+  firstName: String
+  lastName: String
+  role: String
+  school: [String]
+  userId: String!
+}
+
+input UserUpdateInput {
+  firstName: String
+  district: String
+  school: [String]
+  _id_unset: Boolean
+  role_unset: Boolean
+  _id: ObjectId
+  school_unset: Boolean
+  firstName_unset: Boolean
+  district_unset: Boolean
+  userId: String
+  lastName: String
+  lastName_unset: Boolean
+  role: String
+  userId_unset: Boolean
+}
+
+input StudentInfoInstrumentRelationInput {
+  create: InstrumentInfoInsertInput
+  link: ObjectId
+}
+
+input ListStudentDatumUpdateInput {
+  students: ListStudentDatumStudentsRelationInput
+  students_unset: Boolean
+}
+
+input InstrumentInfoQueryInput {
+  classification_lte: String
+  _id_nin: [ObjectId]
+  serialNumber_in: [String]
+  serialNumber_lt: String
+  _id_in: [ObjectId]
+  serialNumber_nin: [String]
+  _id_exists: Boolean
+  rentStatus_in: [String]
+  serialNumber: String
+  classification_exists: Boolean
+  rentStatus_nin: [String]
+  serialNumber_gte: String
+  rentStatus_lt: String
+  serialNumber_lte: String
+  brand_in: [String]
+  rentStatus_gte: String
+  _id: ObjectId
+  rentStatus_gt: String
+  _id_lte: ObjectId
+  serialNumber_ne: String
+  classification_lt: String
+  _id_ne: ObjectId
+  classification_gt: String
+  brand: String
+  rentStatus_exists: Boolean
+  OR: [InstrumentInfoQueryInput!]
+  rentStatus_ne: String
+  assignedTo_exists: Boolean
+  _id_gte: ObjectId
+  classification: String
+  brand_lte: String
+  brand_gt: String
+  classification_ne: String
+  serialNumber_gt: String
+  classification_in: [String]
+  classification_gte: String
+  brand_gte: String
+  AND: [InstrumentInfoQueryInput!]
+  serialNumber_exists: Boolean
+  rentStatus: String
+  _id_gt: ObjectId
+  brand_lt: String
+  rentStatus_lte: String
+  assignedTo: StudentInfoQueryInput
+  brand_exists: Boolean
+  brand_nin: [String]
+  classification_nin: [String]
+  _id_lt: ObjectId
+  brand_ne: String
+}
+
+input StudentInfoQueryInput {
+  teacher_exists: Boolean
+  firstName_gt: String
+  teacher_lt: ObjectId
+  school_in: [String]
+  _id_exists: Boolean
+  _id_lt: ObjectId
+  teacher_gt: ObjectId
+  studentIdNumber_gte: String
+  school_nin: [String]
+  lastName_lt: String
+  teacher: ObjectId
+  studentIdNumber: String
+  firstName_exists: Boolean
+  teacher_ne: ObjectId
+  lastName_in: [String]
+  lastName: String
+  firstName_lte: String
+  _id_lte: ObjectId
+  firstName_nin: [String]
+  school: String
+  firstName_in: [String]
+  _id_in: [ObjectId]
+  instrument_exists: Boolean
+  lastName_gte: String
+  studentIdNumber_ne: String
+  studentIdNumber_lte: String
+  studentIdNumber_gt: String
+  lastName_exists: Boolean
+  studentIdNumber_lt: String
+  school_lte: String
+  firstName_ne: String
+  _id_nin: [ObjectId]
+  firstName_lt: String
+  school_lt: String
+  teacher_lte: ObjectId
+  teacher_nin: [ObjectId]
+  lastName_ne: String
+  school_exists: Boolean
+  firstName: String
+  teacher_in: [ObjectId]
+  studentIdNumber_nin: [String]
+  school_gt: String
+  lastName_lte: String
+  school_gte: String
+  _id_gt: ObjectId
+  _id_gte: ObjectId
+  lastName_gt: String
+  AND: [StudentInfoQueryInput!]
+  school_ne: String
+  _id_ne: ObjectId
+  teacher_gte: ObjectId
+  _id: ObjectId
+  studentIdNumber_in: [String]
+  instrument: InstrumentInfoQueryInput
+  firstName_gte: String
+  studentIdNumber_exists: Boolean
+  OR: [StudentInfoQueryInput!]
+  lastName_nin: [String]
+}
+
+type UpdateManyPayload {
+  matchedCount: Int!
+  modifiedCount: Int!
+}
+
+type Query {
+  instrumentInfo(query: InstrumentInfoQueryInput): InstrumentInfo
+  instrumentInfos(
+    query: InstrumentInfoQueryInput
+    limit: Int = 100
+    sortBy: InstrumentInfoSortByInput
+  ): [InstrumentInfo]!
+  listInstrumentData(
+    query: ListInstrumentDatumQueryInput
+    limit: Int = 100
+  ): [ListInstrumentDatum]!
+  listInstrumentDatum(query: ListInstrumentDatumQueryInput): ListInstrumentDatum
+  listStudentData(
+    query: ListStudentDatumQueryInput
+    limit: Int = 100
+    sortBy: ListStudentDatumSortByInput
+  ): [ListStudentDatum]!
+  listStudentDatum(query: ListStudentDatumQueryInput): ListStudentDatum
+  studentInfo(query: StudentInfoQueryInput): StudentInfo
+  studentInfos(
+    query: StudentInfoQueryInput
+    limit: Int = 100
+    sortBy: StudentInfoSortByInput
+  ): [StudentInfo]!
+  user(query: UserQueryInput): User
+  users(
+    query: UserQueryInput
+    limit: Int = 100
+    sortBy: UserSortByInput
+  ): [User]!
+}
+
+enum UserSortByInput {
+  DISTRICT_DESC
+  _ID_ASC
+  FIRSTNAME_ASC
+  LASTNAME_ASC
+  FIRSTNAME_DESC
+  LASTNAME_DESC
+  ROLE_ASC
+  ROLE_DESC
+  DISTRICT_ASC
+  _ID_DESC
+  USERID_ASC
+  USERID_DESC
+}
+
+input ListStudentDatumStudentsRelationInput {
+  create: StudentInfoInsertInput
+  link: ObjectId
+}
+
+enum ListStudentDatumSortByInput {
+  STUDENTS_ASC
+  STUDENTS_DESC
+}
+
+input StudentInfoInsertInput {
+  firstName: String!
+  lastName: String!
+  studentIdNumber: String!
+  instrument: StudentInfoInstrumentRelationInput
+  school: String
+  teacher: ObjectId
+  _id: ObjectId
+}
+
+input ListStudentDatumInsertInput {
+  students: ListStudentDatumStudentsRelationInput!
+}
+
+input ListInstrumentDatumQueryInput {
+  instruments_nin: [InstrumentInfoQueryInput]
+  instruments_exists: Boolean
+  AND: [ListInstrumentDatumQueryInput!]
+  OR: [ListInstrumentDatumQueryInput!]
+  instruments: [InstrumentInfoQueryInput]
+  instruments_in: [InstrumentInfoQueryInput]
+}
+
+enum InstrumentInfoSortByInput {
+  RENTSTATUS_DESC
+  ASSIGNEDTO_ASC
+  ASSIGNEDTO_DESC
+  _ID_ASC
+  CLASSIFICATION_ASC
+  BRAND_DESC
+  SERIALNUMBER_ASC
+  RENTSTATUS_ASC
+  _ID_DESC
+  CLASSIFICATION_DESC
+  BRAND_ASC
+  SERIALNUMBER_DESC
+}
+
+input InstrumentInfoAssignedToRelationInput {
+  create: StudentInfoInsertInput
+  link: ObjectId
+}
+
+type Mutation {
+  deleteManyInstrumentInfos(query: InstrumentInfoQueryInput): DeleteManyPayload
+  deleteManyListInstrumentData(
+    query: ListInstrumentDatumQueryInput
+  ): DeleteManyPayload
+  deleteManyListStudentData(
+    query: ListStudentDatumQueryInput
+  ): DeleteManyPayload
+  deleteManyStudentInfos(query: StudentInfoQueryInput): DeleteManyPayload
+  deleteManyUsers(query: UserQueryInput): DeleteManyPayload
+  deleteOneInstrumentInfo(query: InstrumentInfoQueryInput!): InstrumentInfo
+  deleteOneListInstrumentDatum(
+    query: ListInstrumentDatumQueryInput!
+  ): ListInstrumentDatum
+  deleteOneListStudentDatum(
+    query: ListStudentDatumQueryInput!
+  ): ListStudentDatum
+  deleteOneStudentInfo(query: StudentInfoQueryInput!): StudentInfo
+  deleteOneUser(query: UserQueryInput!): User
+  insertManyInstrumentInfos(
+    data: [InstrumentInfoInsertInput!]!
+  ): InsertManyPayload
+  insertManyListInstrumentData(
+    data: [ListInstrumentDatumInsertInput!]!
+  ): InsertManyPayload
+  insertManyListStudentData(
+    data: [ListStudentDatumInsertInput!]!
+  ): InsertManyPayload
+  insertManyStudentInfos(data: [StudentInfoInsertInput!]!): InsertManyPayload
+  insertManyUsers(data: [UserInsertInput!]!): InsertManyPayload
+  insertOneInstrumentInfo(data: InstrumentInfoInsertInput!): InstrumentInfo
+  insertOneListInstrumentDatum(
+    data: ListInstrumentDatumInsertInput!
+  ): ListInstrumentDatum
+  insertOneListStudentDatum(
+    data: ListStudentDatumInsertInput!
+  ): ListStudentDatum
+  insertOneStudentInfo(data: StudentInfoInsertInput!): StudentInfo
+  insertOneUser(data: UserInsertInput!): User
+  replaceOneInstrumentInfo(
+    data: InstrumentInfoInsertInput!
+    query: InstrumentInfoQueryInput
+  ): InstrumentInfo
+  replaceOneListInstrumentDatum(
+    query: ListInstrumentDatumQueryInput
+    data: ListInstrumentDatumInsertInput!
+  ): ListInstrumentDatum
+  replaceOneListStudentDatum(
+    query: ListStudentDatumQueryInput
+    data: ListStudentDatumInsertInput!
+  ): ListStudentDatum
+  replaceOneStudentInfo(
+    query: StudentInfoQueryInput
+    data: StudentInfoInsertInput!
+  ): StudentInfo
+  replaceOneUser(query: UserQueryInput, data: UserInsertInput!): User
+  updateManyInstrumentInfos(
+    query: InstrumentInfoQueryInput
+    set: InstrumentInfoUpdateInput!
+  ): UpdateManyPayload
+  updateManyListInstrumentData(
+    query: ListInstrumentDatumQueryInput
+    set: ListInstrumentDatumUpdateInput!
+  ): UpdateManyPayload
+  updateManyListStudentData(
+    query: ListStudentDatumQueryInput
+    set: ListStudentDatumUpdateInput!
+  ): UpdateManyPayload
+  updateManyStudentInfos(
+    query: StudentInfoQueryInput
+    set: StudentInfoUpdateInput!
+  ): UpdateManyPayload
+  updateManyUsers(
+    query: UserQueryInput
+    set: UserUpdateInput!
+  ): UpdateManyPayload
+  updateOneInstrumentInfo(
+    query: InstrumentInfoQueryInput
+    set: InstrumentInfoUpdateInput!
+  ): InstrumentInfo
+  updateOneListInstrumentDatum(
+    query: ListInstrumentDatumQueryInput
+    set: ListInstrumentDatumUpdateInput!
+  ): ListInstrumentDatum
+  updateOneListStudentDatum(
+    query: ListStudentDatumQueryInput
+    set: ListStudentDatumUpdateInput!
+  ): ListStudentDatum
+  updateOneStudentInfo(
+    set: StudentInfoUpdateInput!
+    query: StudentInfoQueryInput
+  ): StudentInfo
+  updateOneUser(query: UserQueryInput, set: UserUpdateInput!): User
+  upsertOneInstrumentInfo(
+    query: InstrumentInfoQueryInput
+    data: InstrumentInfoInsertInput!
+  ): InstrumentInfo
+  upsertOneListInstrumentDatum(
+    data: ListInstrumentDatumInsertInput!
+    query: ListInstrumentDatumQueryInput
+  ): ListInstrumentDatum
+  upsertOneListStudentDatum(
+    query: ListStudentDatumQueryInput
+    data: ListStudentDatumInsertInput!
+  ): ListStudentDatum
+  upsertOneStudentInfo(
+    query: StudentInfoQueryInput
+    data: StudentInfoInsertInput!
+  ): StudentInfo
+  upsertOneUser(query: UserQueryInput, data: UserInsertInput!): User
+}
+
+input InstrumentInfoInsertInput {
+  _id: ObjectId
+  classification: String!
+  brand: String!
+  serialNumber: String!
+  rentStatus: String!
+  assignedTo: InstrumentInfoAssignedToRelationInput
+}
+
+type InsertManyPayload {
+  insertedIds: [ObjectId]!
+}
+
+input ListInstrumentDatumInstrumentsRelationInput {
+  link: [ObjectId]
+  create: [InstrumentInfoInsertInput]
+}
+
+input StudentInfoUpdateInput {
+  firstName: String
+  lastName_unset: Boolean
+  lastName: String
+  _id_unset: Boolean
+  instrument: StudentInfoInstrumentRelationInput
+  school: String
+  firstName_unset: Boolean
+  instrument_unset: Boolean
+  studentIdNumber_unset: Boolean
+  studentIdNumber: String
+  school_unset: Boolean
+  teacher: ObjectId
+  teacher_unset: Boolean
+  _id: ObjectId
+}
+
+type StudentInfo {
+  _id: ObjectId
+  firstName: String!
+  instrument: InstrumentInfo
+  lastName: String!
+  school: String
+  studentIdNumber: String!
+  teacher: ObjectId
+}
+
+input ListStudentDatumQueryInput {
+  students_exists: Boolean
+  AND: [ListStudentDatumQueryInput!]
+  OR: [ListStudentDatumQueryInput!]
+  students: StudentInfoQueryInput
+}
+
+type ListInstrumentDatum {
+  instruments: [InstrumentInfo]!
+}
+
+input ListInstrumentDatumInsertInput {
+  instruments: ListInstrumentDatumInstrumentsRelationInput!
+}
+
+type ListStudentDatum {
+  students: StudentInfo!
+}
+
+input UserQueryInput {
+  firstName_lt: String
+  userId_gt: String
+  school: [String]
+  role: String
+  userId_gte: String
+  district_exists: Boolean
+  district_ne: String
+  firstName_ne: String
+  lastName_gt: String
+  userId: String
+  lastName_exists: Boolean
+  role_gt: String
+  firstName_gt: String
+  firstName_in: [String]
+  lastName_ne: String
+  lastName_lt: String
+  _id_lt: ObjectId
+  district: String
+  firstName_gte: String
+  _id_gt: ObjectId
+  _id_nin: [ObjectId]
+  district_gt: String
+  _id_gte: ObjectId
+  lastName_in: [String]
+  userId_exists: Boolean
+  role_in: [String]
+  userId_ne: String
+  firstName_lte: String
+  lastName_lte: String
+  district_gte: String
+  lastName_nin: [String]
+  district_in: [String]
+  firstName_exists: Boolean
+  _id_lte: ObjectId
+  lastName_gte: String
+  district_lt: String
+  userId_lt: String
+  userId_lte: String
+  role_lt: String
+  userId_nin: [String]
+  role_ne: String
+  role_gte: String
+  role_nin: [String]
+  district_nin: [String]
+  role_exists: Boolean
+  school_exists: Boolean
+  AND: [UserQueryInput!]
+  userId_in: [String]
+  OR: [UserQueryInput!]
+  district_lte: String
+  school_nin: [String]
+  role_lte: String
+  _id_exists: Boolean
+  school_in: [String]
+  _id: ObjectId
+  lastName: String
+  _id_in: [ObjectId]
+  firstName_nin: [String]
+  firstName: String
+  _id_ne: ObjectId
+}
+
+input InstrumentInfoUpdateInput {
+  assignedTo: InstrumentInfoAssignedToRelationInput
+  _id: ObjectId
+  _id_unset: Boolean
+  brand_unset: Boolean
+  rentStatus_unset: Boolean
+  classification_unset: Boolean
+  brand: String
+  serialNumber_unset: Boolean
+  assignedTo_unset: Boolean
+  classification: String
+  rentStatus: String
+  serialNumber: String
+}
+
+input UserInsertInput {
+  firstName: String
+  lastName: String
+  role: String
+  school: [String]
+  district: String
+  _id: ObjectId
+  userId: String!
+}
+
+input ListInstrumentDatumUpdateInput {
+  instruments_unset: Boolean
+  instruments: ListInstrumentDatumInstrumentsRelationInput
+}
+
+scalar ObjectId
+
+enum StudentInfoSortByInput {
+  INSTRUMENT_ASC
+  SCHOOL_ASC
+  _ID_ASC
+  _ID_DESC
+  SCHOOL_DESC
+  TEACHER_ASC
+  FIRSTNAME_DESC
+  STUDENTIDNUMBER_DESC
+  STUDENTIDNUMBER_ASC
+  LASTNAME_ASC
+  LASTNAME_DESC
+  TEACHER_DESC
+  FIRSTNAME_ASC
+  INSTRUMENT_DESC
+}
+
+type DeleteManyPayload {
+  deletedCount: Int!
+}
