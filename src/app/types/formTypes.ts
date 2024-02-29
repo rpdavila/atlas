@@ -21,7 +21,7 @@ export enum UserRole {
 }
 
 export type InstrumentDetails = {
-  id: string | undefined;
+  id: string | undefined | number;
   classification: string | undefined;
   brand: string | undefined;
   serialNumber: string | undefined;
@@ -37,7 +37,7 @@ export enum RentStatus {
 }
 
 export type StudentInfo = {
-  id: string | number;
+  id: string | number | undefined;
   firstName: string | undefined;
   lastName: string | undefined;
   studentIdNumber: string | undefined;
