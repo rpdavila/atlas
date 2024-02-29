@@ -1,27 +1,31 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
-import { useDispatch } from "react-redux";
+import { useAppSelector, useAppDispatch } from "@/app/redux/hooks";
 import { setType } from "@/app/redux/features/searchOptionsSlice";
+import { logOutUser } from "../../redux/features/userSlice";
 
 import { navList } from "@/app/data/nav-List";
 import Button from "../button/button";
 
 export default function Header() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+  const isLoggedIn = useAppSelector((state) => state.userInfo.isLoggedIn);
   const pathName = usePathname();
   const router = useRouter();
 
   const handleClickSignIn = () => {
-    router.push("/signIn");
+    if (isLoggedIn) {
+      dispatch(logOutUser());
+    } else {
+      router.push("/signIn");
+    }
   };
 
   const handleClickNav = () => {
     dispatch(setType(""));
   };
-
   return (
     <header>
       <nav className="flex justify-end bg-white h-20">
@@ -43,9 +47,23 @@ export default function Header() {
               </li>
             );
           })}
+          {isLoggedIn ? (
+            <li className="p-2">
+              <Link
+                href={"/userProfile"}
+                className={
+                  pathName === "/userProfile"
+                    ? "active: text-blue-700 underline underline-offset-4"
+                    : "text-blue-500 hover:underline underline-offset-4"
+                }
+              >
+                Profile
+              </Link>
+            </li>
+          ) : null}
           <Button
             type="button"
-            name="Sign In"
+            name={isLoggedIn ? "Log Out" : "Log In"}
             marginTop="0"
             onClick={handleClickSignIn}
           />
