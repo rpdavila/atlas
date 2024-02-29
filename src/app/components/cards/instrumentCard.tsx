@@ -72,7 +72,7 @@ export default function InstrumentCard({ instrument }: CardProps) {
           studentIdNumber: matchingStudent?.studentIdNumber,
         },
         instrumentInfo: {
-          type: matchingInstrument?.type,
+          classification: matchingInstrument?.classification,
           brand: matchingInstrument?.brand,
           serialNumber: matchingInstrument?.serialNumber,
         },
@@ -85,7 +85,7 @@ export default function InstrumentCard({ instrument }: CardProps) {
       <div className="flex flex-col w-1/3 items-start justify-center">
         <p>
           <strong>Instrument type: </strong>
-          {instrument?.type}
+          {instrument?.classification}
         </p>
         <p>
           <strong>Brand: </strong>
