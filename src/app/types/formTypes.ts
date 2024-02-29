@@ -1,6 +1,28 @@
+export type UserInformation = {
+  id: string | undefined;
+  isLoggedIn: boolean | undefined;
+  accessToken: string | null | undefined;
+  customUserData: SimpleObject | undefined;
+  email: string | undefined;
+};
+
+export enum UpdateUserData {
+  firstName = "First Name",
+  lastName = "Last Name",
+  school = "School",
+  role = "Role",
+  district = "District",
+}
+
+export enum UserRole {
+  Administrator = "Administrator",
+  Teacher = "Teacher",
+  Recruiter = "Recruiter",
+}
+
 export type InstrumentDetails = {
-  id: number | undefined;
-  type: string | undefined;
+  id: string | undefined;
+  classification: string | undefined;
   brand: string | undefined;
   serialNumber: string | undefined;
   rentStatus: RentStatus;
@@ -15,7 +37,7 @@ export enum RentStatus {
 }
 
 export type StudentInfo = {
-  id: number;
+  id: string | number;
   firstName: string | undefined;
   lastName: string | undefined;
   studentIdNumber: string | undefined;
@@ -47,7 +69,7 @@ export type OnlyInstrumentType = Omit<
 
 export type OnlyInstrumentId = Omit<
   InstrumentDetails,
-  "serialNumber" | "brand" | "rentStatus" | "assignedTo" | "type"
+  "serialNumber" | "brand" | "rentStatus" | "assignedTo" | "classification"
 >;
 
 export type OnlyStudentId = Omit<

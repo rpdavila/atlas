@@ -1,24 +1,21 @@
 "use client";
-import React, { useCallback, useState, useMemo } from "react";
+import React, { useState } from "react";
 
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
-import { addInstrumentToList } from "@/app/redux/features/instrumentSLice";
+import { setSearch } from "@/app/redux/features/searchOptionsSlice";
+
+import { ADD_INSTRUMENT } from "@/app/graphQLOperations";
+import { useMutation } from "@apollo/client";
 
 import TextInput from "../input/customTextInput";
 import Button from "../button/button";
 import Select from "../input/customSelection";
 
 import { InstrumentDetails, RentStatus } from "@/app/types/formTypes";
-import { setSearch } from "@/app/redux/features/searchOptionsSlice";
 
 type InstrumentFormProps = {
   formTitle: string;
   buttonText: string;
-};
-
-type SearchParameters = {
-  searchParams: string;
-  result: Array<InstrumentDetails>;
 };
 
 export default function InstrumentForm({
@@ -29,19 +26,18 @@ export default function InstrumentForm({
   const selectOption = useAppSelector((state) => state.searchOptions.type);
   const searchResult = useAppSelector((state) => state.searchOptions.search);
 
-  const initialState = useMemo(() => {
-    return {
-      id: 1,
-      type: "",
-      brand: "",
-      serialNumber: "",
-      rentStatus: RentStatus.Available,
-      assignedTo: undefined,
-    };
-  }, []);
+  const initialState: InstrumentDetails = {
+    id: "",
+    classification: "",
+    brand: "",
+    serialNumber: "",
+    rentStatus: RentStatus.Available,
+    assignedTo: undefined,
+  };
 
   const [instrumentDetails, setInstrumentDetails] =
     useState<InstrumentDetails>(initialState);
+  const [addInstrument, { data, loading, error }] = useMutation(ADD_INSTRUMENT);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
@@ -50,12 +46,24 @@ export default function InstrumentForm({
       : setInstrumentDetails({ ...instrumentDetails, [name]: value });
   };
 
-  const handleClick = useCallback(() => {
-    dispatch(addInstrumentToList(instrumentDetails));
+  const handleClick = async () => {
+    // dispatch(addInstrumentToList(instrumentDetails));
+    await addInstrument({
+      variables: {
+        data: {
+          classification: instrumentDetails.classification,
+          brand: instrumentDetails.brand,
+          serialNumber: instrumentDetails.serialNumber,
+          rentStatus: instrumentDetails.rentStatus,
+        },
+      },
+    });
+    alert(`Instrument added to database`);
     setInstrumentDetails(initialState);
-    alert(`${instrumentDetails} Added to database`);
-  }, [dispatch, initialState, instrumentDetails]);
+  };
 
+  if (loading) return "Submitting";
+  if (error) return `Error submitting request ${error.message}`;
   return (
     <div className="flex flex-col bg-white rounded-lg items-center w-full pb-2 mt-2">
       <h1 className="bg-blue-500 rounded-t-lg w-full self-center text-white text-center">
@@ -78,8 +86,8 @@ export default function InstrumentForm({
           <TextInput
             labelName="Type"
             type="text"
-            name="type"
-            value={instrumentDetails.type}
+            name="classification"
+            value={instrumentDetails.classification}
             placeHolder="Instrument Type"
             onChange={handleChange}
           />
@@ -101,7 +109,7 @@ export default function InstrumentForm({
           />
           <Select
             label="Instrument Rent Status"
-            category="Instrument Select"
+            category="rentStatus"
             placeHolder="Rent Status"
             options={RentStatus}
             onChange={handleChange}

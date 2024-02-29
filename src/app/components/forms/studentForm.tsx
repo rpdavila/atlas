@@ -3,12 +3,14 @@
 import React, { useState } from "react";
 
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { addStudentToList } from "@/app/redux/features/studentListSlice";
+import { setSearch } from "@/app/redux/features/searchOptionsSlice";
 
 import TextInput from "../input/customTextInput";
 import Button from "../button/button";
 import { StudentInfo } from "@/app/types/formTypes";
-import { setSearch } from "@/app/redux/features/searchOptionsSlice";
+
+import { useMutation } from "@apollo/client";
+import { ADD_STUDENT } from "../../graphQLOperations";
 
 type StudentFormProps = {
   formTitle: string;
@@ -24,7 +26,7 @@ export default function StudentForm({
   const searchResult = useAppSelector((state) => state.searchOptions.search);
 
   const initialState: StudentInfo = {
-    id: 1,
+    id: "",
     firstName: "",
     lastName: "",
     studentIdNumber: "",
@@ -32,6 +34,7 @@ export default function StudentForm({
   };
 
   const [studentInfo, setStudentInfo] = useState<StudentInfo>(initialState);
+  const [addStudent, { data, loading, error }] = useMutation(ADD_STUDENT);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -40,11 +43,23 @@ export default function StudentForm({
       : setStudentInfo({ ...studentInfo, [name]: value });
   };
 
-  const handleAddStudent = () => {
-    dispatch(addStudentToList(studentInfo));
-    alert("Student Added");
+  const handleAddStudent = async () => {
+    await addStudent({
+      variables: {
+        data: {
+          firstName: studentInfo.firstName,
+          lastName: studentInfo.lastName,
+          studentIdNumber: studentInfo.studentIdNumber,
+          instrument: studentInfo.instrument,
+        },
+      },
+    });
+    alert(`Added to database`);
+    setStudentInfo(initialState);
   };
 
+  if (loading) return "Submitting";
+  if (error) return `Error submitting request ${error.message}`;
   return (
     <div className="flex flex-col bg-white rounded-lg items-center w-full pb-2 mt-2">
       <h1 className="bg-blue-500 rounded-t-lg w-full self-center text-white text-center">

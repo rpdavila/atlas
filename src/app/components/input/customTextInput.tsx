@@ -6,7 +6,7 @@ type TextProps = {
   labelName: string;
   placeHolder: string;
   onChange: ChangeEventHandler<HTMLInputElement>;
-  value: string | number | undefined;
+  value: string | number | string[] | undefined;
 };
 
 export default function TextInput({

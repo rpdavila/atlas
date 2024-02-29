@@ -3,7 +3,7 @@ import { RentStatus, InstrumentList } from "../types/formTypes";
 export const instrumentDetails: InstrumentList = [
   {
     id: 1,
-    type: "Tuba",
+    classification: "Tuba",
     brand: "Yamaha",
     serialNumber: "YM-001",
     rentStatus: RentStatus.Available,
@@ -11,7 +11,7 @@ export const instrumentDetails: InstrumentList = [
   },
   {
     id: 2,
-    type: "Guitar",
+    classification: "Guitar",
     brand: "Fender",
     serialNumber: "FN-001",
     rentStatus: RentStatus.Available,
@@ -19,7 +19,7 @@ export const instrumentDetails: InstrumentList = [
   },
   {
     id: 3,
-    type: "Drums",
+    classification: "Drums",
     brand: "Korg",
     serialNumber: "KO-001",
     rentStatus: RentStatus.Available,
@@ -27,7 +27,7 @@ export const instrumentDetails: InstrumentList = [
   },
   {
     id: 4,
-    type: "Piano",
+    classification: "Piano",
     brand: "Yamaha",
     serialNumber: "YM-002",
     rentStatus: RentStatus.Available,
@@ -35,7 +35,7 @@ export const instrumentDetails: InstrumentList = [
   },
   {
     id: 5,
-    type: "Flute",
+    classification: "Flute",
     brand: "Fender",
     serialNumber: "FN-002",
     rentStatus: RentStatus.Available,
@@ -43,7 +43,7 @@ export const instrumentDetails: InstrumentList = [
   },
   {
     id: 6,
-    type: "Saxophone",
+    classification: "Saxophone",
     brand: "Yamaha",
     serialNumber: "YM-003",
     rentStatus: RentStatus.Available,
@@ -51,7 +51,7 @@ export const instrumentDetails: InstrumentList = [
   },
   {
     id: 7,
-    type: "Bass Guitar",
+    classification: "Bass Guitar",
     brand: "Fender",
     serialNumber: "FN-003",
     rentStatus: RentStatus.Available,
@@ -59,7 +59,7 @@ export const instrumentDetails: InstrumentList = [
   },
   {
     id: 8,
-    type: "Violin",
+    classification: "Violin",
     brand: "Yamaha",
     serialNumber: "YM-004",
     rentStatus: RentStatus.Available,
@@ -67,7 +67,7 @@ export const instrumentDetails: InstrumentList = [
   },
   {
     id: 9,
-    type: "Cello",
+    classification: "Cello",
     brand: "Fender",
     serialNumber: "FN-004",
     rentStatus: RentStatus.Available,
@@ -75,7 +75,7 @@ export const instrumentDetails: InstrumentList = [
   },
   {
     id: 10,
-    type: "Trumpet",
+    classification: "Trumpet",
     brand: "Yamaha",
     serialNumber: "YM-005",
     rentStatus: RentStatus.Available,
@@ -83,7 +83,7 @@ export const instrumentDetails: InstrumentList = [
   },
   {
     id: 11,
-    type: "Trombone",
+    classification: "Trombone",
     brand: "Fender",
     serialNumber: "FN-005",
     rentStatus: RentStatus.Available,
@@ -91,7 +91,7 @@ export const instrumentDetails: InstrumentList = [
   },
   {
     id: 12,
-    type: "Tuba",
+    classification: "Tuba",
     brand: "Yamaha",
     serialNumber: "YM-006",
     rentStatus: RentStatus.Available,
@@ -99,7 +99,7 @@ export const instrumentDetails: InstrumentList = [
   },
   {
     id: 13,
-    type: "Guitar",
+    classification: "Guitar",
     brand: "Fender",
     serialNumber: "FN-006",
     rentStatus: RentStatus.Available,
@@ -107,7 +107,7 @@ export const instrumentDetails: InstrumentList = [
   },
   {
     id: 14,
-    type: "Drums",
+    classification: "Drums",
     brand: "Korg",
     serialNumber: "KO-002",
     rentStatus: RentStatus.Available,
@@ -115,7 +115,7 @@ export const instrumentDetails: InstrumentList = [
   },
   {
     id: 15,
-    type: "Piano",
+    classification: "Piano",
     brand: "Yamaha",
     serialNumber: "YM-007",
     rentStatus: RentStatus.Available,
@@ -123,7 +123,7 @@ export const instrumentDetails: InstrumentList = [
   },
   {
     id: 16,
-    type: "Flute",
+    classification: "Flute",
     brand: "Fender",
     serialNumber: "FN-007",
     rentStatus: RentStatus.Available,
@@ -131,7 +131,7 @@ export const instrumentDetails: InstrumentList = [
   },
   {
     id: 17,
-    type: "Saxophone",
+    classification: "Saxophone",
     brand: "Yamaha",
     serialNumber: "YM-008",
     rentStatus: RentStatus.Available,
@@ -139,7 +139,7 @@ export const instrumentDetails: InstrumentList = [
   },
   {
     id: 18,
-    type: "Bass Guitar",
+    classification: "Bass Guitar",
     brand: "Fender",
     serialNumber: "FN-008",
     rentStatus: RentStatus.Available,
@@ -147,7 +147,7 @@ export const instrumentDetails: InstrumentList = [
   },
   {
     id: 19,
-    type: "Violin",
+    classification: "Violin",
     brand: "Yamaha",
     serialNumber: "YM-009",
     rentStatus: RentStatus.Available,
