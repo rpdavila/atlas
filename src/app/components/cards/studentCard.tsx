@@ -22,7 +22,7 @@ export default function StudentCard({ student }: StudentCardProps) {
             <div className="flex flex-col">
               <p>
                 <strong>Type: </strong>
-                {student.instrument?.type}
+                {student.instrument?.classification}
               </p>
               <p>
                 <strong>Brand: </strong>
