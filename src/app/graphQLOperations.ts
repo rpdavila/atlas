@@ -35,7 +35,10 @@ export const ADD_USER_CUSTOM_DATA = gql`
 `;
 
 export const UPDATE_USER_CUSTOM_DATA = gql`
-  mutation updateUserCustomData($set: UserUpdateInput!, $query: UserQueryInput!) {
+  mutation updateUserCustomData(
+    $set: UserUpdateInput!
+    $query: UserQueryInput!
+  ) {
     updateOneUser(query: $query, set: $set) {
       firstName
       lastName
@@ -46,11 +49,35 @@ export const UPDATE_USER_CUSTOM_DATA = gql`
   }
 `;
 
-export const GET_USER = gql`
-  query getUser($id: ID!) {
-    user(id: $id) {
-      firstName
-      lastName
+export const GET_INSTRUMENTS_BY_SCHOOL = gql`
+  query getInstrumentsBySchool($data: String!) {
+    instrumentsInfos(query: $data, limit: Int = 100, sortBy: SCHOOL_ASC ) {
+      classification
+      brand
+      serialNumber
+      rentStatus
+      assignedTo
+    }
+  }
+`;
+
+export const GET_INSTRUMENTS_BY_DISTRICT = gql`
+  query getInstrumentsByDistrict($data: String!) {}
+    instrumentsByDistrict(district: $data) {
+      classification
+      brand
+      serialNumber
+    }
+`;
+export const ADD_MANY_INSTRUMENTS = gql`
+  mutation addManyInstruments($data: [InstrumentInfoInsertInput!]!) {
+    insertManyInstrumentInfos(data: $data) {
+      classification
+      brand
+      serialNumber
+      rentStatus
+      school
+      district
     }
   }
 `;
