@@ -42,11 +42,7 @@ export default function UserProfile() {
 
   const [
     updateUserData,
-    {
-      data: updateUserData_Data,
-      loading: updateUserLoading,
-      error: updateUserDataError,
-    },
+    { loading: updateUserLoading, error: updateUserDataError },
   ] = useMutation(UPDATE_USER_CUSTOM_DATA);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -226,7 +222,7 @@ export default function UserProfile() {
           <p>
             Last Name:{" "}
             {userInfo.customUserData
-              ? ` ${userInfo.customUserData.lastName}`
+              ? `${userInfo.customUserData.lastName}`
               : "No Data"}
           </p>
         </section>
