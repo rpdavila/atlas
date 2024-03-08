@@ -48,27 +48,34 @@ export const UPDATE_USER_CUSTOM_DATA = gql`
     }
   }
 `;
+//________
+// DONTUSE
+//________
+// export const GET_INSTRUMENTS_BY_SCHOOL = gql`
+//   query getInstrumentsBySchool($data: [InstrumentInfoInsertInput!]!) {
+//     instrumentsInfos(query: $data, limit: Int = 100, sortBy: SCHOOL_ASC ) {
+//       classification
+//       brand
+//       serialNumber
+//       rentStatus
+//       assignedTo
+//     }
+//   }
+// `;
 
-export const GET_INSTRUMENTS_BY_SCHOOL = gql`
-  query getInstrumentsBySchool($data: String!) {
-    instrumentsInfos(query: $data, limit: Int = 100, sortBy: SCHOOL_ASC ) {
-      classification
-      brand
-      serialNumber
-      rentStatus
-      assignedTo
-    }
-  }
-`;
+//________
+// DONTUSE
+//________
+// export const GET_INSTRUMENTS_BY_DISTRICT = gql`
+//   query getInstrumentsByDistrict($data: String!) {
+//     instrumentsByDistrict(district: $data) {
+//       classification
+//       brand
+//       serialNumber
+//     }
+//   }
+// `;
 
-export const GET_INSTRUMENTS_BY_DISTRICT = gql`
-  query getInstrumentsByDistrict($data: String!) {}
-    instrumentsByDistrict(district: $data) {
-      classification
-      brand
-      serialNumber
-    }
-`;
 export const ADD_MANY_INSTRUMENTS = gql`
   mutation addManyInstruments($data: [InstrumentInfoInsertInput!]!) {
     insertManyInstrumentInfos(data: $data) {
