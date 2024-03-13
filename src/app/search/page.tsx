@@ -1,15 +1,19 @@
 "use client";
 import { Suspense } from "react";
-import { useAppSelector } from "@/app/redux/hooks";
+
+import { useAppSelector, useAppDispatch } from "@/app/redux/hooks";
 import { RootState } from "@/app/redux/store";
 
 import CardList from "../components/card-list/cardList";
 
 export default function Search() {
+  const dipatch = useAppDispatch()
+
+  // Grab student list in store
   const displayStudents = useAppSelector(
     (state: RootState) => state.students.studentList
   );
-
+    // Grab instrument list in store 
   const displayInstruments = useAppSelector(
     (state: RootState) => state.instruments.instrumentList
   );

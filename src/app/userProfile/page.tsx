@@ -5,7 +5,6 @@ import { useAppSelector, useAppDispatch } from "../redux/hooks";
 import { getCustomUserData } from "../redux/features/userSlice";
 import { UserRole, UpdateUserData } from "../types/formTypes";
 
-import { UPDATE_USER_CUSTOM_DATA } from "../graphQLOperations";
 import { useMutation } from "@apollo/client";
 
 import TextInput from "../components/input/customTextInput";
@@ -39,11 +38,6 @@ export default function UserProfile() {
   //   addUserCustomData,
   //   { data: addUserData, loading: addUserLoading, error: addUserError },
   // ] = useMutation(ADD_USER_CUSTOM_DATA);
-
-  const [
-    updateUserData,
-    { loading: updateUserLoading, error: updateUserDataError },
-  ] = useMutation(UPDATE_USER_CUSTOM_DATA);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -113,94 +107,16 @@ export default function UserProfile() {
         );
     }
   };
-  // put below function in its own page after user confirms registration
-  // const handleSubmit = () => {
-  //   addUserCustomData({
-  //     variables: {
-  //       data: {
-  //         userId: userInfo.id,
-  //         firstName: fieldData.firstName,
-  //         lastName: fieldData.lastName,
-  //         schools: fieldData.school,
-  //         district: fieldData.district,
-  //         role: fieldData.role,
-  //       },
-  //     },
-  //   });
-  // };
 
   const handleUpdate = () => {
-    switch (fieldData.selectOptions) {
-      case "First Name":
-        updateUserData({
-          variables: {
-            query: {
-              userId: userInfo.id,
-            },
-            set: {
-              firstName: fieldData.firstName,
-            },
-          },
-        });
-        break;
-      case "Last Name":
-        updateUserData({
-          variables: {
-            query: {
-              userId: userInfo.id,
-            },
-            set: {
-              lastName: fieldData.lastName,
-            },
-          },
-        });
-        break;
-      case "Role":
-        updateUserData({
-          variables: {
-            query: {
-              userId: userInfo.id,
-            },
-            set: {
-              role: fieldData.role,
-            },
-          },
-        });
-        break;
-      case "District":
-        updateUserData({
-          variables: {
-            query: {
-              userId: userInfo.id,
-            },
-            set: {
-              district: fieldData.district,
-            },
-          },
-        });
-        break;
-      case "School":
-        updateUserData({
-          variables: {
-            query: {
-              userId: userInfo.id,
-            },
-            set: {
-              school: fieldData.school,
-            },
-          },
-        });
-        break;
-    }
-  };
+
+  }
+
 
   useEffect(() => {
     dispatch(getCustomUserData());
   }, [dispatch, fieldData]);
 
-  if (updateUserLoading) return <h1>Loading...</h1>;
-  if (updateUserDataError)
-    return <h1>Error submitting request {updateUserDataError.message}</h1>;
   return (
     <main className="flex min-h-screen flex-col justify-evenly place-items-center basis-3/4 bg-white mt-2 rounded-lg">
       <section className="flex flex-col">
