@@ -33,11 +33,6 @@ export default function UserProfile() {
   };
 
   const [fieldData, setFieldData] = useState<FieldData>(initialState);
-  // put below function in its own page after user confirms registration
-  // const [
-  //   addUserCustomData,
-  //   { data: addUserData, loading: addUserLoading, error: addUserError },
-  // ] = useMutation(ADD_USER_CUSTOM_DATA);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
