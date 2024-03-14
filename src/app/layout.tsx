@@ -6,8 +6,6 @@ import { Inter } from "next/font/google";
 
 import { Providers } from "@/app/redux/provider";
 
-import GraphQLProvider from "./utilities/mongoDbGqlProvider";
-
 import Header from "./components/header/header";
 import SideBar from "./components/sideBar/sideBar";
 import PersistGateWrapper from "./components/persist/persist";
@@ -29,13 +27,13 @@ export default function RootLayout({
       <body className={inter.className} suppressHydrationWarning={true}>
         <Providers>
           <PersistGateWrapper>
-            <GraphQLProvider>
+            
               <Header />
               <div className="flex flex-row gap-2 bg-slate-700">
                 <SideBar />
                 {children}
               </div>
-            </GraphQLProvider>
+           
           </PersistGateWrapper>
         </Providers>
       </body>
