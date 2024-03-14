@@ -14,6 +14,7 @@ type SignInProps = {
   password: string;
   loading: boolean;
 };
+
 export default function SignIn() {
   const dispatch = useAppDispatch();
   const isLoggedIn = useAppSelector((state) => state.userInfo.isLoggedIn);
@@ -32,6 +33,7 @@ export default function SignIn() {
   };
 
   const handleClick = async () => {
+    setUserData({ ...userData, loading: true });
     dispatch(loginUser({ email: userData.email, password: userData.password }));
     setUserData({ ...userData, email: "", password: "", loading: false });
   };
