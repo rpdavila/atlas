@@ -8,8 +8,8 @@ import {
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 
-import { useAppSelector, useAppDispatch } from "../redux/hooks";
-import { updateAccessToken } from "../redux/features/userSlice";
+import { useAppSelector, useAppDispatch } from "../../redux/hooks";
+import { updateAccessToken } from "../../redux/features/userSlice";
 
 type GraphQLProviderProps = {
   children: React.ReactNode;
