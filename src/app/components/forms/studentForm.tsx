@@ -9,9 +9,6 @@ import TextInput from "../input/customTextInput";
 import Button from "../button/button";
 import { StudentInfo } from "@/app/types/formTypes";
 
-import { useMutation } from "@apollo/client";
-import { ADD_STUDENT } from "../../graphQLOperations";
-
 type StudentFormProps = {
   formTitle: string;
   buttonText: string;
@@ -34,7 +31,6 @@ export default function StudentForm({
   };
 
   const [studentInfo, setStudentInfo] = useState<StudentInfo>(initialState);
-  const [addStudent, { data, loading, error }] = useMutation(ADD_STUDENT);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -44,22 +40,12 @@ export default function StudentForm({
   };
 
   const handleAddStudent = async () => {
-    await addStudent({
-      variables: {
-        data: {
-          firstName: studentInfo.firstName,
-          lastName: studentInfo.lastName,
-          studentIdNumber: studentInfo.studentIdNumber,
-          instrument: studentInfo.instrument,
-        },
-      },
-    });
+    
     alert(`Added to database`);
     setStudentInfo(initialState);
   };
 
-  if (loading) return "Submitting";
-  if (error) return `Error submitting request ${error.message}`;
+
   return (
     <div className="flex flex-col bg-white rounded-lg items-center w-full pb-2 mt-2">
       <h1 className="bg-blue-500 rounded-t-lg w-full self-center text-white text-center">

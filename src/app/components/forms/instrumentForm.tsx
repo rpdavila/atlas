@@ -4,9 +4,6 @@ import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { setSearch } from "@/app/redux/features/searchOptionsSlice";
 
-import { ADD_INSTRUMENT } from "@/app/graphQLOperations";
-import { useMutation } from "@apollo/client";
-
 import TextInput from "../input/customTextInput";
 import Button from "../button/button";
 import Select from "../input/customSelection";
@@ -37,7 +34,7 @@ export default function InstrumentForm({
 
   const [instrumentDetails, setInstrumentDetails] =
     useState<InstrumentDetails>(initialState);
-  const [addInstrument, { data, loading, error }] = useMutation(ADD_INSTRUMENT);
+
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = event.target;
@@ -47,23 +44,12 @@ export default function InstrumentForm({
   };
 
   const handleClick = async () => {
-    // dispatch(addInstrumentToList(instrumentDetails));
-    await addInstrument({
-      variables: {
-        data: {
-          classification: instrumentDetails.classification,
-          brand: instrumentDetails.brand,
-          serialNumber: instrumentDetails.serialNumber,
-          rentStatus: instrumentDetails.rentStatus,
-        },
-      },
-    });
+    
     alert(`Instrument added to database`);
     setInstrumentDetails(initialState);
   };
 
-  if (loading) return "Submitting";
-  if (error) return `Error submitting request ${error.message}`;
+  
   return (
     <div className="flex flex-col bg-white rounded-lg items-center w-full pb-2 mt-2">
       <h1 className="bg-blue-500 rounded-t-lg w-full self-center text-white text-center">
