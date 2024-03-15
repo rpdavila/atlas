@@ -27,15 +27,15 @@ export default function Header() {
     dispatch(setType(""));
   };
   return (
-    <header>
-      <nav className="flex justify-end bg-white h-20">
+    <header className=" bg-white">
+      <nav className="flex justify-end h-20">
         <ul className="flex flex-row items-center">
           {navList.map((items, index) => {
             return (
               <li key={index} className="p-2">
                 <Link
                   onClick={handleClickNav}
-                  href={items.href}
+                  href={isLoggedIn ? "/dashboard" : items.href}
                   className={
                     pathName === items.href
                       ? "active: text-blue-700 underline underline-offset-4 "
@@ -50,9 +50,9 @@ export default function Header() {
           {isLoggedIn ? (
             <li className="p-2">
               <Link
-                href={"/userProfile"}
+                href={"/dashboard/userProfile"}
                 className={
-                  pathName === "/userProfile"
+                  pathName === "/dashboard/userProfile"
                     ? "active: text-blue-700 underline underline-offset-4"
                     : "text-blue-500 hover:underline underline-offset-4"
                 }

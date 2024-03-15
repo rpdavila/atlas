@@ -26,7 +26,7 @@ export default function SelectSearchOptions({ children }: SearchOptionProps) {
     const value = event.target.value;
     dispatch(setType(value));
     if (selectOption === "Search Student" || "Search Instrument") {
-      router.push("/search");
+      router.push("/dashboard/search");
     }
   };
 

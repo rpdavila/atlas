@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import "./globals.css";
 import type { Metadata } from "next";
 
@@ -6,9 +6,9 @@ import { Inter } from "next/font/google";
 
 import { Providers } from "@/app/redux/provider";
 
-import Header from "./components/header/header";
-import SideBar from "./components/sideBar/sideBar";
 import PersistGateWrapper from "./components/persist/persist";
+import Header from "./components/header/header";
+import Loading from "./components/loading/loading";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,13 +27,12 @@ export default function RootLayout({
       <body className={inter.className} suppressHydrationWarning={true}>
         <Providers>
           <PersistGateWrapper>
-            
-              <Header />
-              <div className="flex flex-row gap-2 bg-slate-700">
-                <SideBar />
+            <Header />
+            <Suspense fallback={<Loading />}>
+              <main className="min-h-screen bg-white flex justify-center">
                 {children}
-              </div>
-           
+              </main>
+            </Suspense>
           </PersistGateWrapper>
         </Providers>
       </body>

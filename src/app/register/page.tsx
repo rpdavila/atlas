@@ -33,39 +33,37 @@ export default function Register() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center basis-3/4 bg-white mt-2 rounded-lg">
-      <div className="flex flex-col w-1/2">
-        <TextInput
-          labelName="Email"
-          type="email"
-          name="email"
-          value={userData.email}
-          placeHolder="Email"
-          onChange={handleChange}
-        />
-        <TextInput
-          labelName="Password"
-          type="password"
-          name="password"
-          value={userData.password}
-          placeHolder="Password"
-          onChange={handleChange}
-        />
-        <TextInput
-          labelName="Confirm Password"
-          type="password"
-          name="confirmPassword"
-          value={userData.confirmPassword}
-          placeHolder="Confirm Password"
-          onChange={handleChange}
-        />
-        <Button
-          type="button"
-          name="Register"
-          marginTop="5"
-          onClick={handleClick}
-        />
-      </div>
-    </main>
+    <section className="flex min-h-screen flex-col items-center justify-center basis-1/2 bg-whiteg">
+      <TextInput
+        labelName="Email"
+        type="email"
+        name="email"
+        value={userData.email}
+        placeHolder="Email"
+        onChange={handleChange}
+      />
+      <TextInput
+        labelName="Password"
+        type="password"
+        name="password"
+        value={userData.password}
+        placeHolder="Password"
+        onChange={handleChange}
+      />
+      <TextInput
+        labelName="Confirm Password"
+        type="password"
+        name="confirmPassword"
+        value={userData.confirmPassword}
+        placeHolder="Confirm Password"
+        onChange={handleChange}
+      />
+      <Button
+        type="button"
+        name="Register"
+        marginTop="5"
+        onClick={handleClick}
+      />
+    </section>
   );
 }

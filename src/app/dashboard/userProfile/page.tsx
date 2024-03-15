@@ -1,15 +1,15 @@
 "use client";
 import { useEffect, useState } from "react";
 
-import { useAppSelector, useAppDispatch } from "../redux/hooks";
-import { getCustomUserData } from "../redux/features/userSlice";
-import { UserRole, UpdateUserData } from "../types/formTypes";
+import { useAppSelector, useAppDispatch } from "../../redux/hooks";
+import { getCustomUserData } from "../../redux/features/userSlice";
+import { UserRole, UpdateUserData } from "../../types/formTypes";
 
-import { useMutation } from "@apollo/client";
 
-import TextInput from "../components/input/customTextInput";
-import Select from "../components/input/customSelection";
-import Button from "../components/button/button";
+
+import TextInput from "../../components/input/customTextInput";
+import Select from "../../components/input/customSelection";
+import Button from "../../components/button/button";
 
 type FieldData = {
   firstName: string;

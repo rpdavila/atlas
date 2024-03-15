@@ -4,16 +4,16 @@ import { Suspense } from "react";
 import { useAppSelector, useAppDispatch } from "@/app/redux/hooks";
 import { RootState } from "@/app/redux/store";
 
-import CardList from "../components/card-list/cardList";
+import CardList from "../../components/card-list/cardList";
 
 export default function Search() {
-  const dipatch = useAppDispatch()
+  const dipatch = useAppDispatch();
 
   // Grab student list in store
   const displayStudents = useAppSelector(
     (state: RootState) => state.students.studentList
   );
-    // Grab instrument list in store 
+  // Grab instrument list in store
   const displayInstruments = useAppSelector(
     (state: RootState) => state.instruments.instrumentList
   );
@@ -44,7 +44,7 @@ export default function Search() {
   });
 
   return (
-    <main className="flex min-h-screen justify-center items-center flex-col basis-3/4 mt-2 rounded-lg">
+    <section className="flex flex-col basis-3/4">
       <Suspense fallback={<p>Loading...</p>}>
         {selectOption === "Search Instrument" && (
           <CardList
@@ -59,6 +59,6 @@ export default function Search() {
           />
         )}
       </Suspense>
-    </main>
+    </section>
   );
 }
