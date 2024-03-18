@@ -2,7 +2,7 @@
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import * as Realm from "realm-web";
-import { UserInformation, UserRole } from "@/app/types/formTypes";
+import { UserInformation } from "@/app/types/formTypes";
 
 const app = Realm.getApp(process.env.NEXT_PUBLIC_APP_ID as string);
 
