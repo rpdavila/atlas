@@ -1,10 +1,11 @@
 "use client";
-
+//react imports
 import React, { useState } from "react";
-
+// resux imports
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { setSearch } from "@/app/redux/features/searchOptionsSlice";
-
+import { addStudent } from "@/app/redux/features/studentListSlice";
+//component imports
 import TextInput from "../input/customTextInput";
 import Button from "../button/button";
 import { StudentInfo } from "@/app/types/formTypes";
@@ -21,9 +22,9 @@ export default function StudentForm({
   const dispatch = useAppDispatch();
   const selectOption = useAppSelector((state) => state.searchOptions.type);
   const searchResult = useAppSelector((state) => state.searchOptions.search);
-
+  const studentInfoLoading = useAppSelector((state) => state.students.loading);
+  const studentresult = useAppSelector((state) => state.students.insertResult);
   const initialState: StudentInfo = {
-    id: "",
     firstName: "",
     lastName: "",
     studentIdNumber: "",
@@ -40,17 +41,24 @@ export default function StudentForm({
   };
 
   const handleAddStudent = async () => {
-    
-    alert(`Added to database`);
+    dispatch(
+      addStudent({
+        firstName: studentInfo.firstName,
+        lastName: studentInfo.lastName,
+        studentIdNumber: studentInfo.studentIdNumber,
+      })
+    );
+    studentresult &&
+      alert(`Student added with ID:${Object.values(studentresult)}`);
     setStudentInfo(initialState);
   };
-
 
   return (
     <div className="flex flex-col bg-white rounded-lg items-center w-full pb-2 mt-2">
       <h1 className="bg-blue-500 rounded-t-lg w-full self-center text-white text-center">
         {formTitle}
       </h1>
+
       {selectOption === "Search Student" && (
         <div>
           <TextInput
@@ -93,7 +101,7 @@ export default function StudentForm({
           <Button
             type="submit"
             marginTop="5"
-            name={buttonText}
+            name={studentInfoLoading ? "Submitting" : buttonText}
             onClick={handleAddStudent}
           />
         </div>

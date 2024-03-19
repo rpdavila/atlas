@@ -1,6 +1,11 @@
 "use client";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 
+//mongodb Imports
+import { app } from "@/app/utilities/realm";
+import { instrumentCollection } from "@/app/utilities/realm";
+import { convertObecjtIdToString } from "@/app/utilities/realm";
+//type imports
 import {
   Getinfo,
   InstrumentList,
@@ -13,13 +18,26 @@ import { instrumentDetails } from "@/app/data/instrumentDetails";
 type InstrumentState = {
   instrumentList: InstrumentList;
   instrumentSearch: string;
+  loading: boolean;
+  error: unknown;
 };
 
 const initialState: InstrumentState = {
-  instrumentList: instrumentDetails,
+  instrumentList: [],
   instrumentSearch: "",
+  loading: false,
+  error: "",
 };
-
+export const getInstruments = createAsyncThunk(
+  "instrumentDetails/getInstruments",
+  async () => {
+    if (app.currentUser) {
+      const result = await instrumentCollection?.find();
+      const stringifiedResult = convertObecjtIdToString(result);
+      return stringifiedResult;
+    }
+  }
+);
 export const instrumentDetailsSlice = createSlice({
   name: "instrumentDetails",
   initialState,
@@ -38,13 +56,36 @@ export const instrumentDetailsSlice = createSlice({
     addStudentToInstrument: (state, action: PayloadAction<Getinfo>) => {
       const { studentInfo, instrumentInfo } = action.payload;
       const instrument = state.instrumentList.find((instrument) => {
-        return instrument.id === instrumentInfo.id;
+        return instrument._id === instrumentInfo._id;
       });
       if (instrument) {
         instrument.assignedTo = studentInfo;
         instrument.rentStatus = RentStatus.Rented;
       }
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(getInstruments.pending, (state, action) => {
+        return {
+          ...state,
+          loading: true,
+        };
+      })
+      .addCase(getInstruments.rejected, (state, action) => {
+        return {
+          ...state,
+          error: action.payload,
+          loading: false,
+        };
+      })
+      .addCase(getInstruments.fulfilled, (state, action) => {
+        return {
+          ...state,
+          instrumentList: action.payload as InstrumentList,
+          loadinf: false,
+        };
+      });
   },
 });
 

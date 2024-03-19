@@ -1,14 +1,23 @@
 "use client";
-import { Suspense } from "react";
+// react imports
+import { Suspense, useEffect } from "react";
 
+//redux imports
 import { useAppSelector, useAppDispatch } from "@/app/redux/hooks";
+import { useMongoDbDataAccess } from "@/app/hooks/useMongoDbDataAccess";
 import { RootState } from "@/app/redux/store";
-
+import { getStudents } from "@/app/redux/features/studentListSlice";
+import { getInstruments } from "@/app/redux/features/instrumentSLice";
+//component imports
+import Loading from "@/app/components/loading/loading";
 import CardList from "../../components/card-list/cardList";
 
 export default function Search() {
-  const dipatch = useAppDispatch();
-
+  const dispatch = useAppDispatch();
+  // const students = useMongoDbDataAccess({ collectionName: "studentInfo" });
+  // const instruments = useMongoDbDataAccess({
+  //   collectionName: "instrumentInfo",
+  // });
   // Grab student list in store
   const displayStudents = useAppSelector(
     (state: RootState) => state.students.studentList
@@ -26,7 +35,7 @@ export default function Search() {
     (state: RootState) => state.searchOptions.search
   );
 
-  const instrumentSearchResults = displayInstruments.filter((instrument) => {
+  const instrumentSearchResults = displayInstruments?.filter((instrument) => {
     return (
       instrument.classification?.includes(searchfield) ||
       instrument.brand?.includes(searchfield) ||
@@ -35,7 +44,7 @@ export default function Search() {
     );
   });
 
-  const studentSearchResults = displayStudents.filter((student) => {
+  const studentSearchResults = displayStudents?.filter((student) => {
     return (
       student.firstName?.includes(searchfield) ||
       student.lastName?.includes(searchfield) ||
@@ -43,22 +52,25 @@ export default function Search() {
     );
   });
 
+  useEffect(() => {
+    dispatch(getInstruments());
+    dispatch(getStudents());
+  }, [dispatch]);
   return (
     <section className="flex flex-col basis-3/4">
-      <Suspense fallback={<p>Loading...</p>}>
-        {selectOption === "Search Instrument" && (
-          <CardList
-            instrumentSearchResults={instrumentSearchResults}
-            selectOption={selectOption}
-          />
-        )}
-        {selectOption === "Search Student" && (
-          <CardList
-            studentSearchResult={studentSearchResults}
-            selectOption={selectOption}
-          />
-        )}
-      </Suspense>
+      {selectOption === "Search Instrument" && (
+        <CardList
+          instrumentSearchResults={instrumentSearchResults}
+          selectOption={selectOption}
+        />
+      )}
+
+      {selectOption === "Search Student" && (
+        <CardList
+          studentSearchResult={studentSearchResults}
+          selectOption={selectOption}
+        />
+      )}
     </section>
   );
 }

@@ -17,11 +17,11 @@ export default function CardList({
     <>
       {selectOption === "Search Instrument" &&
         instrumentSearchResults?.map((items) => {
-          return <InstrumentCard key={items.id} instrument={items} />;
+          return <InstrumentCard key={items._id} instrument={items} />;
         })}
       {selectOption === "Search Student" &&
         studentSearchResult?.map((items) => {
-          return <StudentCard key={items.id} student={items} />;
+          return <StudentCard key={items._id} student={items} />;
         })}
     </>
   );

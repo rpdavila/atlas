@@ -5,8 +5,6 @@ import { useAppSelector, useAppDispatch } from "../../redux/hooks";
 import { getCustomUserData } from "../../redux/features/userSlice";
 import { UserRole, UpdateUserData } from "../../types/formTypes";
 
-
-
 import TextInput from "../../components/input/customTextInput";
 import Select from "../../components/input/customSelection";
 import Button from "../../components/button/button";
@@ -103,17 +101,14 @@ export default function UserProfile() {
     }
   };
 
-  const handleUpdate = () => {
-
-  }
-
+  const handleUpdate = () => {};
 
   useEffect(() => {
     dispatch(getCustomUserData());
   }, [dispatch, fieldData]);
 
   return (
-    <main className="flex min-h-screen flex-col justify-evenly place-items-center basis-3/4 bg-white mt-2 rounded-lg">
+    <>
       <section className="flex flex-col">
         <h1 className="text-center">
           {userInfo.customUserData
@@ -180,6 +175,6 @@ export default function UserProfile() {
           marginTop="5"
         />
       </section>
-    </main>
+    </>
   );
 }

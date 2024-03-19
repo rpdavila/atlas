@@ -1,10 +1,9 @@
 "use client";
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { app } from "../../utilities/realm";
 import * as Realm from "realm-web";
 import { UserInformation } from "@/app/types/formTypes";
-
-const app = Realm.getApp(process.env.NEXT_PUBLIC_APP_ID as string);
 
 const initialState: UserInformation = {
   id: "",
@@ -26,7 +25,6 @@ export const loginUser = createAsyncThunk(
       id: user.id,
       email: user.profile.email,
       isLoggedIn: user.isLoggedIn,
-      accessToken: user.accessToken,
     };
   }
 );
@@ -45,18 +43,18 @@ export const refreshUserData = createAsyncThunk(
   }
 );
 
-export const updateAccessToken = createAsyncThunk(
-  "userInformation/updateAccessToken",
-  async () => {
-    if (!app.currentUser?.isLoggedIn) {
-      logOutUser();
-      throw new Error("You were logged out due to inactivity");
-    } else {
-      await app.currentUser.refreshAccessToken();
-    }
-    return app.currentUser.accessToken;
-  }
-);
+// export const updateAccessToken = createAsyncThunk(
+//   "userInformation/updateAccessToken",
+//   async () => {
+//     if (!app.currentUser?.isLoggedIn) {
+//       logOutUser();
+//       throw new Error("You were logged out due to inactivity");
+//     } else {
+//       await app.currentUser.refreshAccessToken();
+//     }
+//     return app.currentUser.accessToken;
+//   }
+// );
 
 export const getCustomUserData = createAsyncThunk(
   "userInformation/getCustomUserData",
@@ -76,13 +74,12 @@ export const userInformationSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(loginUser.fulfilled, (state, action) => {
-        const { id, email, isLoggedIn, accessToken } = action.payload;
+        const { id, email, isLoggedIn } = action.payload;
         return {
           ...state,
           id: id,
           email: email,
           isLoggedIn: isLoggedIn,
-          accessToken: accessToken,
         };
       })
       .addCase(loginUser.pending, (state, action) => {
@@ -95,12 +92,12 @@ export const userInformationSlice = createSlice({
         state.id = "";
         state.email = "";
         state.isLoggedIn = false;
-        state.accessToken = "";
+        // state.accessToken = "";
         state.customUserData = undefined;
       })
-      .addCase(updateAccessToken.fulfilled, (state, action) => {
-        state.accessToken = action.payload;
-      })
+      // .addCase(updateAccessToken.fulfilled, (state, action) => {
+      //   state.accessToken = action.payload;
+      // })
       .addCase(getCustomUserData.fulfilled, (state, action) => {
         state.customUserData = action.payload;
       });
