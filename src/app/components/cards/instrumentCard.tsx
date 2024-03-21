@@ -37,7 +37,7 @@ export default function InstrumentCard({ instrument }: CardProps) {
 
     //get a matching instrument
     const matchingInstrument = displayInstruments.find((item) => {
-      if (item.id === instrument.id) {
+      if (item._id === instrument._id) {
         return item;
       }
     });
@@ -51,7 +51,7 @@ export default function InstrumentCard({ instrument }: CardProps) {
           studentIdNumber: matchingStudent?.studentIdNumber,
         },
         instrumentInfo: {
-          id: matchingInstrument?.id,
+          _id: matchingInstrument?._id,
         },
       })
     );
