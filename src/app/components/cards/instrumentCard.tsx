@@ -1,12 +1,9 @@
 "use client";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
 import { addStudentToInstrument } from "@/app/redux/features/instrumentSLice";
-import { InstrumentDetails, OnlyStudentData } from "@/app/types/formTypes";
+import { InstrumentDetails, OnlyStudentData, StudentInfo } from "@/app/types/formTypes";
 import Select from "../input/customSelection";
-import {
-  assignInstrumentToStudent,
-  filterStudentList,
-} from "@/app/redux/features/studentListSlice";
+import { filterStudentList } from "@/app/redux/features/studentListSlice";
 
 type CardProps = {
   instrument: InstrumentDetails;
@@ -18,20 +15,17 @@ export default function InstrumentCard({ instrument }: CardProps) {
     (state) => state.instruments.instrumentList
   );
   const displayStudents = useAppSelector(
-    (state) => state.students.filteredList
+    (state) => state.students.dropDownList
   );
+
 
   const handleSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     // MUST BE MODIFIED TO USE DB INSTANCE. IT IS CURRENTLY USING DUMMY DATA PROVIDED IN THE DATA FOLDER
     const value = event.target.value.split(" ");
     // get a matching student
-    const matchingStudent = displayStudents.find((student: OnlyStudentData) => {
+    const matchingStudent = displayStudents.find((student: StudentInfo) => {
       if (student.firstName === value[0] && student.lastName === value[1]) {
-        return {
-          firstName: student.firstName,
-          lastName: student.lastName,
-          studentIdNumber: student.studentIdNumber,
-        };
+        return student
       }
     });
 
@@ -42,23 +36,23 @@ export default function InstrumentCard({ instrument }: CardProps) {
       }
     });
 
+    
     // dispatch and add the student to instrument
     dispatch(
       addStudentToInstrument({
-        studentInfo: {
+        _id: matchingInstrument?._id,
+        student: {
           firstName: matchingStudent?.firstName,
           lastName: matchingStudent?.lastName,
-          studentIdNumber: matchingStudent?.studentIdNumber,
-        },
-        instrumentInfo: {
-          _id: matchingInstrument?._id,
-        },
+          studentIdNumber: matchingStudent?.studentIdNumber
+        }
       })
     );
 
     // filter students in the student list select option
     dispatch(
       filterStudentList({
+        _id: matchingStudent?._id,
         firstName: matchingStudent?.firstName,
         lastName: matchingStudent?.lastName,
         studentIdNumber: matchingStudent?.studentIdNumber,
@@ -66,18 +60,18 @@ export default function InstrumentCard({ instrument }: CardProps) {
     );
 
     // add instrument to student info
-    dispatch(
-      assignInstrumentToStudent({
-        studentInfo: {
-          studentIdNumber: matchingStudent?.studentIdNumber,
-        },
-        instrumentInfo: {
-          classification: matchingInstrument?.classification,
-          brand: matchingInstrument?.brand,
-          serialNumber: matchingInstrument?.serialNumber,
-        },
-      })
-    );
+    // dispatch(
+    //   assignInstrumentToStudent({
+    //     studentInfo: {
+    //       studentIdNumber: matchingStudent?.studentIdNumber,
+    //     },
+    //     instrumentInfo: {
+    //       classification: matchingInstrument?.classification,
+    //       brand: matchingInstrument?.brand,
+    //       serialNumber: matchingInstrument?.serialNumber,
+    //     },
+    //   })
+    // );
   };
 
   return (

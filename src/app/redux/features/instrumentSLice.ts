@@ -1,25 +1,19 @@
 "use client";
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-
+//redux imports
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 //mongodb Imports
-import { app } from "@/app/utilities/realm";
-import { instrumentCollection } from "@/app/utilities/realm";
-import { convertObecjtIdToString } from "@/app/utilities/realm";
+import {app, convertObjectIdToString, instrumentCollection} from "@/app/utilities/mongodb";
+
 //type imports
-import {
-  Getinfo,
-  InstrumentList,
-  InstrumentDetails,
-  RentStatus,
-} from "@/app/types/formTypes";
+import {InstrumentDetails, InstrumentList, StudentInfo} from "@/app/types/formTypes";
 
-import { instrumentDetails } from "@/app/data/instrumentDetails";
-
+// initial state types
 type InstrumentState = {
   instrumentList: InstrumentList;
   instrumentSearch: string;
   loading: boolean;
   error: unknown;
+  success: boolean
 };
 
 const initialState: InstrumentState = {
@@ -27,17 +21,62 @@ const initialState: InstrumentState = {
   instrumentSearch: "",
   loading: false,
   error: "",
+  success: false
 };
+
 export const getInstruments = createAsyncThunk(
   "instrumentDetails/getInstruments",
   async () => {
     if (app.currentUser) {
-      const result = await instrumentCollection?.find();
-      const stringifiedResult = convertObecjtIdToString(result);
-      return stringifiedResult;
+      const result = await instrumentCollection?.find({});
+      return convertObjectIdToString(result)
     }
   }
 );
+
+export const addInstrument = createAsyncThunk(
+    "instrumentDetails/addInstrument",
+    async (instrument: InstrumentDetails) => {
+      try {
+        if (app.currentUser) {
+          return await instrumentCollection?.insertOne(
+              {
+                classification: instrument.classification,
+                brand: instrument.brand,
+                serialNumber: instrument.serialNumber,
+                rentStatus: instrument.rentStatus
+              }
+          )
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+)
+export const addStudentToInstrument = createAsyncThunk(
+  "instrumentDetails/addStudentToInstrument",
+  async (modifyInstrument: {_id: string | number | undefined, student: StudentInfo}) => {
+    try {
+      if (app.currentUser) {
+        return await instrumentCollection?.updateOne(
+            {_id: modifyInstrument._id},
+            {
+              $set: {
+                assignedTo: {
+                  firstName: modifyInstrument.student.lastName,
+                  lastName: modifyInstrument.student.lastName,
+                  studentIdNumber: modifyInstrument.student.studentIdNumber
+                }
+              }
+            },
+            {upsert: true}
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+)
 export const instrumentDetailsSlice = createSlice({
   name: "instrumentDetails",
   initialState,
@@ -49,20 +88,20 @@ export const instrumentDetailsSlice = createSlice({
       };
     },
 
-    clearSearchInstrument: (state) => {
-      return { ...state, result: [] };
-    },
+    // clearSearchInstrument: (state) => {
+    //   return { ...state, result: [] };
+    // },
 
-    addStudentToInstrument: (state, action: PayloadAction<Getinfo>) => {
-      const { studentInfo, instrumentInfo } = action.payload;
-      const instrument = state.instrumentList.find((instrument) => {
-        return instrument._id === instrumentInfo._id;
-      });
-      if (instrument) {
-        instrument.assignedTo = studentInfo;
-        instrument.rentStatus = RentStatus.Rented;
-      }
-    },
+    // addStudentToInstrument: (state, action: PayloadAction<Getinfo>) => {
+    //   const { studentInfo, instrumentInfo } = action.payload;
+    //   const instrument = state.instrumentList.find((instrument) => {
+    //     return instrument._id === instrumentInfo._id;
+    //   });
+    //   if (instrument) {
+    //     instrument.assignedTo = studentInfo;
+    //     instrument.rentStatus = RentStatus.Rented;
+    //   }
+    // },
   },
   extraReducers: (builder) => {
     builder
@@ -83,13 +122,32 @@ export const instrumentDetailsSlice = createSlice({
         return {
           ...state,
           instrumentList: action.payload as InstrumentList,
-          loadinf: false,
+          loading: false,
         };
-      });
+      })
+      .addCase(addStudentToInstrument.pending, (state, action) => {
+        return {
+          ...state,
+          loading: true
+        }
+      })
+      .addCase(addStudentToInstrument.rejected, (state, action) => {
+        return {
+          ...state,
+          loading: false,
+          error: `${action.payload}`
+        }
+      })
+      .addCase(addStudentToInstrument.fulfilled, (state, action) => {
+        return {
+          ...state,
+          loading: false,
+        }
+      })
   },
 });
 
-export const { addInstrumentToList, addStudentToInstrument } =
+export const { addInstrumentToList} =
   instrumentDetailsSlice.actions;
 
 export default instrumentDetailsSlice.reducer;

@@ -1,7 +1,7 @@
 "use client";
 //react imports
 import React, { useState } from "react";
-// resux imports
+// redux imports
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { setSearch } from "@/app/redux/features/searchOptionsSlice";
 import { addStudent } from "@/app/redux/features/studentListSlice";
@@ -23,7 +23,7 @@ export default function StudentForm({
   const selectOption = useAppSelector((state) => state.searchOptions.type);
   const searchResult = useAppSelector((state) => state.searchOptions.search);
   const studentInfoLoading = useAppSelector((state) => state.students.loading);
-  const studentresult = useAppSelector((state) => state.students.insertResult);
+  const studentResult = useAppSelector((state) => state.students.insertResult);
   const initialState: StudentInfo = {
     firstName: "",
     lastName: "",
@@ -48,8 +48,8 @@ export default function StudentForm({
         studentIdNumber: studentInfo.studentIdNumber,
       })
     );
-    studentresult &&
-      alert(`Student added with ID:${Object.values(studentresult)}`);
+    studentResult &&
+      alert(`Student added with ID:${Object.values(studentResult)}`);
     setStudentInfo(initialState);
   };
 

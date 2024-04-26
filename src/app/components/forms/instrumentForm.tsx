@@ -9,6 +9,7 @@ import Button from "../button/button";
 import Select from "../input/customSelection";
 
 import { InstrumentDetails, RentStatus } from "@/app/types/formTypes";
+import {addInstrument} from "@/app/redux/features/instrumentSLice";
 
 type InstrumentFormProps = {
   formTitle: string;
@@ -24,7 +25,6 @@ export default function InstrumentForm({
   const searchResult = useAppSelector((state) => state.searchOptions.search);
 
   const initialState: InstrumentDetails = {
-    id: "",
     classification: "",
     brand: "",
     serialNumber: "",
@@ -44,9 +44,8 @@ export default function InstrumentForm({
   };
 
   const handleClick = async () => {
-    
+    dispatch(addInstrument(instrumentDetails));
     alert(`Instrument added to database`);
-    setInstrumentDetails(initialState);
   };
 
   

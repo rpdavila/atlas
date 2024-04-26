@@ -14,7 +14,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Music Inventory Solutions",
-  description: "Manage your music classroom inventory more efficiantly",
+  description: "Manage your music classroom inventory more efficiently",
 };
 
 export default function RootLayout({
@@ -28,11 +28,11 @@ export default function RootLayout({
         <Providers>
           <PersistGateWrapper>
             <Header />
-            <Suspense fallback={<Loading />}>
-              <main className="min-h-screen bg-white flex justify-center">
+            <main className="min-h-screen bg-white flex justify-center">
+              <Suspense fallback={<Loading />}>
                 {children}
-              </main>
-            </Suspense>
+              </Suspense>
+            </main>
           </PersistGateWrapper>
         </Providers>
       </body>
