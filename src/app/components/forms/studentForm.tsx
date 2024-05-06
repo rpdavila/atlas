@@ -23,7 +23,6 @@ export default function StudentForm({
   const selectOption = useAppSelector((state) => state.searchOptions.type);
   const searchResult = useAppSelector((state) => state.searchOptions.search);
   const studentInfoLoading = useAppSelector((state) => state.students.loading);
-  const studentResult = useAppSelector((state) => state.students.insertResult);
   const initialState: StudentInfo = {
     firstName: "",
     lastName: "",
@@ -48,8 +47,6 @@ export default function StudentForm({
         studentIdNumber: studentInfo.studentIdNumber,
       })
     );
-    studentResult &&
-      alert(`Student added with ID:${Object.values(studentResult)}`);
     setStudentInfo(initialState);
   };
 
