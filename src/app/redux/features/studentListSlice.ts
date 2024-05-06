@@ -6,7 +6,6 @@ import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {app, convertObjectIdToString, studentCollection} from "@/app/utilities/mongodb";
 //type imports
 import { OnlyInstrumentData, OnlyStudentId, StudentInfo, StudentList,} from "@/app/types/formTypes";
-import { UnknownAsyncThunkAction } from "@reduxjs/toolkit/dist/matchers";
 
 type StudentState = {
   studentList: StudentList;
