@@ -43,6 +43,7 @@ export const refreshUserData = createAsyncThunk(
   }
 );
 
+// use for graphql
 // export const updateAccessToken = createAsyncThunk(
 //   "userInformation/updateAccessToken",
 //   async () => {
