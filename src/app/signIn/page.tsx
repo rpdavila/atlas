@@ -18,6 +18,7 @@ type SignInProps = {
 export default function SignIn() {
   const dispatch = useAppDispatch();
   const isLoggedIn = useAppSelector((state) => state.userInfo.isLoggedIn);
+  const loading = useAppSelector((state) => state.userInfo.loading);
 
   const initialState: SignInProps = {
     email: "",
@@ -59,7 +60,7 @@ export default function SignIn() {
       <Button
         type="button"
         name={
-          userData.loading ? "Logging In" : isLoggedIn ? "Logged In" : "Sign In"
+          loading ? "Logging In" : isLoggedIn ? "Logged In" : "Sign In"
         }
         marginTop="5"
         onClick={handleClick}

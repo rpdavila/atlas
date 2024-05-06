@@ -4,6 +4,7 @@ export type UserInformation = {
   accessToken: string | null | undefined;
   customUserData: SimpleObject | undefined;
   email: string | undefined;
+  loading: boolean;
 };
 
 export enum UpdateUserData {

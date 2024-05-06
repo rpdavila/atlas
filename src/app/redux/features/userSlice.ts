@@ -11,6 +11,7 @@ const initialState: UserInformation = {
   isLoggedIn: false,
   accessToken: "",
   customUserData: undefined,
+  loading: false
 };
 
 export const loginUser = createAsyncThunk(
@@ -78,29 +79,26 @@ export const userInformationSlice = createSlice({
         const { id, email, isLoggedIn } = action.payload;
         return {
           ...state,
+          loading: false,
           id: id,
           email: email,
           isLoggedIn: isLoggedIn,
         };
       })
       .addCase(loginUser.pending, (state, action) => {
-        state.isLoggedIn = false;
+        return { ...state, loading: true, isLoggedIn: false };
       })
       .addCase(loginUser.rejected, (state, action) => {
-        state.isLoggedIn = false;
+        return { ...state, loading: false};
       })
       .addCase(logOutUser.fulfilled, (state, action) => {
-        state.id = "";
-        state.email = "";
-        state.isLoggedIn = false;
-        // state.accessToken = "";
-        state.customUserData = undefined;
+        return {...state, isLoggedIn: false, id: "", email: "", customUserData: undefined}
       })
       // .addCase(updateAccessToken.fulfilled, (state, action) => {
       //   state.accessToken = action.payload;
       // })
       .addCase(getCustomUserData.fulfilled, (state, action) => {
-        state.customUserData = action.payload;
+        return { ...state, customUserData: action.payload };
       });
   },
 });
