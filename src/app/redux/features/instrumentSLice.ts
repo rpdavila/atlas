@@ -25,7 +25,7 @@ export const getInstruments = createAsyncThunk(
   async () => {
     try {
       if (app.currentUser) {
-        const result = await instrumentCollection?.find({});        
+        const result = await instrumentCollection?.find();        
         return convertObjectIdToString(result)
       }
     } catch (error) {
