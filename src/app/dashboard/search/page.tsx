@@ -16,7 +16,7 @@ export default function Search() {
   
   // Grab student list in store
   const displayStudents = useAppSelector(
-    (state: RootState) => state.students.studentList
+    (state: RootState) => state.students
   );
   // Grab instrument list in store
   const displayInstruments = useAppSelector(
@@ -40,7 +40,7 @@ export default function Search() {
     );
   });
 
-  const studentSearchResults = displayStudents?.filter((student) => {
+  const studentSearchResults = displayStudents?.studentList.filter((student) => {
     return (
       student.firstName?.includes(searchField) ||
       student.lastName?.includes(searchField) ||
@@ -59,21 +59,21 @@ export default function Search() {
   
   return (
       
-      <section className="flex flex-col basis-3/4">
-        {displayInstruments.loading? (<Loading/>): 
-        selectOption === "Search Instrument" &&  (
-          <CardList
-            instrumentSearchResults={instrumentSearchResults}
-            selectOption={selectOption}
-          />
-        )}
+      <section className="flex flex-col basis-3/4 items-center">
+        {selectOption === "Search Instrument" &&  (
+            <CardList
+              instrumentSearchResults={instrumentSearchResults}
+              selectOption={selectOption}
+            />
+          )}
 
         {selectOption === "Search Student" && (
-          <CardList
-            studentSearchResult={studentSearchResults}
-            selectOption={selectOption}
-          />
-        )}
+            <CardList
+              studentSearchResult={studentSearchResults}
+              selectOption={selectOption}
+            />
+          )}
+        
       </section>
     
   );
