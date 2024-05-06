@@ -1,9 +1,9 @@
 "use client";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
-import { addStudentToInstrument } from "@/app/redux/features/instrumentSLice";
-import { InstrumentDetails, OnlyStudentData, StudentInfo } from "@/app/types/formTypes";
+import { addStudentToInstrument, getInstruments } from "@/app/redux/features/instrumentSLice";
+import { InstrumentDetails, OnlyStudentData, OnlyStudentId, StudentInfo } from "@/app/types/formTypes";
 import Select from "../input/customSelection";
-import { filterStudentList } from "@/app/redux/features/studentListSlice";
+import { assignInstrumentToStudent, filterStudentList, getDropDownList, getStudents } from "@/app/redux/features/studentListSlice";
 
 type CardProps = {
   instrument: InstrumentDetails;
@@ -18,12 +18,11 @@ export default function InstrumentCard({ instrument }: CardProps) {
     (state) => state.students.dropDownList
   );
 
-
-  const handleSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // MUST BE MODIFIED TO USE DB INSTANCE. IT IS CURRENTLY USING DUMMY DATA PROVIDED IN THE DATA FOLDER
+  const handleSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    
     const value = event.target.value.split(" ");
     // get a matching student
-    const matchingStudent = displayStudents.find((student: StudentInfo) => {
+    const matchingStudent = displayStudents.find((student) => {
       if (student.firstName === value[0] && student.lastName === value[1]) {
         return student
       }
@@ -37,10 +36,10 @@ export default function InstrumentCard({ instrument }: CardProps) {
     });
 
     
-    // dispatch and add the student to instrument
-    dispatch(
+    // dispatch and add the student to instrument collection
+    await dispatch(
       addStudentToInstrument({
-        _id: matchingInstrument?._id,
+        serialNumber: matchingInstrument?.serialNumber,
         student: {
           firstName: matchingStudent?.firstName,
           lastName: matchingStudent?.lastName,
@@ -49,29 +48,25 @@ export default function InstrumentCard({ instrument }: CardProps) {
       })
     );
 
-    // filter students in the student list select option
-    dispatch(
-      filterStudentList({
-        _id: matchingStudent?._id,
-        firstName: matchingStudent?.firstName,
-        lastName: matchingStudent?.lastName,
+    // dispatch and add instrument to the student collection
+    await dispatch(
+      assignInstrumentToStudent({
         studentIdNumber: matchingStudent?.studentIdNumber,
-      })
-    );
-
-    // add instrument to student info
-    // dispatch(
-    //   assignInstrumentToStudent({
-    //     studentInfo: {
-    //       studentIdNumber: matchingStudent?.studentIdNumber,
-    //     },
-    //     instrumentInfo: {
-    //       classification: matchingInstrument?.classification,
-    //       brand: matchingInstrument?.brand,
-    //       serialNumber: matchingInstrument?.serialNumber,
-    //     },
-    //   })
-    // );
+        instrument: {
+          classification: matchingInstrument?.classification,
+          brand: matchingInstrument?.brand,
+          serialNumber: matchingInstrument?.serialNumber,          
+          }
+        }
+      )
+    )
+    // get updated instrument list
+    await dispatch(getInstruments())
+    // get updated student list
+    await dispatch(getStudents())
+    // get update dropDownList
+    await dispatch(getDropDownList())   
+  
   };
 
   return (
@@ -97,7 +92,7 @@ export default function InstrumentCard({ instrument }: CardProps) {
       {instrument?.rentStatus === "Rented" ? (
         <div className="flex flex-col items-start justify-center">
           <strong>
-            <h1>Assign to: </h1>
+            <h1>Assigned to: </h1>
           </strong>
           <p>
             <strong>First Name:</strong>

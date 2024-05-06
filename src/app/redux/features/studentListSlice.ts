@@ -5,21 +5,18 @@ import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 // mongodb utility imports
 import {app, convertObjectIdToString, studentCollection} from "@/app/utilities/mongodb";
 //type imports
-import {AssignStudentToInstrument, StudentInfo, StudentList,} from "@/app/types/formTypes";
+import { OnlyInstrumentData, OnlyStudentId, StudentInfo, StudentList,} from "@/app/types/formTypes";
+import { UnknownAsyncThunkAction } from "@reduxjs/toolkit/dist/matchers";
 
 type StudentState = {
   studentList: StudentList;
   dropDownList: StudentList;
   loading: boolean;
-  error: unknown;
-  insertResult: any | undefined;
 };
 const initialState: StudentState = {
   studentList: [],
   dropDownList: [],
   loading: false,
-  error: "",
-  insertResult: undefined,
 };
 export const getStudents = createAsyncThunk(
   "studentList/getStudents",
@@ -34,36 +31,51 @@ export const getStudents = createAsyncThunk(
 export const addStudent = createAsyncThunk(
   "studentList/addStudent",
   async (studentDetails: StudentInfo) => {
-    return studentCollection?.insertOne({
-      firstName: studentDetails.firstName,
-      lastName: studentDetails.lastName,
-      studentIdNumber: studentDetails.studentIdNumber,
-    });
+    try {
+      return studentCollection?.insertOne({
+        firstName: studentDetails.firstName,
+        lastName: studentDetails.lastName,
+        studentIdNumber: studentDetails.studentIdNumber,
+      });
+    } catch (error) {
+      console.error(error);
+    }   
   }
 );
 
-export const assignStudent = createAsyncThunk(
+export const assignInstrumentToStudent = createAsyncThunk(
   "studentList/addStudentToInstrument",
-  async (assignStudentToInstrument: AssignStudentToInstrument) => {
+  async (assignStudentToInstrument: {studentIdNumber: string| undefined, instrument: OnlyInstrumentData }) => {
     try {
-      const update = await studentCollection?.findOneAndUpdate(
-        { _id: assignStudentToInstrument.studentInfo?.studentIdNumber },
+      return await studentCollection?.updateOne(
+        { studentIdNumber: assignStudentToInstrument.studentIdNumber },
         { $set: { 
             instrument: {
-              classification: assignStudentToInstrument.instrumentInfo?.classification,
-              brand: assignStudentToInstrument.instrumentInfo?.brand,
-              serialNumber: assignStudentToInstrument.instrumentInfo?.serialNumber
+              classification: assignStudentToInstrument.instrument?.classification,
+              brand: assignStudentToInstrument.instrument?.brand,
+              serialNumber: assignStudentToInstrument.instrument?.serialNumber
             }
           }
         },
-        {returnNewDocument: true}
       )
-      console.log(update)
     } catch (error) {
       console.error(error);
     }
-    
+  }
+)
 
+export const getDropDownList = createAsyncThunk(
+  "studentList/updateDropDownList",
+  async () => {
+    try {
+      return await studentCollection?.find({
+        $and : [
+          {instrument: {$exists: false}}, {instrument: null}
+        ]
+      });
+    } catch (error) {
+      console.log(error)
+    }
   }
 )
 export const studentListSlice = createSlice({
@@ -77,19 +89,6 @@ export const studentListSlice = createSlice({
       };
     },
 
-    // assignInstrumentToStudent: (
-    //   state,
-    //   action: PayloadAction<AssignStudentToInstrument>
-    // ) => {
-    //   const { studentInfo, instrumentInfo } = action.payload;
-    //   const student = state.studentList.find(
-    //     (student) => student.studentIdNumber === studentInfo?.studentIdNumber
-    //   );
-    //   if (student) {
-    //     student.instrument = instrumentInfo;
-    //   }
-    // },
-
     filterStudentList: (state, action: PayloadAction<StudentInfo>) => {
       const { _id } = action.payload;
       const filteredList = state.dropDownList.filter(
@@ -98,19 +97,19 @@ export const studentListSlice = createSlice({
       return { ...state, dropDownList: filteredList };
     },
   },
+
   extraReducers: (builder) => {
     builder
       .addCase(getStudents.pending, (state, action) => {
         state.loading = true;
       })
       .addCase(getStudents.rejected, (state, action) => {
-        state.error = action.payload;
+        state.loading = false;
       })
       .addCase(getStudents.fulfilled, (state, action) => {
         return {
           ...state,
           studentList: action.payload as StudentList,
-          dropDownList: action.payload as StudentList,
           loading: false,
         };
       })
@@ -130,7 +129,27 @@ export const studentListSlice = createSlice({
       .addCase(addStudent.fulfilled, (state, action) => {
         return {
           ...state,
-          insertResult: action.payload?.insertedId,
+          insertResult: action.payload,
+          loading: false,
+        };
+      })
+      .addCase(getDropDownList.pending, (state, action) => {
+        return {
+          ...state,
+          loading: true,
+        };       
+      })
+      .addCase(getDropDownList.rejected, (state, action) => {
+        return {
+          ...state,
+          error: action.payload,
+          loading: false,
+        };
+      })
+      .addCase(getDropDownList.fulfilled, (state, action) => {
+        return {
+          ...state,
+          dropDownList: action.payload as StudentList,
           loading: false,
         };
       });

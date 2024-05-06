@@ -5,7 +5,7 @@ import { useEffect } from "react";
 //redux imports
 import { useAppSelector, useAppDispatch } from "@/app/redux/hooks";
 import { RootState } from "@/app/redux/store";
-import { getStudents } from "@/app/redux/features/studentListSlice";
+import { getDropDownList, getStudents } from "@/app/redux/features/studentListSlice";
 import { getInstruments } from "@/app/redux/features/instrumentSLice";
 //component imports
 import CardList from "../../components/card-list/cardList";
@@ -30,7 +30,8 @@ export default function Search() {
   const searchField = useAppSelector(
     (state: RootState) => state.searchOptions.search
   );
-  const instrumentSearchResults = displayInstruments.instrumentList.filter((instrument) => {
+
+  const instrumentSearchResults = displayInstruments.instrumentList?.filter(instrument => {
     return (
       instrument.classification?.includes(searchField) ||
       instrument.brand?.includes(searchField) ||
@@ -48,14 +49,12 @@ export default function Search() {
   });
 
   useEffect(() => {
-    Promise.all([dispatch(getInstruments()), dispatch(getStudents())])
-        .then(() => {
-          console.log("Data loaded");
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-
+    const loadData = async () => {
+      await dispatch(getInstruments());
+      await dispatch(getStudents());
+      await dispatch(getDropDownList())
+    };
+    loadData();  
   }, [dispatch]);
   
   return (

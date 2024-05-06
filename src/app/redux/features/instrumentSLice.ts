@@ -5,32 +5,32 @@ import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {app, convertObjectIdToString, instrumentCollection} from "@/app/utilities/mongodb";
 
 //type imports
-import {InstrumentDetails, InstrumentList, StudentInfo} from "@/app/types/formTypes";
+import {InstrumentDetails, InstrumentList, StudentInfo, RentStatus} from "@/app/types/formTypes";
 
 // initial state types
 type InstrumentState = {
   instrumentList: InstrumentList;
   instrumentSearch: string;
   loading: boolean;
-  error: unknown;
-  success: boolean
 };
 
 const initialState: InstrumentState = {
   instrumentList: [],
   instrumentSearch: "",
   loading: false,
-  error: "",
-  success: false
 };
 
 export const getInstruments = createAsyncThunk(
   "instrumentDetails/getInstruments",
   async () => {
-    if (app.currentUser) {
-      const result = await instrumentCollection?.find({});
-      return convertObjectIdToString(result)
-    }
+    try {
+      if (app.currentUser) {
+        const result = await instrumentCollection?.find({});        
+        return convertObjectIdToString(result)
+      }
+    } catch (error) {
+      console.log(error)
+    }    
   }
 );
 
@@ -55,21 +55,21 @@ export const addInstrument = createAsyncThunk(
 )
 export const addStudentToInstrument = createAsyncThunk(
   "instrumentDetails/addStudentToInstrument",
-  async (modifyInstrument: {_id: string | number | undefined, student: StudentInfo}) => {
+  async (modifyInstrument: {serialNumber: string | undefined, student: StudentInfo}) => {
     try {
       if (app.currentUser) {
         return await instrumentCollection?.updateOne(
-            {_id: modifyInstrument._id},
+            {serialNumber: modifyInstrument.serialNumber},
             {
               $set: {
                 assignedTo: {
-                  firstName: modifyInstrument.student.lastName,
+                  firstName: modifyInstrument.student.firstName,
                   lastName: modifyInstrument.student.lastName,
                   studentIdNumber: modifyInstrument.student.studentIdNumber
-                }
+                },
+                rentStatus: RentStatus.Rented
               }
             },
-            {upsert: true}
         );
       }
     } catch (error) {
@@ -134,8 +134,7 @@ export const instrumentDetailsSlice = createSlice({
       .addCase(addStudentToInstrument.rejected, (state, action) => {
         return {
           ...state,
-          loading: false,
-          error: `${action.payload}`
+          loading: false
         }
       })
       .addCase(addStudentToInstrument.fulfilled, (state, action) => {
