@@ -17,16 +17,16 @@ export default function CardList({
 }: CardListProps) {
   return (
     <>
-      <Suspense fallback={<Loading/>}>
-        {selectOption === "Search Instrument" &&
-          instrumentSearchResults?.map((items) => {
-            return <InstrumentCard key={items._id} instrument={items} />;
-          })}
-        {selectOption === "Search Student" &&
-          studentSearchResult?.map((items) => {
-            return <StudentCard key={items._id} student={items} />;
-          })}
-      </Suspense>
-    </>
+      
+    {selectOption === "Search Instrument" &&
+      instrumentSearchResults?.map((items) => {
+        return <InstrumentCard key={items._id} instrument={items} />;
+      })}
+    {selectOption === "Search Student" &&
+      studentSearchResult?.map((items) => {
+        return <StudentCard key={items._id} student={items} />;
+      })}
+      </>
+      
   );
 }
