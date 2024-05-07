@@ -1,15 +1,15 @@
 "use client";
 import React, { useState } from "react";
 
-import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
-import { setSearch } from "@/app/redux/features/searchOptionsSlice";
+import { useAppDispatch, useAppSelector } from "@/app/lib/ReduxSSR/hooks";
+import { setSearch } from "@/app/lib/ReduxSSR/features/searchOptionsSlice";
 
 import TextInput from "../input/customTextInput";
 import Button from "../button/button";
 import Select from "../input/customSelection";
 
 import { InstrumentDetails, RentStatus } from "@/app/types/formTypes";
-import {addInstrument} from "@/app/redux/features/instrumentSLice";
+import {addInstrument} from "@/app/lib/ReduxSSR/features/instrumentSLice";
 
 type InstrumentFormProps = {
   formTitle: string;

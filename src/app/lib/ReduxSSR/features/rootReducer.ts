@@ -1,7 +1,7 @@
 "use client";
 import { combineReducers } from "@reduxjs/toolkit";
 
-import searchOptionsSlice from "../features/searchOptionsSlice";
+import searchOptionsSlice from "./searchOptionsSlice";
 import studentListSlice from "./studentListSlice";
 import instrumentDetailsSlice from "./instrumentSLice";
 import userInformationSlice from "./userSlice";

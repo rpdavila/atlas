@@ -6,8 +6,8 @@ import Link from "next/link";
 import TextInput from "../components/input/customTextInput";
 import Button from "../components/button/button";
 
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { loginUser } from "../redux/features/userSlice";
+import { useAppDispatch, useAppSelector } from "../lib/ReduxSSR/hooks";
+import { loginUser } from "../lib/ReduxSSR/features/userSlice";
 
 type SignInProps = {
   email: string;

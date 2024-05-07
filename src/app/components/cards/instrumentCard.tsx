@@ -1,9 +1,9 @@
 "use client";
-import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
-import { addStudentToInstrument, getInstruments } from "@/app/redux/features/instrumentSLice";
+import { useAppDispatch, useAppSelector } from "@/app/lib/ReduxSSR/hooks";
+import { addStudentToInstrument, getInstruments } from "@/app/lib/ReduxSSR/features/instrumentSLice";
 import { InstrumentDetails, OnlyStudentData, OnlyStudentId, StudentInfo } from "@/app/types/formTypes";
 import Select from "../input/customSelection";
-import { assignInstrumentToStudent, filterStudentList, getDropDownList, getStudents } from "@/app/redux/features/studentListSlice";
+import { assignInstrumentToStudent, filterStudentList, getDropDownList, getStudents } from "@/app/lib/ReduxSSR/features/studentListSlice";
 
 type CardProps = {
   instrument: InstrumentDetails;

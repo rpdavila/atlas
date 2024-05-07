@@ -6,7 +6,6 @@ import { Inter } from "next/font/google";
 
 import { Providers } from "@/app/redux/provider";
 
-import PersistGateWrapper from "./components/persist/persist";
 import Header from "./components/header/header";
 import Loading from "./components/loading/loading";
 
@@ -25,15 +24,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className} suppressHydrationWarning={true}>
-        <Providers>
-          <PersistGateWrapper>
-            <Header />
-            <main className="min-h-screen bg-white flex justify-center">
-              <Suspense fallback={<Loading />}>
-                {children}
-              </Suspense>
-            </main>
-          </PersistGateWrapper>
+        <Providers>         
+          <Header />
+          <main className="min-h-screen bg-white flex justify-center">
+            <Suspense fallback={<Loading />}>
+              {children}
+            </Suspense>          
+          </main>
+                    
         </Providers>
       </body>
     </html>

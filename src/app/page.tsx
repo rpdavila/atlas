@@ -1,6 +1,6 @@
 "use client";
 import UserDetail from "./components/userDetail/userDetail";
-import { useAppSelector } from "./redux/hooks";
+import { useAppSelector } from "./lib/ReduxSSR/hooks";
 export default function Home() {
   const isLoggedIn = useAppSelector((state) => state.userInfo.isLoggedIn);
   return (

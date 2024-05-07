@@ -5,7 +5,7 @@ import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 // mongodb utility imports
 import {app, convertObjectIdToString, studentCollection} from "@/app/utilities/mongodb";
 //type imports
-import { OnlyInstrumentData, OnlyStudentId, StudentInfo, StudentList,} from "@/app/types/formTypes";
+import { OnlyInstrumentData, StudentInfo, StudentList,} from "@/app/types/formTypes";
 
 type StudentState = {
   studentList: StudentList;
@@ -47,7 +47,7 @@ export const assignInstrumentToStudent = createAsyncThunk(
   async (assignStudentToInstrument: {studentIdNumber: string| undefined, instrument: OnlyInstrumentData }) => {
     try {
       return await studentCollection?.updateOne(
-        { studentIdNumber: assignStudentToInstrument.studentIdNumber },
+        { studentIdNumber: assignStudentToInstrument.studentIdNumber},
         { $set: { 
             instrument: {
               classification: assignStudentToInstrument.instrument?.classification,
@@ -56,7 +56,8 @@ export const assignInstrumentToStudent = createAsyncThunk(
             }
           }
         },
-      )
+      )     
+      
     } catch (error) {
       console.error(error);
     }
@@ -67,11 +68,12 @@ export const getDropDownList = createAsyncThunk(
   "studentList/updateDropDownList",
   async () => {
     try {
-      return await studentCollection?.find({
+      const result =  await studentCollection?.find({
         $and : [
           {instrument: {$exists: false}}, {instrument: null}
         ]
       });
+      return convertObjectIdToString(result)
     } catch (error) {
       console.log(error)
     }
@@ -80,23 +82,7 @@ export const getDropDownList = createAsyncThunk(
 export const studentListSlice = createSlice({
   name: "studentList",
   initialState,
-  reducers: {
-    addStudentToList: (state, action: PayloadAction<StudentInfo>) => {
-      return {
-        ...state,
-        studentList: state.studentList.concat(action.payload),
-      };
-    },
-
-    filterStudentList: (state, action: PayloadAction<StudentInfo>) => {
-      const { _id } = action.payload;
-      const filteredList = state.dropDownList.filter(
-        (list) => list._id !== _id
-      );
-      return { ...state, dropDownList: filteredList };
-    },
-  },
-
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(getStudents.pending, (state, action) => {
@@ -154,10 +140,5 @@ export const studentListSlice = createSlice({
       });
   },
 });
-
-export const {
-  addStudentToList,
-  filterStudentList,
-} = studentListSlice.actions;
 
 export default studentListSlice.reducer;

@@ -3,10 +3,10 @@
 import { useEffect } from "react";
 
 //redux imports
-import { useAppSelector, useAppDispatch } from "@/app/redux/hooks";
-import { RootState } from "@/app/redux/store";
-import { getDropDownList, getStudents } from "@/app/redux/features/studentListSlice";
-import { getInstruments } from "@/app/redux/features/instrumentSLice";
+import { useAppSelector, useAppDispatch } from "@/app/lib/ReduxSSR/hooks";
+import { RootState } from "@/app/lib/ReduxSSR/store";
+import { getDropDownList, getStudents } from "@/app/lib/ReduxSSR/features/studentListSlice";
+import { getInstruments } from "@/app/lib/ReduxSSR/features/instrumentSLice";
 //component imports
 import CardList from "../../components/card-list/cardList";
 import Loading from "@/app/components/loading/loading";

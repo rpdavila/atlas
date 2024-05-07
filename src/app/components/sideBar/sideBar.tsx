@@ -1,5 +1,5 @@
 "use client";
-import { useAppSelector } from "@/app/redux/hooks";
+import { useAppSelector } from "@/app/lib/ReduxSSR/hooks";
 
 import SelectSearchOptions from "../searchForm/selectSearchOptions";
 import StudentForm from "../forms/studentForm";
