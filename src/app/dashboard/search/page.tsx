@@ -40,7 +40,7 @@ export default function Search() {
     );
   });
 
-  const studentSearchResults = displayStudents?.studentList.filter((student) => {
+  const studentSearchResults = displayStudents.studentList?.filter((student) => {
     return (
       student.firstName?.includes(searchField) ||
       student.lastName?.includes(searchField) ||
