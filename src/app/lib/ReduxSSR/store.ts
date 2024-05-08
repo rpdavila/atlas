@@ -1,5 +1,5 @@
 
-import { configureStore } from "@reduxjs/toolkit";
+import { Tuple, configureStore } from "@reduxjs/toolkit";
 import {
   persistStore,
   persistReducer,
@@ -37,7 +37,8 @@ export const makeStore = () => {
             serializableCheck: {
                 ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
             },
-        }).concat(logger),     
+        }),
+      devTools: process.env.NODE_ENV !== "production",    
     })
     store.__persistor = persistStore(store);
     return store
