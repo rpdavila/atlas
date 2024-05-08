@@ -20,10 +20,16 @@ const initialState: StudentState = {
 export const getStudents = createAsyncThunk(
   "studentList/getStudents",
   async () => {
-    if (app?.currentUser) {
-      const result = await studentCollection?.find();
-      return convertObjectIdToString(result);
+    try {
+      if (app?.currentUser) {
+        const result = await studentCollection?.find();
+        return convertObjectIdToString(result);
+      }
+    } catch (error) {
+      console.error(error);
+      
     }
+    
   }
 );
 

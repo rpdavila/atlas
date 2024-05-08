@@ -1,4 +1,4 @@
-import { UpdateResult } from "mongodb";
+
 import * as Realm from "realm-web"
 
 
@@ -16,16 +16,10 @@ export const studentCollection =  db?.collection("studentInfo");
 export const instrumentCollection =  db?.collection("instrumentInfo")
 export const userCollection = db?.collection("users");
 
-export function convertObjectIdToString(result: any[] | undefined  ) : any[]
-export function convertObjectIdToString(result: any) : any {
-  if(Array.isArray(result)) {
-    result.map(item => {
-      item._id = String(item._id)
-      return item
-    })
-  } else {
-    result._id = result._id.toString()
-    return result
-  }
+
+export function convertObjectIdToString(result: any[] | undefined) {
+  result?.forEach((document) => {
+    document._id = String(document._id);
+  });
+  return result;
 }
-  
