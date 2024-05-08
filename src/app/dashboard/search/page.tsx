@@ -11,6 +11,7 @@ import { getInstruments } from "@/app/lib/ReduxSSR/features/instrumentSLice";
 import CardList from "../../components/card-list/cardList";
 
 export default function Search() {
+  // initialze the store in the client side from the server side
   const store = useAppStore()
   const initialized = useRef(false)
   if (!initialized.current) {
