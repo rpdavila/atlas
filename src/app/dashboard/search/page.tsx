@@ -1,9 +1,9 @@
 "use client";
 // react imports
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 //redux imports
-import { useAppSelector, useAppDispatch } from "@/app/lib/ReduxSSR/hooks";
+import { useAppSelector, useAppDispatch, useAppStore } from "@/app/lib/ReduxSSR/hooks";
 import { RootState } from "@/app/lib/ReduxSSR/store";
 import { getDropDownList, getStudents } from "@/app/lib/ReduxSSR/features/studentListSlice";
 import { getInstruments } from "@/app/lib/ReduxSSR/features/instrumentSLice";
@@ -11,7 +11,14 @@ import { getInstruments } from "@/app/lib/ReduxSSR/features/instrumentSLice";
 import CardList from "../../components/card-list/cardList";
 
 export default function Search() {
-  const dispatch = useAppDispatch();
+  const store = useAppStore()
+  const initialized = useRef(false)
+  if (!initialized.current) {
+    store.dispatch(getStudents())
+    store.dispatch(getInstruments())
+    store.dispatch(getDropDownList())
+    initialized.current = true
+  }
   
   // Grab student list in store
   const displayStudents = useAppSelector(
@@ -46,15 +53,6 @@ export default function Search() {
       student.studentIdNumber?.includes(searchField)
     );
   });
-
-  useEffect(() => {
-    const loadData = async () => {
-      await dispatch(getInstruments());
-      await dispatch(getStudents());
-      await dispatch(getDropDownList())
-    };
-    loadData();  
-  }, [dispatch]);
   
   return (
       
