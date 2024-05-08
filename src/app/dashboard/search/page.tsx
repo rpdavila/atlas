@@ -9,7 +9,6 @@ import { getDropDownList, getStudents } from "@/app/lib/ReduxSSR/features/studen
 import { getInstruments } from "@/app/lib/ReduxSSR/features/instrumentSLice";
 //component imports
 import CardList from "../../components/card-list/cardList";
-import Loading from "@/app/components/loading/loading";
 
 export default function Search() {
   const dispatch = useAppDispatch();
@@ -31,7 +30,7 @@ export default function Search() {
     (state: RootState) => state.searchOptions.search
   );
 
-  const instrumentSearchResults = displayInstruments.instrumentList?.filter(instrument => {
+  const instrumentSearchResults = displayInstruments.instrumentList?.filter((instrument: { classification: string | any[]; brand: string | any[]; serialNumber: string | any[]; rentStatus: string | any[]; }) => {
     return (
       instrument.classification?.includes(searchField) ||
       instrument.brand?.includes(searchField) ||
@@ -40,7 +39,7 @@ export default function Search() {
     );
   });
 
-  const studentSearchResults = displayStudents.studentList?.filter((student) => {
+  const studentSearchResults = displayStudents.studentList?.filter((student: { firstName: string | any[]; lastName: string | any[]; studentIdNumber: string | any[]; }) => {
     return (
       student.firstName?.includes(searchField) ||
       student.lastName?.includes(searchField) ||
