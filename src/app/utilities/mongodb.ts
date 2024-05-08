@@ -17,8 +17,7 @@ export const instrumentCollection =  db?.collection("instrumentInfo")
 export const userCollection = db?.collection("users");
 
 export function convertObjectIdToString(result: any[] | undefined  ) : any[]
-export function convertObjectIdToString(result: UpdateResult<any>) : UpdateResult<any>
-export function convertObjectIdToString(result: any) : any[] | UpdateResult<any> {
+export function convertObjectIdToString(result: any) : any[] {
   if(Array.isArray(result)) {
     return result.map(item => {
       item._id = item._id.toString()
