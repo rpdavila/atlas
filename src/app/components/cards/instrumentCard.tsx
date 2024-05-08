@@ -1,12 +1,13 @@
 "use client";
 import { useAppDispatch, useAppSelector } from "@/app/lib/ReduxSSR/hooks";
 import { addStudentToInstrument, getInstruments } from "@/app/lib/ReduxSSR/features/instrumentSLice";
-import { InstrumentDetails, OnlyStudentData, OnlyStudentId, StudentInfo } from "@/app/types/formTypes";
+import { InstrumentDetails, StudentInfo } from "@/app/types/formTypes";
 import Select from "../input/customSelection";
-import { assignInstrumentToStudent, filterStudentList, getDropDownList, getStudents } from "@/app/lib/ReduxSSR/features/studentListSlice";
+import { assignInstrumentToStudent, getDropDownList, getStudents } from "@/app/lib/ReduxSSR/features/studentListSlice";
 
 type CardProps = {
   instrument: InstrumentDetails;
+  student: StudentInfo
 };
 
 export default function InstrumentCard({ instrument }: CardProps) {
@@ -22,14 +23,14 @@ export default function InstrumentCard({ instrument }: CardProps) {
     
     const value = event.target.value.split(" ");
     // get a matching student
-    const matchingStudent = displayStudents.find((student) => {
+    const matchingStudent = displayStudents.find((student: StudentInfo) => {
       if (student.firstName === value[0] && student.lastName === value[1]) {
         return student
       }
     });
 
     //get a matching instrument
-    const matchingInstrument = displayInstruments.find((item) => {
+    const matchingInstrument = displayInstruments.find((item: InstrumentDetails) => {
       if (item._id === instrument._id) {
         return item;
       }
