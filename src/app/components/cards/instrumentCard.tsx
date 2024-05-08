@@ -7,7 +7,6 @@ import { assignInstrumentToStudent, getDropDownList, getStudents } from "@/app/l
 
 type CardProps = {
   instrument: InstrumentDetails;
-  student: StudentInfo
 };
 
 export default function InstrumentCard({ instrument }: CardProps) {
@@ -65,7 +64,7 @@ export default function InstrumentCard({ instrument }: CardProps) {
     await dispatch(getInstruments())
     // get updated student list
     await dispatch(getStudents())
-    // get update dropDownList
+    // update the dropDownList
     await dispatch(getDropDownList())   
   
   };
