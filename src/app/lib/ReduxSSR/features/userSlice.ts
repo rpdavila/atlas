@@ -1,5 +1,3 @@
-"use client";
-
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { app } from "@/app/utilities/mongodb";
 import * as Realm from "realm-web";

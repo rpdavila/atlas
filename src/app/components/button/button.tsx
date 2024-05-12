@@ -1,6 +1,6 @@
 type ButtonProps = {
   name: string;
-  marginTop: string;
+  marginTop?: string;
   type: "submit" | "reset" | "button";
   disabled?: boolean;
   onClick?: () => void;

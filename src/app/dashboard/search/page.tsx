@@ -1,9 +1,9 @@
 "use client";
 // react imports
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
 //redux imports
-import { useAppSelector, useAppDispatch, useAppStore } from "@/app/lib/ReduxSSR/hooks";
+import { useAppSelector, useAppStore } from "@/app/lib/ReduxSSR/hooks";
 import { RootState } from "@/app/lib/ReduxSSR/store";
 import { getDropDownList, getStudents } from "@/app/lib/ReduxSSR/features/studentListSlice";
 import { getInstruments } from "@/app/lib/ReduxSSR/features/instrumentSLice";
@@ -11,7 +11,7 @@ import { getInstruments } from "@/app/lib/ReduxSSR/features/instrumentSLice";
 import CardList from "../../components/card-list/cardList";
 
 export default function Search() {
-  // initialze the store in the client side from the server side
+  // initialize the store in the client side from the server side
   const store = useAppStore()
   const initialized = useRef(false)
   if (!initialized.current) {
@@ -29,11 +29,12 @@ export default function Search() {
   const displayInstruments = useAppSelector(
     (state: RootState) => state.instruments
   );
-
+  // grab the selection option
   const selectOption = useAppSelector(
     (state: RootState) => state.searchOptions.type
   );
 
+  // grab searchfield
   const searchField = useAppSelector(
     (state: RootState) => state.searchOptions.search
   );
@@ -55,24 +56,21 @@ export default function Search() {
     );
   });
   
-  return (
-      
-      <section className="flex flex-col basis-3/4 items-center">
-        {selectOption === "Search Instrument" &&  (
-            <CardList
-              instrumentSearchResults={instrumentSearchResults}
-              selectOption={selectOption}
-            />
-          )}
+  return (      
+    <section className="flex flex-col basis-3/4 items-center">
+      {selectOption === "Search Instrument" &&  (
+          <CardList
+            instrumentSearchResults={instrumentSearchResults}
+            selectOption={selectOption}
+          />
+        )}
 
-        {selectOption === "Search Student" && (
-            <CardList
-              studentSearchResult={studentSearchResults}
-              selectOption={selectOption}
-            />
-          )}
-        
-      </section>
-    
+      {selectOption === "Search Student" && (
+          <CardList
+            studentSearchResult={studentSearchResults}
+            selectOption={selectOption}
+          />
+        )}        
+    </section>    
   );
 }

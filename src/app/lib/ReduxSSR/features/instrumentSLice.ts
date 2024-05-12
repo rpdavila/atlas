@@ -1,4 +1,3 @@
-"use client";
 //redux imports
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 //mongodb Imports
@@ -77,32 +76,26 @@ export const addStudentToInstrument = createAsyncThunk(
     }
   }
 )
+
+export const unassignStudentFromInstrument = createAsyncThunk(
+  "instrumentDetails/unassignStudent",
+  async (serialNumber: string) => {
+    try {
+      if (app.currentUser) {
+        return await instrumentCollection?.updateOne(
+          {serialNumber: serialNumber},
+          {$unset: {assignedTo: ""}}
+        )
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+)
 export const instrumentDetailsSlice = createSlice({
   name: "instrumentDetails",
   initialState,
-  reducers: {
-    addInstrumentToList: (state, action: PayloadAction<InstrumentDetails>) => {
-      return {
-        ...state,
-        instrumentList: state.instrumentList.concat(action.payload),
-      };
-    },
-
-    // clearSearchInstrument: (state) => {
-    //   return { ...state, result: [] };
-    // },
-
-    // addStudentToInstrument: (state, action: PayloadAction<Getinfo>) => {
-    //   const { studentInfo, instrumentInfo } = action.payload;
-    //   const instrument = state.instrumentList.find((instrument) => {
-    //     return instrument._id === instrumentInfo._id;
-    //   });
-    //   if (instrument) {
-    //     instrument.assignedTo = studentInfo;
-    //     instrument.rentStatus = RentStatus.Rented;
-    //   }
-    // },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(getInstruments.pending, (state, action) => {
@@ -145,8 +138,4 @@ export const instrumentDetailsSlice = createSlice({
       })
   },
 });
-
-export const { addInstrumentToList} =
-  instrumentDetailsSlice.actions;
-
 export default instrumentDetailsSlice.reducer;

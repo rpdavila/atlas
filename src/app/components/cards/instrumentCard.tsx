@@ -1,9 +1,13 @@
 "use client";
+//redux imports
 import { useAppDispatch, useAppSelector } from "@/app/lib/ReduxSSR/hooks";
 import { addStudentToInstrument, getInstruments } from "@/app/lib/ReduxSSR/features/instrumentSLice";
-import { InstrumentDetails, StudentInfo } from "@/app/types/formTypes";
-import Select from "../input/customSelection";
 import { assignInstrumentToStudent, getDropDownList, getStudents } from "@/app/lib/ReduxSSR/features/studentListSlice";
+// type imports
+import { InstrumentDetails, StudentInfo } from "@/app/types/formTypes";
+//component imports
+import Select from "../input/customSelection";
+import Button from "../button/button";
 
 type CardProps = {
   instrument: InstrumentDetails;
@@ -60,15 +64,20 @@ export default function InstrumentCard({ instrument }: CardProps) {
         }
       )
     )
+
     // get updated instrument list
     await dispatch(getInstruments())
+
     // get updated student list
     await dispatch(getStudents())
+
     // update the dropDownList
-    await dispatch(getDropDownList())   
-  
+    await dispatch(getDropDownList()) 
   };
 
+  const uanassignStudent = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    
+  }
   return (
     <div className="flex flex-row justify-evenly bg-white w-3/4 rounded-lg m-4 basis-1/3">
       <div className="flex flex-col w-1/3 items-start justify-center">
@@ -105,7 +114,10 @@ export default function InstrumentCard({ instrument }: CardProps) {
             <strong>Student Id Number: </strong>
             {instrument.assignedTo?.studentIdNumber}
           </p>
+          <Button type="button" name="Unassign Student" marginBottom="5" marginTop="0" />          
         </div>
+        
+     
       ) : (
         <Select
           category="Available Students"

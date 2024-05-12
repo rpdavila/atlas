@@ -1,4 +1,3 @@
-"use client";
 import { combineReducers } from "@reduxjs/toolkit";
 
 import searchOptionsSlice from "./searchOptionsSlice";

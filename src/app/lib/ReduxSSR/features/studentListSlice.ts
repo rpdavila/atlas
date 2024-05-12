@@ -1,21 +1,21 @@
-"use client";
-
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 // mongodb utility imports
 import {app, convertObjectIdToString, studentCollection} from "@/app/utilities/mongodb";
 //type imports
-import { OnlyInstrumentData, StudentInfo, StudentList,} from "@/app/types/formTypes";
+import { OnlyInstrumentData, OnlyStudentId, StudentInfo, StudentList,} from "@/app/types/formTypes";
 
 type StudentState = {
   studentList: StudentList;
   dropDownList: StudentList;
   loading: boolean;
+  error: unknown;
 };
 const initialState: StudentState = {
   studentList: [],
   dropDownList: [],
   loading: false,
+    error: null,
 };
 export const getStudents = createAsyncThunk(
   "studentList/getStudents",
@@ -26,12 +26,24 @@ export const getStudents = createAsyncThunk(
         return convertObjectIdToString(result);
       }
     } catch (error) {
-      console.error(error);
-      
-    }
-    
+      console.error(error);      
+    }    
   }
 );
+
+export const unassignInstrumentFromStudent = createAsyncThunk(
+  "studentlist/unassignStudent",
+  async (studentIdNumber: OnlyStudentId) => {
+    try {
+      return studentCollection?.updateOne(
+        { studentIdNumber: studentIdNumber},
+        { $unset: { instrument:  ""} }
+      )
+    } catch (error) {
+      console.error(error);
+    }
+  }
+)
 
 export const addStudent = createAsyncThunk(
   "studentList/addStudent",
@@ -92,10 +104,17 @@ export const studentListSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getStudents.pending, (state, action) => {
-        state.loading = true;
+        return {
+          ...state,
+          loading: true,
+        };
       })
       .addCase(getStudents.rejected, (state, action) => {
-        state.loading = false;
+        return  {
+          ...state,
+          error: action.payload,
+          loading: false,
+        }
       })
       .addCase(getStudents.fulfilled, (state, action) => {
         return {
@@ -120,7 +139,6 @@ export const studentListSlice = createSlice({
       .addCase(addStudent.fulfilled, (state, action) => {
         return {
           ...state,
-          insertResult: action.payload,
           loading: false,
         };
       })
@@ -143,7 +161,32 @@ export const studentListSlice = createSlice({
           dropDownList: action.payload as StudentList,
           loading: false,
         };
-      });
+      })
+      .addCase(unassignInstrumentFromStudent.fulfilled, (state, action) => {
+        return {
+          ...state,
+          loading: false,
+        };
+      })
+      .addCase(assignInstrumentToStudent.pending, (state, action) => {
+        return {
+          ...state,
+          loading: true,
+        };
+      })
+      .addCase(assignInstrumentToStudent.rejected, (state, action) => {
+        return {
+          ...state,
+          error: action.payload,
+          loading: false,
+        };
+      })
+      .addCase(assignInstrumentToStudent.fulfilled, (state, action) => {
+        return {
+          ...state,
+          loading: false,
+        };
+      })
   },
 });
 
