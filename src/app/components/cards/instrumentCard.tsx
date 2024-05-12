@@ -114,7 +114,7 @@ export default function InstrumentCard({ instrument }: CardProps) {
             <strong>Student Id Number: </strong>
             {instrument.assignedTo?.studentIdNumber}
           </p>
-          <Button type="button" name="Unassign Student" marginBottom="5" marginTop="0" />          
+          <Button type="button" name="Unassign Student" marginTop="0" />          
         </div>
         
      
