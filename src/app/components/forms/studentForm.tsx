@@ -40,7 +40,7 @@ export default function StudentForm({
   };
 
   const handleAddStudent = async () => {
-    dispatch(
+    await dispatch(
       addStudent({
         firstName: studentInfo.firstName,
         lastName: studentInfo.lastName,

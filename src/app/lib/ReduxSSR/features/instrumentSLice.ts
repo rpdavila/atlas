@@ -79,12 +79,15 @@ export const addStudentToInstrument = createAsyncThunk(
 
 export const unassignStudentFromInstrument = createAsyncThunk(
   "instrumentDetails/unassignStudent",
-  async (serialNumber: string) => {
+  async (serialNumber: string | undefined) => {
     try {
       if (app.currentUser) {
         return await instrumentCollection?.updateOne(
           {serialNumber: serialNumber},
-          {$unset: {assignedTo: ""}}
+          {
+            $unset: {assignedTo: ""},
+            $set: {rentStatus: RentStatus.Available}
+          }
         )
       }
     } catch (error) {
@@ -131,6 +134,24 @@ export const instrumentDetailsSlice = createSlice({
         }
       })
       .addCase(addStudentToInstrument.fulfilled, (state, action) => {
+        return {
+          ...state,
+          loading: false,
+        }
+      })
+      .addCase(unassignStudentFromInstrument.pending, (state, action) => {
+        return {
+          ...state,
+          loading: true
+        }
+      })
+      .addCase(unassignStudentFromInstrument.rejected, (state, action) => {
+        return {
+          ...state,
+          loading: false
+        }
+      })
+      .addCase(unassignStudentFromInstrument.fulfilled, (state, action) => {
         return {
           ...state,
           loading: false,

@@ -33,9 +33,9 @@ export const getStudents = createAsyncThunk(
 
 export const unassignInstrumentFromStudent = createAsyncThunk(
   "studentlist/unassignStudent",
-  async (studentIdNumber: OnlyStudentId) => {
+  async (studentIdNumber: string | undefined) => {
     try {
-      return studentCollection?.updateOne(
+      return await studentCollection?.updateOne(
         { studentIdNumber: studentIdNumber},
         { $unset: { instrument:  ""} }
       )
