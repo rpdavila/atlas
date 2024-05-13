@@ -14,10 +14,13 @@ import storage from "redux-persist/lib/storage";
 import rootReducer from "./features/rootReducer";
 import logger from "redux-logger";
 
+
 const persistConfig = {
   key: "root",
   storage,
 };
+
+
 
 export const makeStore = () => {
   const isServer = typeof window === "undefined";
@@ -30,7 +33,11 @@ export const makeStore = () => {
     let store: any = configureStore({
       reducer: persistedReducer,
       middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat(logger),
+        getDefaultMiddleware({
+            serializableCheck: {
+                ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+            },
+        }).concat(logger),
       devTools: process.env.NODE_ENV !== "production",    
     })
     store.__persistor = persistStore(store);
@@ -41,3 +48,4 @@ export const makeStore = () => {
 export type AppStore = ReturnType<typeof makeStore>
 export type RootState = ReturnType<AppStore['getState']>;
 export type AppDispatch = AppStore['dispatch']
+
