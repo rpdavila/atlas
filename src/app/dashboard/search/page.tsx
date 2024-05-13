@@ -40,6 +40,11 @@ export default function Search() {
     (state: RootState) => state.searchOptions.search
   );
 
+  // Check if the data is available before rendering
+  if (!displayStudents.studentList || !displayInstruments.instrumentList) {
+    return <Loading />;
+  }
+
   const instrumentSearchResults = displayInstruments.instrumentList?.filter((instrument: { classification: string | any[]; brand: string | any[]; serialNumber: string | any[]; rentStatus: string | any[]; }) => {
     return (
       instrument.classification?.includes(searchField) ||
