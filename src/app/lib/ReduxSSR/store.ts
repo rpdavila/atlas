@@ -26,18 +26,22 @@ export const makeStore = () => {
   const isServer = typeof window === "undefined";
   if (isServer) {
     return configureStore({
-      reducer: rootReducer
-    })
+      reducer: rootReducer,
+      middleware: (getDefaultMiddleWare): ReturnType<typeof getDefaultMiddleWare> => getDefaultMiddleWare({
+        thunk: true,
+        serializableCheck: false,
+      })
+    });
   } else {
     const persistedReducer = persistReducer(persistConfig, rootReducer);
     let store: any = configureStore({
       reducer: persistedReducer,
-      middleware: (getDefaultMiddleware) =>
+      middleware: (getDefaultMiddleware): ReturnType<typeof getDefaultMiddleware> =>
         getDefaultMiddleware({
             serializableCheck: {
                 ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
             },
-        }).concat(logger),
+        }),
       devTools: process.env.NODE_ENV !== "production",    
     })
     store.__persistor = persistStore(store);

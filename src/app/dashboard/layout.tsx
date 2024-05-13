@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { Suspense } from "react";
 import SideBar from "../components/sideBar/sideBar";
 import Loading from "../components/loading/loading";
