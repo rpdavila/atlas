@@ -1,5 +1,5 @@
 
-import { Tuple, configureStore } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import {
   persistStore,
   persistReducer,
@@ -14,13 +14,10 @@ import storage from "redux-persist/lib/storage";
 import rootReducer from "./features/rootReducer";
 import logger from "redux-logger";
 
-
 const persistConfig = {
   key: "root",
   storage,
 };
-
-
 
 export const makeStore = () => {
   const isServer = typeof window === "undefined";
@@ -48,4 +45,3 @@ export const makeStore = () => {
 export type AppStore = ReturnType<typeof makeStore>
 export type RootState = ReturnType<AppStore['getState']>;
 export type AppDispatch = AppStore['dispatch']
-
