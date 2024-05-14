@@ -9,6 +9,7 @@ import { InstrumentDetails, StudentInfo } from "@/app/types/formTypes";
 //component imports
 import Select from "../input/customSelection";
 import Button from "../button/button";
+import Loading from "../loading/loading";
 
 
 
@@ -78,9 +79,7 @@ export default function InstrumentCard({ instrument }: CardProps) {
       await dispatch(getStudents())
 
       // update the dropDownList
-      await dispatch(getDropDownList()) 
-     
-    
+      await dispatch(getDropDownList())
   };
 
   const handleUnassignStudent = async (instrumentSerialNumber: string | undefined, studentIdNumber: string | undefined) => {
@@ -137,8 +136,7 @@ export default function InstrumentCard({ instrument }: CardProps) {
           category="Available Students"
           options={displayStudents}
           onChange={handleSelect}
-          placeHolder="Assign to student"
-        />
+          placeHolder="Assign Student"        />
         
       )}
     </div>
