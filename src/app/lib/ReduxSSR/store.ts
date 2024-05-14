@@ -20,17 +20,11 @@ const persistConfig = {
   storage,
 };
 
-
-
 export const makeStore = () => {
   const isServer = typeof window === "undefined";
   if (isServer) {
     return configureStore({
       reducer: rootReducer,
-      middleware: (getDefaultMiddleWare): ReturnType<typeof getDefaultMiddleWare> => getDefaultMiddleWare({
-        thunk: true,
-        serializableCheck: false,
-      })
     });
   } else {
     const persistedReducer = persistReducer(persistConfig, rootReducer);

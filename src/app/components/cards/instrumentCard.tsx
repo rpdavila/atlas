@@ -1,9 +1,11 @@
 "use client";
+//react imports
+import { Suspense } from "react";
 //redux imports
 import { useAppDispatch, useAppSelector } from "@/app/lib/ReduxSSR/hooks";
 import { addStudentToInstrument, getInstruments, unassignStudentFromInstrument } from "@/app/lib/ReduxSSR/features/instrumentSLice";
 import { assignInstrumentToStudent, getDropDownList, getStudents, unassignInstrumentFromStudent } from "@/app/lib/ReduxSSR/features/studentListSlice";
-import { RootState } from "@/app/lib/ReduxSSR/store";
+
 // type imports
 import { InstrumentDetails, StudentInfo } from "@/app/types/formTypes";
 //component imports
@@ -19,16 +21,14 @@ type CardProps = {
 
 export default function InstrumentCard({ instrument }: CardProps) {
   const dispatch = useAppDispatch();
+  const StudentLoading = useAppSelector((state) => state.students.loading)
+  const instrumentsLoading = useAppSelector((state) => state.instruments.loading)
   const displayInstruments = useAppSelector(
     (state) => state.instruments.instrumentList
   );
   const displayStudents = useAppSelector(
     (state) => state.students.dropDownList
   );
-
-  const studentLoading = useAppSelector((state: RootState) => state.students.loading )
-  const instrumentLoading = useAppSelector((state: RootState) => state.instruments.loading)
-
   const handleSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
    
       const value = event.target.value.split(" ");
@@ -128,16 +128,15 @@ export default function InstrumentCard({ instrument }: CardProps) {
             {instrument.assignedTo?.studentIdNumber}
           </p>
           <Button type="button" name="Unassign Student" marginTop="0" onClick={() => handleUnassignStudent(instrument.serialNumber, instrument.assignedTo?.studentIdNumber )} />          
-        </div>
-        
+        </div>       
      
-      ) : (
-       <Select
+      ) : ( 
+        <Select
           category="Available Students"
           options={displayStudents}
           onChange={handleSelect}
-          placeHolder="Assign Student"        />
-        
+          placeHolder="Assign Student"
+        />      
       )}
     </div>
   );

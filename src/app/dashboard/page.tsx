@@ -6,8 +6,6 @@ import { getInstruments } from "@/app/lib/ReduxSSR/features/instrumentSLice";
 
 import UserDetail from "../components/userDetail/userDetail";
 
-
-
 export default function DashboardMainPage() {
   const store = useAppStore()
   const initialized = useRef(false)
