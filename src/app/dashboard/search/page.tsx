@@ -1,26 +1,17 @@
 "use client";
 // react imports
-import { Suspense, useRef } from "react";
+import { Suspense} from "react";
 
 //redux imports
-import { useAppSelector, useAppStore } from "@/app/lib/ReduxSSR/hooks";
+import { useAppSelector } from "@/app/lib/ReduxSSR/hooks";
 import { RootState } from "@/app/lib/ReduxSSR/store";
-import { getDropDownList, getStudents } from "@/app/lib/ReduxSSR/features/studentListSlice";
-import { getInstruments } from "@/app/lib/ReduxSSR/features/instrumentSLice";
+
 //component imports
 import CardList from "../../components/card-list/cardList";
 import Loading from "../../components/loading/loading";
 
 export default function Search() {
-  // initialize the store in the client side from the server side
-  const store = useAppStore()
-  const initialized = useRef(false)
-  if (!initialized.current) {
-    store.dispatch(getStudents())
-    store.dispatch(getInstruments())
-    store.dispatch(getDropDownList())
-    initialized.current = true
-  }
+ 
   
   // Grab student list in store
   const displayStudents = useAppSelector(
@@ -39,11 +30,6 @@ export default function Search() {
   const searchField = useAppSelector(
     (state: RootState) => state.searchOptions.search
   );
-
-  // Check if the data is available before rendering
-  if (!displayStudents.studentList || !displayInstruments.instrumentList) {
-    return <Loading />;
-  }
 
   const instrumentSearchResults = displayInstruments.instrumentList?.filter((instrument: { classification: string | any[]; brand: string | any[]; serialNumber: string | any[]; rentStatus: string | any[]; }) => {
     return (

@@ -3,11 +3,14 @@
 import { useAppDispatch, useAppSelector } from "@/app/lib/ReduxSSR/hooks";
 import { addStudentToInstrument, getInstruments, unassignStudentFromInstrument } from "@/app/lib/ReduxSSR/features/instrumentSLice";
 import { assignInstrumentToStudent, getDropDownList, getStudents, unassignInstrumentFromStudent } from "@/app/lib/ReduxSSR/features/studentListSlice";
+import { RootState } from "@/app/lib/ReduxSSR/store";
 // type imports
 import { InstrumentDetails, StudentInfo } from "@/app/types/formTypes";
 //component imports
 import Select from "../input/customSelection";
 import Button from "../button/button";
+
+
 
 type CardProps = {
   instrument: InstrumentDetails;
@@ -21,6 +24,9 @@ export default function InstrumentCard({ instrument }: CardProps) {
   const displayStudents = useAppSelector(
     (state) => state.students.dropDownList
   );
+
+  const studentLoading = useAppSelector((state: RootState) => state.students.loading )
+  const instrumentLoading = useAppSelector((state: RootState) => state.instruments.loading)
 
   const handleSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
    
@@ -127,12 +133,13 @@ export default function InstrumentCard({ instrument }: CardProps) {
         
      
       ) : (
-        <Select
+       <Select
           category="Available Students"
           options={displayStudents}
           onChange={handleSelect}
           placeHolder="Assign to student"
         />
+        
       )}
     </div>
   );
