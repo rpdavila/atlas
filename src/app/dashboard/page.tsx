@@ -13,7 +13,7 @@ export default function DashBoardMainPage() {
   const userData = useAppSelector((state) => state.userInfo.customUserData)
   instruments.length === 0 ? dispatch(getInstruments()) : null;
   students.length === 0 ? dispatch(getStudents()) : null;
-  dropDownList.length === 0 || dropDownList === undefined ? dispatch(getDropDownList()) : null;
+  dropDownList === undefined ? dispatch(getDropDownList()) : null;
   if (userData === undefined) {
     dispatch(getCustomUserData())
   }
