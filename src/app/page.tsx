@@ -1,6 +1,5 @@
 "use client";
-import UserDetail from "./components/userDetail/userDetail";
-import { useAppSelector } from "./lib/ReduxSSR/hooks";
+
 export default function Home() {
   return (
     <section className="flex min-h-screen flex-col items-ceter justify-between">

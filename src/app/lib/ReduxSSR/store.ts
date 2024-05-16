@@ -43,10 +43,6 @@ export const makeStore = () => {
   if (isServer) {
     return configureStore({
       reducer: rootReducer,
-      middleware: (getDefaultMiddleWare): ReturnType<typeof getDefaultMiddleWare> => getDefaultMiddleWare({
-        thunk: true,
-        serializableCheck: false,
-      })
     });
   } else {
     const persistedReducer = persistReducer(persistConfig, rootReducer);
