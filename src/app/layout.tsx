@@ -7,7 +7,6 @@ import { Inter } from "next/font/google";
 import { Providers } from "@/app/redux/provider";
 
 import Header from "./components/header/header";
-import Loading from "./components/loading/loading";
 
 const inter = Inter({ subsets: ["latin"] });
 

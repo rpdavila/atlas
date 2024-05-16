@@ -1,13 +1,16 @@
 "use client";
-import { useRef, useEffect } from "react";
+import React from "react";
+import { useRef } from "react";
 import { useAppStore } from "../lib/ReduxSSR/hooks";
 import { getStudents, getDropDownList } from "../lib/ReduxSSR/features/studentListSlice";
 import { getInstruments } from "../lib/ReduxSSR/features/instrumentSLice";
 import { getCustomUserData } from "../lib/ReduxSSR/features/userSlice";
 
+type DashBoardMainPageProps = {
+  children: React.ReactNode;
+};
 
-
-export default function DashBoardMainPage({children}: {children: React.ReactNode}) {
+export default function DashBoardMainPage({children}: DashBoardMainPageProps) {
   const store = useAppStore()
   const initialized = useRef(false) // only run once
      
