@@ -1,25 +1,28 @@
 "use client";
-import { useRef } from "react";
-import { useAppStore } from "@/app/lib/ReduxSSR/hooks";
-import { getDropDownList, getStudents } from "@/app/lib/ReduxSSR/features/studentListSlice";
-import { getInstruments } from "@/app/lib/ReduxSSR/features/instrumentSLice";
-
-import UserDetail from "../components/userDetail/userDetail";
-
+import { useRef, useEffect } from "react";
+import { useAppStore } from "../lib/ReduxSSR/hooks";
+import { getStudents, getDropDownList } from "../lib/ReduxSSR/features/studentListSlice";
+import { getInstruments } from "../lib/ReduxSSR/features/instrumentSLice";
+import { getCustomUserData } from "../lib/ReduxSSR/features/userSlice";
 
 
-export default function DashboardMainPage() {
+
+export default function DashBoardMainPage({children}: {children: React.ReactNode}) {
   const store = useAppStore()
-  const initialized = useRef(false)
-  if (!initialized.current) {
-    store.dispatch(getStudents())
-    store.dispatch(getInstruments())
-    store.dispatch(getDropDownList())
-    initialized.current = true
-  }
+  const initialized = useRef(false) // only run once
+     
+    if (!initialized.current) {
+      store.dispatch(getStudents())
+      store.dispatch(getInstruments())
+      store.dispatch(getDropDownList())
+      store.dispatch(getCustomUserData())
+      initialized.current = true
+    }
+
+  
   return (
-    <section className="flex bg-white mt-2 rounded-lg basis-3/4 justify-center">
-      <UserDetail />
+    <section className="flex flex-col mt-2 rounded-lg basis-3/4 justify-center">
+      {children}
     </section>
   );
 }

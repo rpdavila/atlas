@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React from "react";
 import "./globals.css";
 import type { Metadata } from "next";
 
@@ -24,12 +24,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className} suppressHydrationWarning={true}>
-        <Providers>         
+        <Providers>        
           <Header />
           <main className="min-h-screen bg-white flex justify-center">
-            <Suspense fallback={<Loading />}>
+            
               {children}
-            </Suspense>          
+                     
           </main>
                     
         </Providers>

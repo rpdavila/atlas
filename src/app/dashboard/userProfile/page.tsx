@@ -103,12 +103,9 @@ export default function UserProfile() {
 
   const handleUpdate = () => {};
 
-  useEffect(() => {
-    dispatch(getCustomUserData());
-  }, [dispatch, fieldData]);
 
   return (
-    <>
+    <div className="flex flex-col justify-evenly items-center basis-3/4 bg-white mt-2 rounded-lg ">
       <section className="flex flex-col">
         <h1 className="text-center">
           {userInfo.customUserData
@@ -175,6 +172,6 @@ export default function UserProfile() {
           marginTop="5"
         />
       </section>
-    </>
+    </div>
   );
 }
