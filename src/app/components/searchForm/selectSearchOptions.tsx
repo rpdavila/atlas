@@ -25,7 +25,7 @@ export default function SelectSearchOptions({ children }: SearchOptionProps) {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     dispatch(setType(value));
-    if (selectOption === "Search Student" || selectOption === "Search Instrument") {
+    if (selectOption === "Search Student" || "Search Instrument") {
       router.push("/dashboard/search");
     }
   };

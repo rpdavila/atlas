@@ -8,8 +8,11 @@ export default function UserDetail() {
 
   
   return (
-    <h1 className="flex items-center justify-center text-2xl">
-      Hello {userFirstName} {userLastName}
-    </h1>
+    <section className="flex flex-col bg-white rounded-lg">
+      <h1 className="text-2xl">
+        Hello {userFirstName} {userLastName}
+      </h1>
+    </section>
+    
   );
 }

@@ -1,31 +1,26 @@
 "use client";
-import React from "react";
-import { useRef } from "react";
-import { useAppStore } from "../lib/ReduxSSR/hooks";
-import { getStudents, getDropDownList } from "../lib/ReduxSSR/features/studentListSlice";
+import UserDetail from "../components/userDetail/userDetail";
+import { useAppSelector, useAppDispatch } from "../lib/ReduxSSR/hooks";
 import { getInstruments } from "../lib/ReduxSSR/features/instrumentSLice";
+import { getStudents, getDropDownList } from "../lib/ReduxSSR/features/studentListSlice";
 import { getCustomUserData } from "../lib/ReduxSSR/features/userSlice";
 
-type DashBoardMainPageProps = {
-  children: React.ReactNode;
-};
+export default function DashBoardMainPage() {
+  const dispatch = useAppDispatch();
+  const instruments = useAppSelector((state) => state.instruments.instrumentList);
+  const students = useAppSelector((state) => state.students.studentList);
+  const dropDownList = useAppSelector((state) => state.students.dropDownList)
+  const userData = useAppSelector((state) => state.userInfo.customUserData)
+  instruments.length === 0? dispatch(getInstruments()): null;
+  students.length === 0 ? dispatch(getStudents()): null;
+  dropDownList.length === 0 ? dispatch(getDropDownList()): null;
+  if (userData === undefined){
+    dispatch(getCustomUserData())
+  }
 
-export default function DashBoardMainPage({children}: DashBoardMainPageProps) {
-  const store = useAppStore()
-  const initialized = useRef(false) // only run once
-     
-    if (!initialized.current) {
-      store.dispatch(getStudents())
-      store.dispatch(getInstruments())
-      store.dispatch(getDropDownList())
-      store.dispatch(getCustomUserData())
-      initialized.current = true
-    }
-
-  
   return (
-    <section className="flex flex-col mt-2 rounded-lg basis-3/4 justify-center">
-      {children}
-    </section>
+    <section className="flex flex-col min-h-screen bg-white mt-2 rounded-lg basis-3/4 items-center">
+      <UserDetail/>
+    </section>    
   );
 }
