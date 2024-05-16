@@ -15,21 +15,25 @@ export default function DashBoardMainPage() {
 
   const [loading, setLoading] = useState(false);
   useEffect(() => {
-    setLoading(true);
-    if (!instrumentList || Object.keys(instrumentList).length === 0) {
-      dispatch(getInstruments());
-    }
-    if (!studentList || Object.keys(studentList).length === 0) {
-      dispatch(getStudents());
-    }
-    if (!dropDownList || Object.keys(dropDownList).length === 0) {
-      dispatch(getDropDownList());
+    const fetchData = async () => {
+      setLoading(true);
+      if (!instrumentList || Object.keys(instrumentList).length === 0) {
+        await dispatch(getInstruments());
+      }
+      if (!studentList || Object.keys(studentList).length === 0) {
+        await dispatch(getStudents());
+      }
+      if (!dropDownList || Object.keys(dropDownList).length === 0) {
+        await dispatch(getDropDownList());
+      }
+
+      if (!userCustomData) {
+        await dispatch(getCustomUserData());
+      }
+      setLoading(false);
     }
 
-    if (!userCustomData) {
-      dispatch(getCustomUserData());
-    }
-    setLoading(false);
+    fetchData();
 
 
   }, [dispatch, instrumentList, studentList, dropDownList, userCustomData]);
