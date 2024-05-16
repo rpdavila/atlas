@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 // redux imports
 import { useAppSelector, useAppDispatch } from "../../lib/ReduxSSR/hooks";
 import { RootState } from "@/app/lib/ReduxSSR/store";
-import { setType } from "@/app/lib/ReduxSSR/features/searchOptionsSlice";
+import { setType, setLoading } from "@/app/lib/ReduxSSR/features/searchOptionsSlice";
 //component imports
 import Radio from "../input/custumInputRadio";
 
@@ -22,13 +22,23 @@ export default function SelectSearchOptions({ children }: SearchOptionProps) {
     (state: RootState) => state.searchOptions.type
   );
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const loading = useAppSelector(
+    (state: RootState) => state.searchOptions.loading
+  );
+
+  const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    dispatch(setType(value));
-    if (selectOption === "Search Student" || "Search Instrument") {
+    dispatch(setLoading(true));
+    await dispatch(setType(value));
+    dispatch(setLoading(false));
+    if (selectOption === "Search Student" || selectOption === "Search Instrument") {
       router.push("/dashboard/search");
     }
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>

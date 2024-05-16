@@ -18,16 +18,20 @@ export default function DashBoardMainPage() {
     const fetchData = async () => {
       setLoading(true);
       if (!instrumentList || Object.keys(instrumentList).length === 0) {
+        console.log("fetching Instruments")
         await dispatch(getInstruments());
       }
       if (!studentList || Object.keys(studentList).length === 0) {
+        console.log("fetching Students")
         await dispatch(getStudents());
       }
       if (!dropDownList || Object.keys(dropDownList).length === 0) {
+        console.log("fetching DropDownList")
         await dispatch(getDropDownList());
       }
 
       if (!userCustomData) {
+        console.log("fetching customUserData")
         await dispatch(getCustomUserData());
       }
       setLoading(false);

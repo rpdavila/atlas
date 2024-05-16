@@ -3,11 +3,13 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 type SearchOptionsState = {
   type: string;
   search: string;
+  loading: boolean;
 };
 
 const initialState: SearchOptionsState = {
   type: "",
   search: "",
+  loading: false,
 };
 
 export const searchOptionsSlice = createSlice({
@@ -21,9 +23,13 @@ export const searchOptionsSlice = createSlice({
     setSearch: (state, action: PayloadAction<string>) => {
       return { ...state, search: action.payload };
     },
+
+    setLoading: (state, action: PayloadAction<boolean>) => {
+      return { ...state, loading: action.payload };
+    },
   },
 });
 
-export const { setType, setSearch } = searchOptionsSlice.actions;
+export const { setType, setSearch, setLoading } = searchOptionsSlice.actions;
 
 export default searchOptionsSlice.reducer;
