@@ -11,16 +11,16 @@ export default function DashBoardMainPage() {
   const students = useAppSelector((state) => state.students.studentList);
   const dropDownList = useAppSelector((state) => state.students.dropDownList)
   const userData = useAppSelector((state) => state.userInfo.customUserData)
-  instruments.length === 0? dispatch(getInstruments()): null;
-  students.length === 0 ? dispatch(getStudents()): null;
-  dropDownList.length === 0 ? dispatch(getDropDownList()): null;
-  if (userData === undefined){
+  instruments.length === 0 ? dispatch(getInstruments()) : null;
+  students.length === 0 ? dispatch(getStudents()) : null;
+  dropDownList.length === 0 || dropDownList === undefined ? dispatch(getDropDownList()) : null;
+  if (userData === undefined) {
     dispatch(getCustomUserData())
   }
 
   return (
     <section className="flex flex-col min-h-screen bg-white mt-2 rounded-lg basis-3/4 items-center">
-      <UserDetail/>
-    </section>    
+      <UserDetail />
+    </section>
   );
 }
