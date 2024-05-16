@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import UserDetail from "../components/userDetail/userDetail";
 import { useAppSelector, useAppDispatch } from "../lib/ReduxSSR/hooks";
 import { getInstruments } from "../lib/ReduxSSR/features/instrumentSLice";
@@ -8,37 +8,34 @@ import { getCustomUserData } from "../lib/ReduxSSR/features/userSlice";
 
 export default function DashBoardMainPage() {
   const dispatch = useAppDispatch();
+  const instrumentList = useAppSelector((state) => state.instruments.instrumentList);
+  const studentList = useAppSelector((state) => state.students.studentList);
+  const dropDownList = useAppSelector((state) => state.students.dropDownList);
+  const userCustomData = useAppSelector((state) => state.userInfo.customUserData);
 
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
-    try {
-      const item = localStorage.getItem('persist:root')
-      if (item) {
-        const data = JSON.parse(item);
-        const instruments = JSON.parse(data.instruments);
-        const students = JSON.parse(data.students);
-        const user = JSON.parse(data.userInfo);
-        console.log(instruments, students, user)
-        if (instruments.instrumentList.length === 0) {
-          dispatch(getInstruments());
-        }
-        if (students.studentList.length === 0) {
-          dispatch(getStudents());
-        }
-        if (students.dropDownList.length === 0) {
-          dispatch(getDropDownList());
-        }
-        if (user.customUserData === undefined) {
-          dispatch(getCustomUserData());
-        }
-      }
+    setLoading(true);
+    if (!instrumentList || Object.keys(instrumentList).length === 0) {
+      dispatch(getInstruments());
     }
-    catch (error) {
-      console.log(error)
+    if (!studentList || Object.keys(studentList).length === 0) {
+      dispatch(getStudents());
     }
-  }, [dispatch])
+    if (!dropDownList || Object.keys(dropDownList).length === 0) {
+      dispatch(getDropDownList());
+    }
+
+    if (!userCustomData) {
+      dispatch(getCustomUserData());
+    }
+    setLoading(false);
+
+
+  }, [dispatch, instrumentList, studentList, dropDownList, userCustomData]);
   return (
     <section className="flex flex-col min-h-screen bg-white mt-2 rounded-lg basis-3/4 items-center">
-      <UserDetail />
+      {loading ? "loading..." : <UserDetail />}
     </section>
   );
 }
