@@ -18,10 +18,11 @@ export default function DashBoardMainPage() {
         const instruments = JSON.parse(data.instruments);
         const students = JSON.parse(data.students);
         const user = JSON.parse(data.userInfo);
+        console.log(instruments, students, user)
         if (instruments.instrumentList.length === 0) {
           dispatch(getInstruments());
         }
-        if (students.studentList.length === 0) {
+        if (students.studentList === null) {
           dispatch(getStudents());
         }
         if (students.dropDownList.length === 0) {
@@ -31,7 +32,6 @@ export default function DashBoardMainPage() {
           dispatch(getCustomUserData());
         }
       }
-
     }
     catch (error) {
       console.log(error)
