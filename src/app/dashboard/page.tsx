@@ -1,5 +1,4 @@
 "use client";
-"use strict";
 import { useEffect } from "react";
 import UserDetail from "../components/userDetail/userDetail";
 import { useAppSelector, useAppDispatch } from "../lib/ReduxSSR/hooks";
@@ -22,7 +21,7 @@ export default function DashBoardMainPage() {
         if (instruments.instrumentList.length === 0) {
           dispatch(getInstruments());
         }
-        if (students.studentList === null) {
+        if (students.studentList.length === 0) {
           dispatch(getStudents());
         }
         if (students.dropDownList.length === 0) {
