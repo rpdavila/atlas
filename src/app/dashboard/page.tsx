@@ -23,7 +23,7 @@ export default function DashboardMainPage() {
 
   return (
     <section className="flex flex-col min-h-screen bg-white mt-2 rounded-lg basis-3/4 items-center">
-      <UserDetail />
+      {initialized ? "Initializing your data" : <UserDetail />}
     </section>
   );
 }
