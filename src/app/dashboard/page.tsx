@@ -13,6 +13,7 @@ export default function DashboardMainPage() {
   const initialized = useRef(false)
 
   useEffect(() => {
+    
     if (!initialized.current) {
       store.dispatch(getStudents())
       store.dispatch(getInstruments())
@@ -23,7 +24,7 @@ export default function DashboardMainPage() {
 
   return (
     <section className="flex flex-col min-h-screen bg-white mt-2 rounded-lg basis-3/4 items-center">
-      {initialized ? "Initializing your data" : <UserDetail />}
+      {initialized ? <UserDetail /> : "Initializing your data"}
     </section>
   );
 }
