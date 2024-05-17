@@ -1,7 +1,4 @@
-
 import * as Realm from "realm-web"
-
-
 
 const config: Realm.AppConfiguration = {
   id: process.env.NEXT_PUBLIC_APP_ID as string,

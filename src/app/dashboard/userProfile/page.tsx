@@ -101,80 +101,81 @@ export default function UserProfile() {
     }
   };
 
-  const handleUpdate = () => {};
+  const handleUpdate = () => { };
 
-  useEffect(() => {
-    dispatch(getCustomUserData());
-  }, [dispatch, fieldData]);
 
   return (
     <>
-      <section className="flex flex-col">
-        <h1 className="text-center">
-          {userInfo.customUserData
-            ? `Hello ${userInfo.customUserData.firstName} ${userInfo.customUserData.lastName}`
-            : `Welcome user ${userInfo.id}`}
-        </h1>
-        <p>Here you can change your password and/or delete your account</p>
-      </section>
-      <section className="flex flex-col justify-evenly w-1/2">
-        <section className="flex flex-row justify-between">
-          <p>
-            First Name:{" "}
+      <div className="flex flex-col items-center mt-2 bg-white basis-3/4">
+        <section className="flex flex-col">
+          <h1 className="text-center">
             {userInfo.customUserData
-              ? `${userInfo.customUserData.firstName}`
-              : "No Data"}
-          </p>
+              ? `Hello ${userInfo.customUserData.firstName} ${userInfo.customUserData.lastName}`
+              : `Welcome user ${userInfo.id}`}
+          </h1>
+          <p>Here you can change your password and/or delete your account</p>
+        </section>
+        <br />
+        <br />
+        <section className="flex flex-col justify-evenly w-1/2">
+          <section className="flex flex-row justify-between">
+            <p>
+              <strong>First Name:</strong>{" "}
+              {userInfo.customUserData
+                ? `${userInfo.customUserData.firstName}`
+                : "No Data"}
+            </p>
+            <p>
+              <strong>Last Name:</strong>{" "}
+              {userInfo.customUserData
+                ? `${userInfo.customUserData.lastName}`
+                : "No Data"}
+            </p>
+          </section>
+          <section className="flex flex-row justify-between">
+            <p>
+              <strong>Role:</strong>{" "}
+              {userInfo.customUserData
+                ? `${userInfo.customUserData.role}`
+                : "No Data"}
+            </p>
+            <p>
+              <strong>District:</strong>{" "}
+              {userInfo.customUserData
+                ? `${userInfo.customUserData.district}`
+                : "No Data"}
+            </p>
+          </section>
           <p>
-            Last Name:{" "}
+            <strong>Schools:</strong>{" "}
             {userInfo.customUserData
-              ? `${userInfo.customUserData.lastName}`
+              ? `${userInfo.customUserData.school}`
               : "No Data"}
           </p>
         </section>
-        <section className="flex flex-row justify-between">
-          <p>
-            Role:{" "}
-            {userInfo.customUserData
-              ? `${userInfo.customUserData.role}`
-              : "No Data"}
-          </p>
-          <p>
-            District:{" "}
-            {userInfo.customUserData
-              ? `${userInfo.customUserData.district}`
-              : "No Data"}
-          </p>
-        </section>
-        <p>
-          Schools:{" "}
-          {userInfo.customUserData
-            ? `${userInfo.customUserData.school}`
-            : "No Data"}
-        </p>
-      </section>
-      <section>
         <section>
-          <Select
-            category="selectOptions"
-            label="Update Field"
-            options={UpdateUserData}
-            onChange={onChange}
-            placeHolder="Update Field"
+          <section>
+            <Select
+              category="selectOptions"
+              label="Update Field"
+              options={UpdateUserData}
+              onChange={onChange}
+              placeHolder="Update Field"
+            />
+          </section>
+
+          <section className="flex flex-row justify-center w-full">
+            {getComponent()}
+          </section>
+
+          <Button
+            name="Update"
+            onClick={handleUpdate}
+            type="button"
+            marginTop="5"
           />
         </section>
-
-        <section className="flex flex-row justify-center w-full">
-          {getComponent()}
-        </section>
-
-        <Button
-          name="Update"
-          onClick={handleUpdate}
-          type="button"
-          marginTop="5"
-        />
-      </section>
+      </div>
     </>
   );
 }

@@ -7,8 +7,6 @@ import { useAppSelector } from "@/app/lib/ReduxSSR/hooks";
 import { RootState } from "@/app/lib/ReduxSSR/store";
 
 //component imports
-import CardList from "../../components/card-list/studentCardList";
-import Loading from "../../components/loading/loading";
 import StudentCardListSuspenseWrapper from "../../components/card-list/studentCardList";
 import InstrumentCardListSuspenseWrapper from "@/app/components/card-list/instrumentCardList";
 

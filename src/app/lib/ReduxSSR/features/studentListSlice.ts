@@ -3,7 +3,7 @@ import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 // mongodb utility imports
 import {app, convertObjectIdToString, studentCollection} from "@/app/utilities/mongodb";
 //type imports
-import { OnlyInstrumentData, OnlyStudentId, StudentInfo, StudentList,} from "@/app/types/formTypes";
+import { OnlyInstrumentData, StudentInfo, StudentList,} from "@/app/types/formTypes";
 
 type StudentState = {
   studentList: StudentList;
