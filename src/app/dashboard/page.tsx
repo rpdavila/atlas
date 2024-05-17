@@ -22,8 +22,8 @@ export default function DashboardMainPage() {
   })
 
   return (
-    <section className="flex bg-white mt-2 rounded-lg basis-3/4 justify-center">
-      <UserDetail />
+    <section className="flex flex-col min-h-screen bg-white mt-2 rounded-lg basis-3/4 items-center">
+      {loading ? "loading..." : <UserDetail />}
     </section>
   );
 }
