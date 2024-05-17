@@ -103,9 +103,6 @@ export default function UserProfile() {
 
   const handleUpdate = () => { };
 
-  useEffect(() => {
-    dispatch(getCustomUserData());
-  }, [dispatch, fieldData]);
 
   return (
     <>

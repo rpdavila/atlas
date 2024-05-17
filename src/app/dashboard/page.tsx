@@ -1,29 +1,49 @@
 "use client";
-import { useRef, useEffect } from "react";
-import { useAppStore } from "@/app/lib/ReduxSSR/hooks";
-import { getDropDownList, getStudents } from "@/app/lib/ReduxSSR/features/studentListSlice";
-import { getInstruments } from "@/app/lib/ReduxSSR/features/instrumentSLice";
-
+import { useEffect, useState } from "react";
 import UserDetail from "../components/userDetail/userDetail";
+import { useAppSelector, useAppDispatch } from "../lib/ReduxSSR/hooks";
+import { getInstruments } from "../lib/ReduxSSR/features/instrumentSLice";
+import { getStudents, getDropDownList } from "../lib/ReduxSSR/features/studentListSlice";
+import { getCustomUserData } from "../lib/ReduxSSR/features/userSlice";
 
+export default function DashBoardMainPage() {
+  const dispatch = useAppDispatch();
+  const instrumentList = useAppSelector((state) => state.instruments.instrumentList);
+  const studentList = useAppSelector((state) => state.students.studentList);
+  const dropDownList = useAppSelector((state) => state.students.dropDownList);
+  const userCustomData = useAppSelector((state) => state.userInfo.customUserData);
 
-
-export default function DashboardMainPage() {
-  const store = useAppStore()
-  const initialized = useRef(false)
-
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
-    if (!initialized.current) {
-      store.dispatch(getStudents())
-      store.dispatch(getInstruments())
-      store.dispatch(getDropDownList())
-      initialized.current = true
-    }
-  })
+    const fetchData = async () => {
+      setLoading(true);
+      if (!instrumentList || Object.keys(instrumentList).length === 0) {
+        console.log("fetching Instruments")
+        await dispatch(getInstruments());
+      }
+      if (!studentList || Object.keys(studentList).length === 0) {
+        console.log("fetching Students")
+        await dispatch(getStudents());
+      }
+      if (!dropDownList || Object.keys(dropDownList).length === 0) {
+        console.log("fetching DropDownList")
+        await dispatch(getDropDownList());
+      }
 
+      if (!userCustomData) {
+        console.log("fetching customUserData")
+        await dispatch(getCustomUserData());
+      }
+      setLoading(false);
+    }
+
+    fetchData();
+
+
+  }, [dispatch, instrumentList, studentList, dropDownList, userCustomData]);
   return (
-    <section className="flex bg-white mt-2 rounded-lg basis-3/4 justify-center">
-      <UserDetail />
+    <section className="flex flex-col min-h-screen bg-white mt-2 rounded-lg basis-3/4 items-center">
+      {loading ? "loading..." : <UserDetail />}
     </section>
   );
 }

@@ -30,7 +30,7 @@ export default function Header() {
   return (
     <header className=" bg-white">
       <nav className="flex justify-end h-20">
-        <ul className="flex flex-row items-center">
+        <ul className="flex flex-row items-center w-auto">
           
           {isLoggedIn ? (
             <>

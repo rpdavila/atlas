@@ -10,39 +10,57 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
-import storage from "redux-persist/lib/storage";
-import rootReducer from "./features/rootReducer";
-import logger from "redux-logger";
 
+import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
+
+import rootReducer from "./features/rootReducer";
+import { createLogger } from "redux-logger";
+
+const createNoopStorage = () => {
+  return {
+    getItem(_key: string) {
+      return Promise.resolve(null);
+    },
+    setItem(_key: string, value: string) {
+      return Promise.resolve(value);
+    },
+    removeItem(_key: string) {
+      return Promise.resolve();
+    },
+  };
+};
+
+const myStorage = typeof window !== "undefined" ? storage : createNoopStorage();
+const logger = createLogger()
 
 const persistConfig = {
   key: "root",
-  storage,
+  storage: myStorage 
 };
-
-
 
 export const makeStore = () => {
   const isServer = typeof window === "undefined";
   if (isServer) {
     return configureStore({
       reducer: rootReducer,
-      middleware: (getDefaultMiddleWare): ReturnType<typeof getDefaultMiddleWare> => getDefaultMiddleWare({
-        thunk: true,
-        serializableCheck: false,
-      })
     });
   } else {
     const persistedReducer = persistReducer(persistConfig, rootReducer);
     let store: any = configureStore({
       reducer: persistedReducer,
       middleware: (getDefaultMiddleware): ReturnType<typeof getDefaultMiddleware> =>
-        getDefaultMiddleware({
+        process.env.NODE_ENV === "production"
+        ? getDefaultMiddleware({
             serializableCheck: {
                 ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
             },
-        }),
-      devTools: process.env.NODE_ENV !== "production",    
+          })
+        : (getDefaultMiddleware({
+          thunk: true,
+          serializableCheck: {
+              ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+          },
+        }).concat(logger)) as any, // temporarilty fixes the type error   
     })
     store.__persistor = persistStore(store);
     return store
