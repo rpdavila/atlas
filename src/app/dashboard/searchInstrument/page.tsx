@@ -1,6 +1,6 @@
 "use client";
 // react imports
-import { Suspense, use, useEffect } from "react";
+import { useEffect } from "react";
 
 //redux imports
 import { useAppSelector, useAppDispatch } from "@/app/lib/ReduxSSR/hooks";
@@ -8,7 +8,7 @@ import { RootState } from "@/app/lib/ReduxSSR/store";
 
 //component imports
 import InstrumentCardListSuspenseWrapper from "@/app/components/card-list/instrumentCardList";
-import { InstrumentDetails } from "@/app/types/formTypes";
+import { InstrumentList, InstrumentDetails } from "@/app/types/formTypes";
 import { getInstruments } from "@/app/lib/ReduxSSR/features/instrumentSLice";
 
 
@@ -16,8 +16,8 @@ export default function SearchInstrument() {
   const dispatch = useAppDispatch();
 
   // Grab instrument list in store
-  const displayInstruments = useAppSelector(
-    (state: RootState) => state.instruments
+  const displayInstruments: InstrumentList = useAppSelector(
+    (state: RootState) => state.instruments.instrumentList
   );
 
   // grab searchfield
@@ -25,7 +25,7 @@ export default function SearchInstrument() {
     (state: RootState) => state.searchOptions.search
   );
 
-  const instrumentSearchResults = displayInstruments.instrumentList?.filter((instrument: InstrumentDetails) => {
+  const instrumentSearchResults = displayInstruments?.filter((instrument: InstrumentDetails) => {
     return (
       instrument.classification?.includes(searchField) ||
       instrument.brand?.includes(searchField) ||
@@ -35,7 +35,7 @@ export default function SearchInstrument() {
   });
 
   useEffect(() => {
-    if (typeof displayInstruments.instrumentList === "undefined" || displayInstruments.instrumentList.length === 0) {
+    if (typeof displayInstruments === "undefined" || displayInstruments.length === 0) {
       dispatch(getInstruments())
     }
   }, [dispatch, displayInstruments])

@@ -20,3 +20,15 @@ export function convertObjectIdToString(result: any[] | undefined) {
   });
   return result;
 }
+
+export async function getStudents() {
+  const result = await studentCollection?.find();
+  return convertObjectIdToString(result);
+}
+
+export async function getInstruments() {
+  const result = await instrumentCollection?.find();
+  return convertObjectIdToString(result);
+}
+
+
