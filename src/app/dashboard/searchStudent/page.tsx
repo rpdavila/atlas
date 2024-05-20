@@ -9,15 +9,15 @@ import { getStudents } from "@/app/lib/ReduxSSR/features/studentListSlice";
 
 //component imports
 import StudentCardListSuspenseWrapper from "../../components/card-list/studentCardList";
-import { StudentInfo } from "@/app/types/formTypes";
+import { StudentInfo, StudentList } from "@/app/types/formTypes";
 
 
 export default function SearchStudent() {
   const dispatch = useAppDispatch();
 
   // Grab student list in store
-  const displayStudents = useAppSelector(
-    (state: RootState) => state.students
+  const displayStudents: StudentList = useAppSelector(
+    (state: RootState) => state.students.studentList
   );
   // Grab instrument list in store
 
@@ -28,7 +28,7 @@ export default function SearchStudent() {
   );
 
 
-  const studentSearchResults = displayStudents.studentList?.filter((student: StudentInfo) => {
+  const studentSearchResults = displayStudents?.filter((student: StudentInfo) => {
     return (
       student.firstName?.includes(searchField) ||
       student.lastName?.includes(searchField) ||
@@ -37,7 +37,7 @@ export default function SearchStudent() {
   });
 
   useEffect(() => {
-    if (typeof displayStudents.studentList === "undefined" || displayStudents.studentList.length === 0) {
+    if (typeof displayStudents === "undefined" || displayStudents.length === 0) {
       dispatch(getStudents())
     }
 
