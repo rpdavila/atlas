@@ -7,23 +7,23 @@ import InstrumentCard from "@/app/components/cards/instrumentCard"
 
 
 type InstrumentCardListProps = {
-  instrumentSearchResults?: InstrumentList;
+  instrumentSearchResults: InstrumentList;
 }
 
-export default function InstrumentCardListSuspenseWrapper({ instrumentSearchResults}: InstrumentCardListProps) {
-  return(    
-    <InstrumentCardList instrumentSearchResults={instrumentSearchResults} />    
+export default function InstrumentCardListSuspenseWrapper({ instrumentSearchResults }: InstrumentCardListProps) {
+  return (
+    <InstrumentCardList instrumentSearchResults={instrumentSearchResults} />
   )
 }
 
 function InstrumentCardList({
   instrumentSearchResults
 }: InstrumentCardListProps) {
-  return ( 
-    <>      
+  return (
+    <>
       {instrumentSearchResults?.map((items) => {
-          return <InstrumentCard key={items._id} instrument={items} />
-        })}
+        return <InstrumentCard key={items._id} instrument={items} />
+      })}
     </>
   )
 }

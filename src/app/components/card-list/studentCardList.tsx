@@ -6,10 +6,10 @@ import Loading from "@/app/components/loading/loading";
 
 
 type CardListProps = {
-  studentSearchResult?: StudentList;
+  studentSearchResult: StudentList;
 };
 
-export default function StudentCardListSuspenseWrapper({studentSearchResult}: CardListProps) {
+export default function StudentCardListSuspenseWrapper({ studentSearchResult }: CardListProps) {
 
   return (
     <Suspense fallback={<Loading />}>
@@ -26,6 +26,6 @@ function StudentCardList({
       {studentSearchResult?.map((items) => {
         return <StudentCard key={items._id} student={items} />;
       })}
-    </>      
+    </>
   );
 }
