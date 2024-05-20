@@ -35,7 +35,7 @@ export default function SearchInstrument() {
   });
 
   useEffect(() => {
-    if (displayInstruments.instrumentList.length === 0) {
+    if (typeof displayInstruments.instrumentList === "undefined" || displayInstruments.instrumentList.length === 0) {
       dispatch(getInstruments())
     }
   }, [dispatch, displayInstruments])

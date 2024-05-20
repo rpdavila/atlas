@@ -37,7 +37,7 @@ export default function SearchStudent() {
   });
 
   useEffect(() => {
-    if (displayStudents.studentList.length === 0) {
+    if (typeof displayStudents.studentList === "undefined" || displayStudents.studentList.length === 0) {
       dispatch(getStudents())
     }
 
