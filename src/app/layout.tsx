@@ -24,14 +24,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className} suppressHydrationWarning={true}>
-        <Providers>         
+        <Providers>
           <Header />
           <main className="min-h-screen bg-white flex justify-center">
-            <Suspense fallback={<Loading />}>
-              {children}
-            </Suspense>          
+
+            {children}
+
           </main>
-                    
+
         </Providers>
       </body>
     </html>

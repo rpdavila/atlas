@@ -22,12 +22,12 @@ export enum UserRole {
 }
 
 export type InstrumentDetails = {
-  _id?: string | undefined | number;
-  classification: string | undefined;
-  brand: string | undefined;
-  serialNumber: string | undefined;
+  _id?: string | number;
+  classification: string;
+  brand: string;
+  serialNumber: string;
   rentStatus: RentStatus;
-  assignedTo?: OnlyStudentData | undefined;
+  assignedTo?: OnlyStudentData;
 };
 
 export type InstrumentList = Array<InstrumentDetails>;
@@ -38,11 +38,11 @@ export enum RentStatus {
 }
 
 export type StudentInfo = {
-  _id?: string | number | undefined;
-  firstName: string | undefined;
-  lastName: string | undefined;
-  studentIdNumber: string | undefined;
-  instrument?: OnlyInstrumentData | undefined;
+  _id?: string | number;
+  firstName: string;
+  lastName: string;
+  studentIdNumber: string;
+  instrument?: OnlyInstrumentData;
 };
 
 export type StudentList = Array<StudentInfo>;

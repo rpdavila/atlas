@@ -25,7 +25,7 @@ export default function SearchInstrument() {
     (state: RootState) => state.searchOptions.search
   );
 
-  const instrumentSearchResults = displayInstruments?.filter((instrument: InstrumentDetails) => {
+  const instrumentSearchResults: InstrumentList = displayInstruments.filter((instrument: InstrumentDetails) => {
     return (
       instrument.classification?.includes(searchField) ||
       instrument.brand?.includes(searchField) ||
@@ -36,7 +36,7 @@ export default function SearchInstrument() {
 
   useEffect(() => {
     // dispatch if instrumetnList is empty or undefined
-    if (typeof displayInstruments === "undefined" || displayInstruments.length === 0) {
+    if (displayInstruments.length === 0) {
       dispatch(getInstruments())
     }
   }, [dispatch, displayInstruments])

@@ -26,7 +26,7 @@ export default function SearchStudent() {
   );
 
 
-  const studentSearchResults: StudentList | undefined = displayStudents?.filter((student: StudentInfo) => {
+  const studentSearchResults: StudentList = displayStudents.filter((student: StudentInfo) => {
     return (
       student.firstName?.includes(searchField) ||
       student.lastName?.includes(searchField) ||
@@ -35,7 +35,7 @@ export default function SearchStudent() {
   });
 
   useEffect(() => {
-    if (typeof displayStudents === "undefined" || displayStudents.length === 0) {
+    if (displayStudents.length === 0) {
       dispatch(getStudents())
     }
 
