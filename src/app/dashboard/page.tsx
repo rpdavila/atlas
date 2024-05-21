@@ -5,17 +5,11 @@ import { getDropDownList, getStudents } from "@/app/lib/ReduxSSR/features/studen
 import { getInstruments } from "@/app/lib/ReduxSSR/features/instrumentSLice";
 import { getCustomUserData } from "../lib/ReduxSSR/features/userSlice";
 
-import { StudentList } from "@/app/types/formTypes";
-import UserDetail from "../components/userDetail/userDetail";
 import SearchStudent from "../components/searchStudent/searchStudent";
 import SearchInstrument from "../components/searchInstruments/searchInstruments";
 
 
-export default function DashBoardMainPage({
-  displayStudents
-}: {
-  displayStudents: StudentList | undefined;
-}) {
+export default function DashBoardMainPage() {
   const selectOption = useAppSelector(state => state.searchOptions.type)
   const store = useAppStore()
   const initialized = useRef(false)
