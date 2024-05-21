@@ -3,7 +3,7 @@ import { StudentList } from "@/app/types/formTypes";
 import StudentCard from "../cards/studentCard";
 
 type CardListProps = {
-  studentSearchResult: StudentList;
+  studentSearchResult: StudentList | undefined;
 };
 
 export default function StudentCardList({

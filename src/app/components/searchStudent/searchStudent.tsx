@@ -1,4 +1,4 @@
-"use client";
+"use client"
 // react imports
 import { useEffect } from "react";
 
@@ -10,32 +10,23 @@ import { getStudents } from "@/app/lib/ReduxSSR/features/studentListSlice";
 //component imports
 import StudentCardList from "../../components/card-list/studentCardList";
 import { StudentInfo, StudentList } from "@/app/types/formTypes";
-import Loading from "@/app/components/loading/loading";
-
 
 export default function SearchStudent() {
+
   const dispatch = useAppDispatch();
 
   // Grab student list in store
   const displayStudents: StudentList = useAppSelector(
     (state: RootState) => state.students.studentList
   );
-  // Grab instrument list in store
-  const loading: boolean = useAppSelector(
-    (state: RootState) => state.students.loading
-  );
 
-  //grab search options type in store
-  const searchOptions: string = useAppSelector(
-    (state: RootState) => state.searchOptions.type
-  );
   // grab searchfield
   const searchField: string = useAppSelector(
     (state: RootState) => state.searchOptions.search
   );
 
 
-  const studentSearchResults: StudentList = displayStudents?.filter((student: StudentInfo) => {
+  const studentSearchResults: StudentList | undefined = displayStudents?.filter((student: StudentInfo) => {
     return (
       student.firstName?.includes(searchField) ||
       student.lastName?.includes(searchField) ||
@@ -48,11 +39,10 @@ export default function SearchStudent() {
       dispatch(getStudents())
     }
 
-  }, [dispatch, displayStudents, searchOptions])
+  }, [dispatch, displayStudents])
   return (
-    <section className="flex flex-col basis-3/4 items-center">
-      {loading ? <Loading /> : <StudentCardList studentSearchResult={studentSearchResults} />}
-
+    <section className="flex flex-col basis-3/4 w-full items-center justify-between">
+      <StudentCardList studentSearchResult={studentSearchResults} />
     </section>
   );
 }

@@ -1,3 +1,5 @@
+
+import {cache} from 'react';
 import * as Realm from "realm-web"
 
 const config: Realm.AppConfiguration = {
@@ -21,10 +23,15 @@ export function convertObjectIdToString(result: any[] | undefined) {
   return result;
 }
 
-export async function getStudents() {
-  const result = await studentCollection?.find();
-  return convertObjectIdToString(result);
-}
+export const getStudents = cache(async () => {
+  try {
+    const result = await studentCollection?.find();
+    console.log(result)
+    return convertObjectIdToString(result);
+  } catch (error){
+    console.log(error)
+  }
+});
 
 export async function getInstruments() {
   const result = await instrumentCollection?.find();
