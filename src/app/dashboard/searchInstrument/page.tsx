@@ -7,7 +7,7 @@ import { useAppSelector, useAppDispatch } from "@/app/lib/ReduxSSR/hooks";
 import { RootState } from "@/app/lib/ReduxSSR/store";
 
 //component imports
-import InstrumentCardListSuspenseWrapper from "@/app/components/card-list/instrumentCardList";
+import InstrumentCardList from "@/app/components/card-list/instrumentCardList";
 import { InstrumentList, InstrumentDetails } from "@/app/types/formTypes";
 import { getInstruments } from "@/app/lib/ReduxSSR/features/instrumentSLice";
 import Loading from "@/app/components/loading/loading";
@@ -49,7 +49,7 @@ export default function SearchInstrument() {
 
   return (
     <section className="flex flex-col basis-3/4 items-center">
-      {loading ? <Loading /> : <InstrumentCardListSuspenseWrapper instrumentSearchResults={instrumentSearchResults} />}
+      {loading ? <Loading /> : <InstrumentCardList instrumentSearchResults={instrumentSearchResults} />}
 
     </section>
   );

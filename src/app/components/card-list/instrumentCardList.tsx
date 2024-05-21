@@ -10,13 +10,7 @@ type InstrumentCardListProps = {
   instrumentSearchResults: InstrumentList;
 }
 
-export default function InstrumentCardListSuspenseWrapper({ instrumentSearchResults }: InstrumentCardListProps) {
-  return (
-    <InstrumentCardList instrumentSearchResults={instrumentSearchResults} />
-  )
-}
-
-function InstrumentCardList({
+export default function InstrumentCardList({
   instrumentSearchResults
 }: InstrumentCardListProps) {
   return (
