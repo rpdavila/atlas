@@ -24,6 +24,8 @@ export default function SearchStudent() {
   const searchField: string = useAppSelector(
     (state: RootState) => state.searchOptions.search
   );
+  // used to refresh component when search option changes
+  const searchOption: string = useAppSelector(state => state.searchOptions.type)
 
   if (displayStudents) {
     studentSearchResults = displayStudents.filter((student: StudentInfo) => {
@@ -41,7 +43,7 @@ export default function SearchStudent() {
       dispatch(getStudents())
     }
 
-  }, [dispatch, displayStudents])
+  }, [dispatch, displayStudents, searchOption])
   return (
     <section className="flex flex-col basis-3/4 w-full items-center justify-between">
       <StudentCardList studentSearchResult={studentSearchResults} />

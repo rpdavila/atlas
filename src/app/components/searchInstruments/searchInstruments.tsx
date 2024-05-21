@@ -26,6 +26,9 @@ export default function SearchInstrument() {
     (state: RootState) => state.searchOptions.search
   );
 
+  // used to refresh component when search option changes
+  const searchOption = useAppSelector(state => state.searchOptions.type)
+
   if (displayInstruments) {
     instrumentSearchResults = displayInstruments.filter((instrument: InstrumentDetails) => {
       return (
@@ -42,7 +45,7 @@ export default function SearchInstrument() {
     if (!displayInstruments) {
       dispatch(getInstruments())
     }
-  }, [dispatch, displayInstruments])
+  }, [dispatch, displayInstruments, searchOption])
 
   return (
     <section className="flex flex-col basis-3/4 items-center">
