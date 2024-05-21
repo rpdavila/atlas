@@ -16,6 +16,10 @@ import storage from 'redux-persist/lib/storage' // defaults to localStorage for 
 import rootReducer from "./features/rootReducer";
 import { createLogger } from "redux-logger";
 
+import { getStudents, getDropDownList } from "./features/studentListSlice";
+import { getInstruments } from "./features/instrumentSLice";
+import { getCustomUserData } from "./features/userSlice";
+
 const createNoopStorage = () => {
   return {
     getItem(_key: string) {
@@ -41,11 +45,18 @@ const persistConfig = {
 export const makeStore = () => {
   const isServer = typeof window === "undefined";
   if (isServer) {
-    return configureStore({
+  const store = configureStore({
       reducer: rootReducer,
     });
-
     
+    const actions = [
+      store.dispatch(getStudents()),
+      store.dispatch(getInstruments()),
+      store.dispatch(getDropDownList()),
+      store.dispatch(getCustomUserData())
+    ]
+    
+    Promise.all(actions).then(() => store.getState()).catch((err) => console.log("Error during initialization", err))
   } else {
     const persistedReducer = persistReducer(persistConfig, rootReducer);
     let store: any = configureStore({

@@ -40,7 +40,7 @@ export default function SearchStudent() {
 
 
   useEffect(() => {
-    if (!displayStudents) {
+    if (displayStudents.length === 0) {
       dispatch(getStudents())
     }
 

@@ -1,6 +1,6 @@
 "use client";
 // react imports
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 //redux imports
 import { useAppSelector, useAppDispatch } from "@/app/lib/ReduxSSR/hooks";
@@ -13,8 +13,8 @@ import { getInstruments } from "@/app/lib/ReduxSSR/features/instrumentSLice";
 
 
 export default function SearchInstrument() {
+  const dispatch = useAppDispatch()
   let instrumentSearchResults: InstrumentList = [];
-  const dispatch = useAppDispatch();
 
   // Grab instrument list in store
   const displayInstruments: InstrumentList = useAppSelector(
@@ -42,7 +42,7 @@ export default function SearchInstrument() {
 
   useEffect(() => {
     // dispatch if instrumetnList is empty or undefined
-    if (!displayInstruments) {
+    if (displayInstruments.length === 0) {
       dispatch(getInstruments())
     }
   }, [dispatch, displayInstruments, searchOption])

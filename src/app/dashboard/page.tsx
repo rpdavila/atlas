@@ -1,6 +1,6 @@
 "use client";
 import { useRef, useEffect } from "react";
-import { useAppStore, useAppDispatch, useAppSelector } from "@/app/lib/ReduxSSR/hooks";
+import { useAppStore, useAppSelector } from "@/app/lib/ReduxSSR/hooks";
 import { getDropDownList, getStudents } from "@/app/lib/ReduxSSR/features/studentListSlice";
 import { getInstruments } from "@/app/lib/ReduxSSR/features/instrumentSLice";
 import { getCustomUserData } from "../lib/ReduxSSR/features/userSlice";
@@ -22,7 +22,7 @@ export default function DashBoardMainPage() {
       store.dispatch(getCustomUserData())
       initialized.current = true
     }
-  })
+  }, [])// ignore warning
 
   return (
     <section className="flex flex-col min-h-screen mt-2 rounded-lg basis-3/4">
