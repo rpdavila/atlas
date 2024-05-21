@@ -13,6 +13,7 @@ import { getInstruments } from "@/app/lib/ReduxSSR/features/instrumentSLice";
 
 
 export default function SearchInstrument() {
+  let instrumentSearchResults: InstrumentList = [];
   const dispatch = useAppDispatch();
 
   // Grab instrument list in store
@@ -25,14 +26,16 @@ export default function SearchInstrument() {
     (state: RootState) => state.searchOptions.search
   );
 
-  const instrumentSearchResults: InstrumentList = displayInstruments.filter((instrument: InstrumentDetails) => {
-    return (
-      instrument.classification?.includes(searchField) ||
-      instrument.brand?.includes(searchField) ||
-      instrument.serialNumber?.includes(searchField) ||
-      instrument.rentStatus.includes(searchField)
-    );
-  });
+  if (displayInstruments) {
+    instrumentSearchResults = displayInstruments.filter((instrument: InstrumentDetails) => {
+      return (
+        instrument.classification?.includes(searchField) ||
+        instrument.brand?.includes(searchField) ||
+        instrument.serialNumber?.includes(searchField) ||
+        instrument.rentStatus.includes(searchField)
+      );
+    });
+  }
 
   useEffect(() => {
     // dispatch if instrumetnList is empty or undefined

@@ -12,7 +12,7 @@ import StudentCardList from "../../components/card-list/studentCardList";
 import { StudentInfo, StudentList } from "@/app/types/formTypes";
 
 export default function SearchStudent() {
-
+  let studentSearchResults: StudentList = [];
   const dispatch = useAppDispatch();
 
   // Grab student list in store
@@ -25,14 +25,16 @@ export default function SearchStudent() {
     (state: RootState) => state.searchOptions.search
   );
 
+  if (displayStudents) {
+    studentSearchResults = displayStudents.filter((student: StudentInfo) => {
+      return (
+        student.firstName?.includes(searchField) ||
+        student.lastName?.includes(searchField) ||
+        student.studentIdNumber?.includes(searchField)
+      );
+    });
+  }
 
-  const studentSearchResults: StudentList = displayStudents.filter((student: StudentInfo) => {
-    return (
-      student.firstName?.includes(searchField) ||
-      student.lastName?.includes(searchField) ||
-      student.studentIdNumber?.includes(searchField)
-    );
-  });
 
   useEffect(() => {
     if (!displayStudents) {
