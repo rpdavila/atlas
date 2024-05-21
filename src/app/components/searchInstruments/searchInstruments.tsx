@@ -41,11 +41,8 @@ export default function SearchInstrument() {
   }
 
   useEffect(() => {
-    // dispatch if instrumetnList is empty or undefined
-    if (!displayInstruments) {
-      dispatch(getInstruments())
-    }
-  }, [dispatch, displayInstruments, searchOption])
+    dispatch(getInstruments())
+  }, [dispatch])
 
   return (
     <section className="flex flex-col basis-3/4 items-center">

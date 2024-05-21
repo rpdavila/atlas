@@ -40,11 +40,9 @@ export default function SearchStudent() {
 
 
   useEffect(() => {
-    if (!displayStudents) {
-      dispatch(getStudents())
-    }
+    dispatch(getStudents())
 
-  }, [dispatch, displayStudents, searchOption])
+  }, [dispatch])
   return (
     <section className="flex flex-col basis-3/4 w-full items-center justify-between">
       {studentsLoading ? <h1>Loading...</h1> : <StudentCardList studentSearchResult={studentSearchResults} />}
