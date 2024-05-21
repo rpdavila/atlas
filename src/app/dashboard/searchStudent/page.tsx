@@ -10,6 +10,7 @@ import { getStudents } from "@/app/lib/ReduxSSR/features/studentListSlice";
 //component imports
 import StudentCardListSuspenseWrapper from "../../components/card-list/studentCardList";
 import { StudentInfo, StudentList } from "@/app/types/formTypes";
+import Loading from "@/app/components/loading/loading";
 
 
 export default function SearchStudent() {
@@ -20,7 +21,9 @@ export default function SearchStudent() {
     (state: RootState) => state.students.studentList
   );
   // Grab instrument list in store
-
+  const loading: boolean = useAppSelector(
+    (state: RootState) => state.students.loading
+  );
 
   // grab searchfield
   const searchField = useAppSelector(
@@ -44,7 +47,8 @@ export default function SearchStudent() {
   }, [dispatch, displayStudents])
   return (
     <section className="flex flex-col basis-3/4 items-center">
-      <StudentCardListSuspenseWrapper studentSearchResult={studentSearchResults} />
+      {loading ? <Loading /> : <StudentCardListSuspenseWrapper studentSearchResult={studentSearchResults} />}
+
     </section>
   );
 }

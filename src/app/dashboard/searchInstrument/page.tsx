@@ -10,6 +10,7 @@ import { RootState } from "@/app/lib/ReduxSSR/store";
 import InstrumentCardListSuspenseWrapper from "@/app/components/card-list/instrumentCardList";
 import { InstrumentList, InstrumentDetails } from "@/app/types/formTypes";
 import { getInstruments } from "@/app/lib/ReduxSSR/features/instrumentSLice";
+import Loading from "@/app/components/loading/loading";
 
 
 export default function SearchInstrument() {
@@ -19,6 +20,8 @@ export default function SearchInstrument() {
   const displayInstruments: InstrumentList = useAppSelector(
     (state: RootState) => state.instruments.instrumentList
   );
+
+  const loading: boolean = useAppSelector((state: RootState) => state.instruments.loading);
 
   // grab searchfield
   const searchField = useAppSelector(
@@ -42,7 +45,8 @@ export default function SearchInstrument() {
 
   return (
     <section className="flex flex-col basis-3/4 items-center">
-      <InstrumentCardListSuspenseWrapper instrumentSearchResults={instrumentSearchResults} />
+      {loading ? <Loading /> : <InstrumentCardListSuspenseWrapper instrumentSearchResults={instrumentSearchResults} />}
+
     </section>
   );
 }
