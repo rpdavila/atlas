@@ -35,7 +35,7 @@ export default function SearchStudent() {
   );
 
 
-  const studentSearchResults = displayStudents?.filter((student: StudentInfo) => {
+  const studentSearchResults: StudentList = displayStudents.filter((student: StudentInfo) => {
     return (
       student.firstName?.includes(searchField) ||
       student.lastName?.includes(searchField) ||
