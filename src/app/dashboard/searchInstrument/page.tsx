@@ -20,7 +20,10 @@ export default function SearchInstrument() {
   const displayInstruments: InstrumentList = useAppSelector(
     (state: RootState) => state.instruments.instrumentList
   );
+  //grab searchOption type in store
+  const searchOptions: string = useAppSelector((state) => state.searchOptions.type);
 
+  // get loading value from store
   const loading: boolean = useAppSelector((state: RootState) => state.instruments.loading);
 
   // grab searchfield
@@ -38,10 +41,11 @@ export default function SearchInstrument() {
   });
 
   useEffect(() => {
+    // dispatch if instrumetnList is empty or undefined
     if (typeof displayInstruments === "undefined" || displayInstruments.length === 0) {
       dispatch(getInstruments())
     }
-  }, [dispatch, displayInstruments])
+  }, [dispatch, displayInstruments, searchOptions])
 
   return (
     <section className="flex flex-col basis-3/4 items-center">

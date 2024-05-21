@@ -25,8 +25,12 @@ export default function SearchStudent() {
     (state: RootState) => state.students.loading
   );
 
+  //grab search options type in store
+  const searchOptions: string = useAppSelector(
+    (state: RootState) => state.searchOptions.type
+  );
   // grab searchfield
-  const searchField = useAppSelector(
+  const searchField: string = useAppSelector(
     (state: RootState) => state.searchOptions.search
   );
 
@@ -44,7 +48,7 @@ export default function SearchStudent() {
       dispatch(getStudents())
     }
 
-  }, [dispatch, displayStudents])
+  }, [dispatch, displayStudents, searchOptions])
   return (
     <section className="flex flex-col basis-3/4 items-center">
       {loading ? <Loading /> : <StudentCardListSuspenseWrapper studentSearchResult={studentSearchResults} />}
