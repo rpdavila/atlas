@@ -47,7 +47,6 @@ export default function SearchStudent() {
     if (typeof displayStudents === "undefined" || displayStudents.length === 0) {
       dispatch(getStudents())
     }
-    console.log(displayStudents)
 
   }, [dispatch, displayStudents, searchOptions])
   return (
