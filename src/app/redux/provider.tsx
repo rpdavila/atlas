@@ -9,7 +9,7 @@ import { getInstruments } from "../lib/ReduxSSR/features/instrumentSLice";
 import { getCustomUserData } from "../lib/ReduxSSR/features/userSlice";
 
 export function Providers({ children }: { children: React.ReactNode }) {
-  const storeRef = useRef<AppStore>();
+  const storeRef = useRef<AppStore | null>(null);
   if (!storeRef.current) {
     // Create the store instance the first time it renders
     storeRef.current = makeStore();
