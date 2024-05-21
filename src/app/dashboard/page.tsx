@@ -10,6 +10,7 @@ import SearchInstrument from "../components/searchInstruments/searchInstruments"
 
 
 export default function DashBoardMainPage() {
+  const dispatch = useAppStore()
   const selectOption = useAppSelector(state => state.searchOptions.type)
   const store = useAppStore()
   const initialized = useRef(false)
@@ -22,7 +23,12 @@ export default function DashBoardMainPage() {
       store.dispatch(getCustomUserData())
       initialized.current = true
     }
-  }, [])// ignore warning
+
+    dispatch(getStudents())
+    dispatch(getInstruments())
+    dispatch(getDropDownList())
+    dispatch(getCustomUserData())
+  }, [dispatch])// ignore warning
 
   return (
     <section className="flex flex-col min-h-screen mt-2 rounded-lg basis-3/4">
