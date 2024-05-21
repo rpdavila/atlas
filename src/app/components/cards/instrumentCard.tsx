@@ -1,6 +1,5 @@
 "use client";
-//react imports
-import { Suspense } from "react";
+
 //redux imports
 import { useAppDispatch, useAppSelector } from "@/app/lib/ReduxSSR/hooks";
 import { addStudentToInstrument, getInstruments, unassignStudentFromInstrument } from "@/app/lib/ReduxSSR/features/instrumentSLice";
@@ -18,8 +17,6 @@ type CardProps = {
 
 export default function InstrumentCard({ instrument }: CardProps) {
   const dispatch = useAppDispatch();
-  const StudentLoading = useAppSelector((state) => state.students.loading)
-  const instrumentsLoading = useAppSelector((state) => state.instruments.loading)
   const displayInstruments = useAppSelector(
     (state) => state.instruments.instrumentList
   );

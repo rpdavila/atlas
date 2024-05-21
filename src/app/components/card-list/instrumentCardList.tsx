@@ -15,7 +15,7 @@ export default function InstrumentCardList({
 }: InstrumentCardListProps) {
   return (
     <>
-      {instrumentSearchResults?.map((items) => {
+      {instrumentSearchResults.map((items) => {
         return <InstrumentCard key={items._id} instrument={items} />
       })}
     </>
