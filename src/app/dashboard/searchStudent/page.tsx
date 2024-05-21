@@ -8,7 +8,7 @@ import { RootState } from "@/app/lib/ReduxSSR/store";
 import { getStudents } from "@/app/lib/ReduxSSR/features/studentListSlice";
 
 //component imports
-import StudentCardListSuspenseWrapper from "../../components/card-list/studentCardList";
+import StudentCardList from "../../components/card-list/studentCardList";
 import { StudentInfo, StudentList } from "@/app/types/formTypes";
 import Loading from "@/app/components/loading/loading";
 
@@ -52,7 +52,7 @@ export default function SearchStudent() {
   }, [dispatch, displayStudents, searchOptions])
   return (
     <section className="flex flex-col basis-3/4 items-center">
-      {loading ? <Loading /> : <StudentCardListSuspenseWrapper studentSearchResult={studentSearchResults} />}
+      {loading ? <Loading /> : <StudentCardList studentSearchResult={studentSearchResults} />}
 
     </section>
   );

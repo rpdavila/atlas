@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+
 import { StudentList } from "@/app/types/formTypes";
 import StudentCard from "../cards/studentCard";
 import Loading from "@/app/components/loading/loading";
@@ -9,16 +9,16 @@ type CardListProps = {
   studentSearchResult: StudentList;
 };
 
-export default function StudentCardListSuspenseWrapper({ studentSearchResult }: CardListProps) {
+// export default function StudentCardListSuspenseWrapper({ studentSearchResult }: CardListProps) {
 
-  return (
-    <Suspense fallback={<Loading />}>
-      <StudentCardList studentSearchResult={studentSearchResult} />
-    </Suspense>
-  );
-}
+//   return (
 
-function StudentCardList({
+//     <StudentCardList studentSearchResult={studentSearchResult} />
+
+//   );
+// }
+
+export function StudentCardList({
   studentSearchResult,
 }: CardListProps) {
   return (
