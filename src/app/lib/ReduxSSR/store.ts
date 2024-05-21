@@ -57,6 +57,7 @@ export const makeStore = () => {
     ]
     
     Promise.all(actions).then(() => store.getState()).catch((err) => console.log("Error during initialization", err))
+    return store
   } else {
     const persistedReducer = persistReducer(persistConfig, rootReducer);
     let store: any = configureStore({
