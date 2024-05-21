@@ -20,7 +20,8 @@ export default function SearchInstrument() {
   const displayInstruments: InstrumentList = useAppSelector(
     (state: RootState) => state.instruments.instrumentList
   );
-
+  // check if instruments are loading
+  const instrumentsLoading = useAppSelector(state => state.instruments.loading);
   // grab searchfield
   const searchField = useAppSelector(
     (state: RootState) => state.searchOptions.search
@@ -49,7 +50,7 @@ export default function SearchInstrument() {
 
   return (
     <section className="flex flex-col basis-3/4 items-center">
-      <InstrumentCardList instrumentSearchResults={instrumentSearchResults} />
+      {instrumentsLoading ? <h1>Loading...</h1> : <InstrumentCardList instrumentSearchResults={instrumentSearchResults} />}
     </section>
   );
 }

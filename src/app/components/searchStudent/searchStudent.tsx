@@ -19,7 +19,8 @@ export default function SearchStudent() {
   const displayStudents: StudentList = useAppSelector(
     (state: RootState) => state.students.studentList
   );
-
+  // check if students are loading
+  const studentsLoading = useAppSelector(state => state.students.loading);
   // grab searchfield
   const searchField: string = useAppSelector(
     (state: RootState) => state.searchOptions.search
@@ -46,7 +47,7 @@ export default function SearchStudent() {
   }, [dispatch, displayStudents, searchOption])
   return (
     <section className="flex flex-col basis-3/4 w-full items-center justify-between">
-      <StudentCardList studentSearchResult={studentSearchResults} />
+      {studentsLoading ? <h1>Loading...</h1> : <StudentCardList studentSearchResult={studentSearchResults} />}
     </section>
   );
 }
