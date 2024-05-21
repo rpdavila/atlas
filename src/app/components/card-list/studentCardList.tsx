@@ -18,7 +18,7 @@ type CardListProps = {
 //   );
 // }
 
-export function StudentCardList({
+export default function StudentCardList({
   studentSearchResult,
 }: CardListProps) {
   return (
