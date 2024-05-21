@@ -9,8 +9,6 @@ import { RootState } from "@/app/lib/ReduxSSR/store";
 //component imports
 import InstrumentCardList from "@/app/components/card-list/instrumentCardList";
 import { InstrumentList, InstrumentDetails } from "@/app/types/formTypes";
-import { getInstruments } from "@/app/lib/ReduxSSR/features/instrumentSLice";
-
 
 export default function SearchInstrument() {
   const dispatch = useAppDispatch()
@@ -39,10 +37,6 @@ export default function SearchInstrument() {
       );
     });
   }
-
-  useEffect(() => {
-    dispatch(getInstruments())
-  }, [dispatch])
 
   return (
     <section className="flex flex-col basis-3/4 items-center">
