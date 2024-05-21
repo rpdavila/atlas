@@ -42,7 +42,7 @@ export default function SearchInstrument() {
 
   useEffect(() => {
     // dispatch if instrumetnList is empty or undefined
-    if (displayInstruments.length === 0) {
+    if (!displayInstruments) {
       dispatch(getInstruments())
     }
   }, [dispatch, displayInstruments, searchOption])
