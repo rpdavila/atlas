@@ -44,6 +44,8 @@ export const makeStore = () => {
     return configureStore({
       reducer: rootReducer,
     });
+
+    
   } else {
     const persistedReducer = persistReducer(persistConfig, rootReducer);
     let store: any = configureStore({

@@ -29,7 +29,6 @@ export default function SearchInstrument() {
 
   // used to refresh component when search option changes
   const searchOption = useAppSelector(state => state.searchOptions.type)
-
   if (displayInstruments) {
     instrumentSearchResults = displayInstruments.filter((instrument: InstrumentDetails) => {
       return (
