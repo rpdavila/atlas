@@ -4,9 +4,9 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 // redux imports
-import { useAppSelector, useAppDispatch } from "../../redux/hooks";
-import { RootState } from "@/app/redux/store";
-import { setType } from "@/app/redux/features/searchOptionsSlice";
+import { useAppSelector, useAppDispatch } from "../../lib/ReduxSSR/hooks";
+import { RootState } from "@/app/lib/ReduxSSR/store";
+import { setType } from "@/app/lib/ReduxSSR/features/searchOptionsSlice";
 //component imports
 import Radio from "../input/custumInputRadio";
 
@@ -25,10 +25,8 @@ export default function SelectSearchOptions({ children }: SearchOptionProps) {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     dispatch(setType(value));
-    if (selectOption === "Search Student" || "Search Instrument") {
-      router.push("/search");
-    }
-  };
+    router.push("/dashboard");
+  }
 
   return (
     <>

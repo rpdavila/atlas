@@ -1,51 +1,82 @@
 "use client";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
-import { useDispatch } from "react-redux";
-import { setType } from "@/app/redux/features/searchOptionsSlice";
+import { useAppSelector, useAppDispatch } from "@/app/lib/ReduxSSR/hooks";
+import { setType } from "@/app/lib/ReduxSSR/features/searchOptionsSlice";
+import { logOutUser } from "../../lib/ReduxSSR/features/userSlice";
 
-import { navList } from "@/app/data/nav-List";
+import { navList, dashBoardNavList } from "@/app/data/nav-List";
 import Button from "../button/button";
 
 export default function Header() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+  const isLoggedIn = useAppSelector((state) => state.userInfo.isLoggedIn);
   const pathName = usePathname();
   const router = useRouter();
 
   const handleClickSignIn = () => {
-    router.push("/signIn");
+    if (isLoggedIn) {
+      dispatch(logOutUser());
+      router.push("/");
+    } else {
+      router.push("/signIn");
+    }
   };
 
   const handleClickNav = () => {
     dispatch(setType(""));
   };
-
   return (
-    <header>
-      <nav className="flex justify-end bg-white h-20">
-        <ul className="flex flex-row items-center">
-          {navList.map((items, index) => {
-            return (
-              <li key={index} className="p-2">
-                <Link
-                  onClick={handleClickNav}
-                  href={items.href}
-                  className={
-                    pathName === items.href
-                      ? "active: text-blue-700 underline underline-offset-4 "
-                      : "text-blue-500 hover:underline underline-offset-4"
-                  }
-                >
-                  {items.name}
-                </Link>
-              </li>
-            );
-          })}
+    <header className=" bg-white">
+      <nav className="flex justify-end h-20">
+        <ul className="flex flex-row items-center w-auto">
+          
+          {isLoggedIn ? (
+            <>
+              {dashBoardNavList.map((items, index) => {
+                return (
+                  <li key={index} className="p-2">
+                    <Link
+                      onClick={handleClickNav}
+                      href={items.href}
+                      className={
+                        pathName === items.href
+                          ? "active: text-blue-700 underline underline-offset-4 "
+                          : "text-blue-500 hover:underline underline-offset-4"
+                      }
+                    >
+                      {items.name}
+                    </Link>
+                  </li>
+                );
+              })}
+            </>
+           
+          ) : (
+            <>
+              {navList.map((items, index) => {
+                return (
+                  <li key={index} className="p-2">
+                    <Link
+                      onClick={handleClickNav}
+                      href={items.href}
+                      className={
+                        pathName === items.href
+                          ? "active: text-blue-700 underline underline-offset-4 "
+                          : "text-blue-500 hover:underline underline-offset-4"
+                      }
+                    >
+                      {items.name}
+                    </Link>
+                  </li>
+                );
+              })}
+            </>
+          )}
           <Button
             type="button"
-            name="Sign In"
+            name={isLoggedIn ? "Log Out" : "Log In"}
             marginTop="0"
             onClick={handleClickSignIn}
           />

@@ -7,13 +7,13 @@ import { Inter } from "next/font/google";
 import { Providers } from "@/app/redux/provider";
 
 import Header from "./components/header/header";
-import SideBar from "./components/sideBar/sideBar";
+import Loading from "./components/loading/loading";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Music Inventory Solutions",
-  description: "Manage your music classroom inventory more efficiantly",
+  description: "Manage your music classroom inventory more efficiently",
 };
 
 export default function RootLayout({
@@ -26,10 +26,12 @@ export default function RootLayout({
       <body className={inter.className} suppressHydrationWarning={true}>
         <Providers>
           <Header />
-          <div className="flex flex-row gap-2 bg-slate-700">
-            <SideBar />
-            <Suspense fallback={<p>Loading Page...</p>}>{children}</Suspense>
-          </div>
+          <main className="min-h-screen bg-white flex justify-center">
+
+            {children}
+
+          </main>
+
         </Providers>
       </body>
     </html>

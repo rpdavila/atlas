@@ -1,14 +1,14 @@
 "use client";
-
+//react imports
 import React, { useState } from "react";
-
-import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { addStudentToList } from "@/app/redux/features/studentListSlice";
-
+// redux imports
+import { useAppDispatch, useAppSelector } from "../../lib/ReduxSSR/hooks";
+import { setSearch } from "@/app/lib/ReduxSSR/features/searchOptionsSlice";
+import { addStudent } from "@/app/lib/ReduxSSR/features/studentListSlice";
+//component imports
 import TextInput from "../input/customTextInput";
 import Button from "../button/button";
 import { StudentInfo } from "@/app/types/formTypes";
-import { setSearch } from "@/app/redux/features/searchOptionsSlice";
 
 type StudentFormProps = {
   formTitle: string;
@@ -22,9 +22,8 @@ export default function StudentForm({
   const dispatch = useAppDispatch();
   const selectOption = useAppSelector((state) => state.searchOptions.type);
   const searchResult = useAppSelector((state) => state.searchOptions.search);
-
+  const studentInfoLoading = useAppSelector((state) => state.students.loading);
   const initialState: StudentInfo = {
-    id: 1,
     firstName: "",
     lastName: "",
     studentIdNumber: "",
@@ -40,9 +39,15 @@ export default function StudentForm({
       : setStudentInfo({ ...studentInfo, [name]: value });
   };
 
-  const handleAddStudent = () => {
-    dispatch(addStudentToList(studentInfo));
-    alert("Student Added");
+  const handleAddStudent = async () => {
+    await dispatch(
+      addStudent({
+        firstName: studentInfo.firstName,
+        lastName: studentInfo.lastName,
+        studentIdNumber: studentInfo.studentIdNumber,
+      })
+    );
+    setStudentInfo(initialState);
   };
 
   return (
@@ -50,6 +55,7 @@ export default function StudentForm({
       <h1 className="bg-blue-500 rounded-t-lg w-full self-center text-white text-center">
         {formTitle}
       </h1>
+
       {selectOption === "Search Student" && (
         <div>
           <TextInput
@@ -92,7 +98,7 @@ export default function StudentForm({
           <Button
             type="submit"
             marginTop="5"
-            name={buttonText}
+            name={studentInfoLoading ? "Submitting" : buttonText}
             onClick={handleAddStudent}
           />
         </div>

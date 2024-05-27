@@ -1,12 +1,15 @@
 "use client";
-import { useAppDispatch, useAppSelector } from "@/app/redux/hooks";
-import { addStudentToInstrument } from "@/app/redux/features/instrumentSLice";
-import { InstrumentDetails, OnlyStudentData } from "@/app/types/formTypes";
+
+//redux imports
+import { useAppDispatch, useAppSelector } from "@/app/lib/ReduxSSR/hooks";
+import { addStudentToInstrument, getInstruments, unassignStudentFromInstrument } from "@/app/lib/ReduxSSR/features/instrumentSLice";
+import { assignInstrumentToStudent, getDropDownList, getStudents, unassignInstrumentFromStudent } from "@/app/lib/ReduxSSR/features/studentListSlice";
+
+// type imports
+import { InstrumentDetails, StudentInfo } from "@/app/types/formTypes";
+//component imports
 import Select from "../input/customSelection";
-import {
-  assignInstrumentToStudent,
-  filterStudentList,
-} from "@/app/redux/features/studentListSlice";
+import Button from "../button/button";
 
 type CardProps = {
   instrument: InstrumentDetails;
@@ -18,74 +21,76 @@ export default function InstrumentCard({ instrument }: CardProps) {
     (state) => state.instruments.instrumentList
   );
   const displayStudents = useAppSelector(
-    (state) => state.students.filteredList
+    (state) => state.students.dropDownList
   );
+  const handleSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+   
+      const value = event.target.value.split(" ");
+      // get a matching student
+      const matchingStudent = displayStudents.find((student: StudentInfo) => {
+        if (student.firstName === value[0] && student.lastName === value[1]) {
+          return student
+        }
+      });
 
-  const handleSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // MUST BE MODIFIED TO USE DB INSTANCE. IT IS CURRENTLY USING DUMMY DATA PROVIDED IN THE DATA FOLDER
-    const value = event.target.value.split(" ");
-    // get a matching student
-    const matchingStudent = displayStudents.find((student: OnlyStudentData) => {
-      if (student.firstName === value[0] && student.lastName === value[1]) {
-        return {
-          firstName: student.firstName,
-          lastName: student.lastName,
-          studentIdNumber: student.studentIdNumber,
-        };
-      }
-    });
+      //get a matching instrument
+      const matchingInstrument = displayInstruments.find((item: InstrumentDetails) => {
+        if (item._id === instrument._id) {
+          return item;
+        }
+      });
 
-    //get a matching instrument
-    const matchingInstrument = displayInstruments.find((item) => {
-      if (item.id === instrument.id) {
-        return item;
-      }
-    });
-
-    // dispatch and add the student to instrument
-    dispatch(
-      addStudentToInstrument({
-        studentInfo: {
-          firstName: matchingStudent?.firstName,
-          lastName: matchingStudent?.lastName,
-          studentIdNumber: matchingStudent?.studentIdNumber,
-        },
-        instrumentInfo: {
-          id: matchingInstrument?.id,
-        },
-      })
-    );
-
-    // filter students in the student list select option
-    dispatch(
-      filterStudentList({
-        firstName: matchingStudent?.firstName,
-        lastName: matchingStudent?.lastName,
-        studentIdNumber: matchingStudent?.studentIdNumber,
-      })
-    );
-
-    // add instrument to student info
-    dispatch(
-      assignInstrumentToStudent({
-        studentInfo: {
-          studentIdNumber: matchingStudent?.studentIdNumber,
-        },
-        instrumentInfo: {
-          type: matchingInstrument?.type,
-          brand: matchingInstrument?.brand,
+      
+      // dispatch and add the student to instrument collection
+      await dispatch(
+        addStudentToInstrument({
           serialNumber: matchingInstrument?.serialNumber,
-        },
-      })
-    );
+          student: {
+            firstName: matchingStudent?.firstName,
+            lastName: matchingStudent?.lastName,
+            studentIdNumber: matchingStudent?.studentIdNumber
+          }
+        })
+      );
+
+      // dispatch and add instrument to the student collection
+      await dispatch(
+        assignInstrumentToStudent({
+          studentIdNumber: matchingStudent?.studentIdNumber,
+          instrument: {
+            classification: matchingInstrument?.classification,
+            brand: matchingInstrument?.brand,
+            serialNumber: matchingInstrument?.serialNumber,          
+            }
+          }
+        )
+      )
+
+      // get updated instrument list
+      await dispatch(getInstruments())
+
+      // get updated student list
+      await dispatch(getStudents())
+
+      // update the dropDownList
+      await dispatch(getDropDownList())
   };
 
+  const handleUnassignStudent = async (instrumentSerialNumber: string | undefined, studentIdNumber: string | undefined) => {
+    
+    await dispatch(unassignStudentFromInstrument(instrumentSerialNumber))
+    await dispatch(unassignInstrumentFromStudent(studentIdNumber))
+    await dispatch(getInstruments())
+    await dispatch(getStudents())
+    await dispatch(getDropDownList())    
+    
+  }
   return (
     <div className="flex flex-row justify-evenly bg-white w-3/4 rounded-lg m-4 basis-1/3">
       <div className="flex flex-col w-1/3 items-start justify-center">
         <p>
           <strong>Instrument type: </strong>
-          {instrument?.type}
+          {instrument?.classification}
         </p>
         <p>
           <strong>Brand: </strong>
@@ -103,7 +108,7 @@ export default function InstrumentCard({ instrument }: CardProps) {
       {instrument?.rentStatus === "Rented" ? (
         <div className="flex flex-col items-start justify-center">
           <strong>
-            <h1>Assign to: </h1>
+            <h1>Assigned to: </h1>
           </strong>
           <p>
             <strong>First Name:</strong>
@@ -116,14 +121,16 @@ export default function InstrumentCard({ instrument }: CardProps) {
             <strong>Student Id Number: </strong>
             {instrument.assignedTo?.studentIdNumber}
           </p>
-        </div>
-      ) : (
+          <Button type="button" name="Unassign Student" marginTop="0" onClick={() => handleUnassignStudent(instrument.serialNumber, instrument.assignedTo?.studentIdNumber )} />          
+        </div>       
+     
+      ) : ( 
         <Select
           category="Available Students"
           options={displayStudents}
           onChange={handleSelect}
-          placeHolder="Assign to student"
-        />
+          placeHolder="Assign Student"
+        />      
       )}
     </div>
   );
