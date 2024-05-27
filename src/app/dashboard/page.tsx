@@ -13,13 +13,6 @@ export default function DashBoardMainPage() {
   const dispatch = useAppDispatch()
   const selectOption = useAppSelector(state => state.searchOptions.type)
 
-  useEffect(() => {
-    dispatch(getStudents())
-    dispatch(getInstruments())
-    dispatch(getDropDownList())
-    dispatch(getCustomUserData())
-  }, [dispatch, selectOption])
-
   return (
     <section className="flex flex-col min-h-screen mt-2 rounded-lg basis-3/4">
       {selectOption === "Search Student" && <SearchStudent />}

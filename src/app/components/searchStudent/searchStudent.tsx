@@ -37,7 +37,13 @@ export default function SearchStudent() {
       );
     });
   }
-  
+
+  useEffect(() => {
+    if (displayStudents.length === 0) {
+      dispatch(getStudents());
+    }
+  }, [dispatch, displayStudents.length, searchOption])
+
   return (
     <section className="flex flex-col basis-3/4 w-full items-center justify-between">
       {studentsLoading ? <h1>Loading...</h1> : <StudentCardList studentSearchResult={studentSearchResults} />}
