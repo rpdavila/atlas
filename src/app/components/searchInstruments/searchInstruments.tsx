@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 //redux imports
 import { useAppSelector, useAppDispatch } from "@/app/lib/ReduxSSR/hooks";
 import { RootState } from "@/app/lib/ReduxSSR/store";
+import { getInstruments } from "@/app/lib/ReduxSSR/features/instrumentSLice";
 
 //component imports
 import InstrumentCardList from "@/app/components/card-list/instrumentCardList";
@@ -37,6 +38,12 @@ export default function SearchInstrument() {
       );
     });
   }
+
+  useEffect(() => {
+    if (displayInstruments.length === 0) {
+      dispatch(getInstruments());
+    }
+  }, [dispatch, displayInstruments.length, searchOption])
 
   return (
     <section className="flex flex-col basis-3/4 items-center">
