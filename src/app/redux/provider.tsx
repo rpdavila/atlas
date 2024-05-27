@@ -13,12 +13,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
   if (!storeRef.current) {
     // Create the store instance the first time it renders
     storeRef.current = makeStore();
+    storeRef.current.dispatch(getStudents())
+    storeRef.current.dispatch(getDropDownList())
+    storeRef.current.dispatch(getInstruments())
+    storeRef.current.dispatch(getCustomUserData())
   }
-
-  storeRef.current.dispatch(getStudents())
-  storeRef.current.dispatch(getDropDownList())
-  storeRef.current.dispatch(getInstruments())
-  storeRef.current.dispatch(getCustomUserData())
 
   return (
     <Provider store={storeRef.current}>

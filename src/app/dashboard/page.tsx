@@ -1,5 +1,5 @@
 "use client";
-import { useRef, useEffect } from "react";
+import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/lib/ReduxSSR/hooks";
 import { getDropDownList, getStudents } from "@/app/lib/ReduxSSR/features/studentListSlice";
 import { getInstruments } from "@/app/lib/ReduxSSR/features/instrumentSLice";
@@ -14,15 +14,11 @@ export default function DashBoardMainPage() {
   const selectOption = useAppSelector(state => state.searchOptions.type)
 
   useEffect(() => {
-
     dispatch(getStudents())
     dispatch(getInstruments())
     dispatch(getDropDownList())
     dispatch(getCustomUserData())
-
-
-
-  }, [])// ignore warning
+  }, [dispatch, selectOption])
 
   return (
     <section className="flex flex-col min-h-screen mt-2 rounded-lg basis-3/4">
