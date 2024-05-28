@@ -11,9 +11,9 @@ export function useMongoDbDataAccess({
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
 
-  console.log({data, loading, error})
+  
   useEffect(() => {
-    (async () => {
+    const getStudentData = async (collectionName: string): Promise<void> => {
       try {
         if (app?.currentUser) {
           setLoading(true);
@@ -28,9 +28,10 @@ export function useMongoDbDataAccess({
         setLoading(false);
         setError(error as Error);
       }
-      
-    })();
-  }, [app, app?.currentUser, app?.currentUser?.id, collectionName, data, error]);
+    };
 
-  return [data, loading, error];
+    getStudentData(collectionName);
+  }, [app?.currentUser, collectionName]);
+
+  return {data: data, loading: loading, error: error};
 }
