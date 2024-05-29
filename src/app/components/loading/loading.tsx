@@ -1,3 +1,7 @@
 export default function Loading() {
-  return <h1 className="flex justify-center self-center text-5xl bg-white">Loading...</h1>;
+  return (
+    <section className="flex justify-center text-5xl bg-white mt-2">
+      <h1>Loading...</h1>;
+    </section>
+  )
 }

@@ -13,8 +13,11 @@ export default function UserDetail() {
     dispatch(getCustomUserData());
   }, [dispatch]);
   return (
-    <h1 className="text-2xl">
-      Hello {userFirstName} {userLastName}
-    </h1>
+    <section className="flex justify-center text-2xl  bg-white rounded-lg h-full">
+      <h1> 
+        Hello {userFirstName} {userLastName}
+      </h1>
+    </section>
+    
   );
 }

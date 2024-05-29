@@ -10,26 +10,25 @@ import { getInstruments } from "@/app/lib/ReduxSSR/features/instrumentSLice";
 //component imports
 import InstrumentCardList from "@/app/components/card-list/instrumentCardList";
 import { InstrumentList, InstrumentDetails } from "@/app/types/formTypes";
+import { useMongoDbDataAccess } from "@/app/hooks/useMongoDbDataAccess";
+import Loading from "../loading/loading";
 
 export default function SearchInstrument() {
-  const dispatch = useAppDispatch()
   let instrumentSearchResults: InstrumentList = [];
-
+  const { data, loading, error } = useMongoDbDataAccess({ collectionName: 'instrumentInfo' });
   // Grab instrument list in store
   const displayInstruments: InstrumentList = useAppSelector(
     (state: RootState) => state.instruments.instrumentList
   );
-  // check if instruments are loading
-  const instrumentsLoading = useAppSelector(state => state.instruments.loading);
+  // // check if instruments are loading
+  // const instrumentsLoading = useAppSelector(state => state.instruments.loading);
   // grab searchfield
   const searchField = useAppSelector(
     (state: RootState) => state.searchOptions.search
   );
 
-  // used to refresh component when search option changes
-  const searchOption = useAppSelector(state => state.searchOptions.type)
-  if (displayInstruments) {
-    instrumentSearchResults = displayInstruments.filter((instrument: InstrumentDetails) => {
+  if (data) {
+    instrumentSearchResults = data.filter((instrument: InstrumentDetails) => {
       return (
         instrument.classification?.includes(searchField) ||
         instrument.brand?.includes(searchField) ||
@@ -39,15 +38,17 @@ export default function SearchInstrument() {
     });
   }
 
-  useEffect(() => {
-    if (displayInstruments.length === 0) {
-      dispatch(getInstruments());
-    }
-  }, [dispatch, displayInstruments.length, searchOption])
+  if (error) {
+    return (
+      <>
+        <h1 >Error: {error.message}</h1>
+      </>
+    );
+  }
 
   return (
     <section className="flex flex-col basis-3/4 items-center">
-      {instrumentsLoading ? <h1>Loading...</h1> : <InstrumentCardList instrumentSearchResults={instrumentSearchResults} />}
+      {loading ? <Loading /> : <InstrumentCardList instrumentSearchResults={instrumentSearchResults} />}
     </section>
   );
 }
