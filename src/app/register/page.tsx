@@ -4,13 +4,17 @@ import TextInput from "../components/input/customTextInput";
 import Button from "../components/button/button";
 import { useApp } from "../hooks/useApp";
 
+
 type RegisterProps = {
   email: string;
   password: string;
   confirmPassword: string;
   error: string;
 };
+
+
 export default function Register() {
+
   const app = useApp();
   const initialState: RegisterProps = {
     email: "",

@@ -10,12 +10,14 @@ type StudentState = {
   dropDownList: StudentList;
   loading: boolean;
   error: unknown;
+  initialized: boolean;
 };
 const initialState: StudentState = {
   studentList: [],
   dropDownList: [],
   loading: false,
-    error: null,
+  error: null,
+  initialized: false,
 };
 export const getStudents = createAsyncThunk(
   "studentList/getStudents",
@@ -23,7 +25,7 @@ export const getStudents = createAsyncThunk(
     try {
       if (app?.currentUser) {
         const result = await studentCollection?.find();
-        return convertObjectIdToString(result);
+        return convertObjectIdToString(result as StudentList);
       }
     } catch (error) {
       console.error(error);      
@@ -91,7 +93,7 @@ export const getDropDownList = createAsyncThunk(
           {instrument: {$exists: false}}, {instrument: null}
         ]
       });
-      return convertObjectIdToString(result)
+      return convertObjectIdToString(result as StudentList)
     } catch (error) {
       console.log(error)
     }
@@ -100,7 +102,23 @@ export const getDropDownList = createAsyncThunk(
 export const studentListSlice = createSlice({
   name: "studentList",
   initialState,
-  reducers: {},
+  reducers: {
+    setStudentsInitialized: (state, action: PayloadAction<StudentList>) => {
+      if (state.initialized === true && state.studentList === undefined) {
+        return {
+          ...state,
+          studentList: action.payload,
+          dropDownList: action.payload,
+        }
+      } else {
+        return {
+          ...state,
+          studentList: action.payload,
+          initialized: true,
+        }
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getStudents.pending, (state, action) => {
@@ -191,3 +209,4 @@ export const studentListSlice = createSlice({
 });
 
 export default studentListSlice.reducer;
+export const {setStudentsInitialized} = studentListSlice.actions;

@@ -62,9 +62,8 @@ export default function InstrumentCard({ instrument }: CardProps) {
           brand: matchingInstrument?.brand,
           serialNumber: matchingInstrument?.serialNumber,
         }
-      }
-      )
-    )
+      })
+    );
 
     // get updated instrument list
     await dispatch(getInstruments())

@@ -1,5 +1,5 @@
-"use client";
 import UserDetail from "../components/userDetail/userDetail";
+
 
 export default function DashBoardMainPage() {
 

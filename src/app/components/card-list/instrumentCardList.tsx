@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 //type imports
 import { InstrumentList } from "@/app/types/formTypes"
 //component imports
@@ -13,6 +12,7 @@ type InstrumentCardListProps = {
 export default function InstrumentCardList({
   instrumentSearchResults
 }: InstrumentCardListProps) {
+  //render the instrument cards
   return (
     <>
       {instrumentSearchResults.map((items) => {

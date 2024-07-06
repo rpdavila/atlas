@@ -1,19 +1,24 @@
 import { useState, useEffect } from "react";
 import { useApp } from "./useApp";
+import { useAppDispatch} from "../lib/ReduxSSR/hooks";
+import { InstrumentList, StudentList } from "../types/formTypes";
 
 export function useMongoDbDataAccess({
   collectionName,
 }: {
   collectionName: string;
 }) {
+  const dispatch = useAppDispatch();
   const app = useApp();
-  const [data, setData] = useState<any[]>();
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
+  const [studentData, setStudentData] = useState<StudentList | null>(null);
+  const [instrumentData, setInstrumentData] = useState<InstrumentList | null>(null);
+
 
   
-  useEffect(() => {
-    const getStudentData = async (collectionName: string): Promise<void> => {
+  useEffect(() => {    
+    const getData = async (collectionName: string) => {
       try {
         if (app?.currentUser) {
           setLoading(true);
@@ -21,8 +26,15 @@ export function useMongoDbDataAccess({
           const db = mongo.db("Test");
           const collection = db.collection(collectionName);
           const result = await collection.find();
-          setData(result);
-          setLoading(false);
+          if (collectionName === "studentInfo") {
+            setStudentData(result as StudentList)
+            setLoading(false);
+          }
+          if (collectionName === "instrumentInfo") {
+            setInstrumentData(result as InstrumentList)
+            setLoading(false);
+          }
+          
         }
       } catch (error) {
         setLoading(false);
@@ -30,8 +42,8 @@ export function useMongoDbDataAccess({
       }
     };
 
-    getStudentData(collectionName);
-  }, [app?.currentUser, collectionName]);
+    getData(collectionName);
+  }, [app?.currentUser, collectionName, dispatch]);
 
-  return {data: data, loading: loading, error: error};
+  return { studentData: studentData, instrumentData: instrumentData, loading: loading, error: error };
 }

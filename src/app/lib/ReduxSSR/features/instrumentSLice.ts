@@ -11,12 +11,14 @@ type InstrumentState = {
   instrumentList: InstrumentList;
   instrumentSearch: string;
   loading: boolean;
+  initialized: boolean;
 };
 
 const initialState: InstrumentState = {
   instrumentList: [],
   instrumentSearch: "",
   loading: false,
+  initialized: false,
 };
 
 export const getInstruments = createAsyncThunk(
@@ -98,7 +100,15 @@ export const unassignStudentFromInstrument = createAsyncThunk(
 export const instrumentDetailsSlice = createSlice({
   name: "instrumentDetails",
   initialState,
-  reducers: {},
+  reducers: {
+    setInstrumentsInitialized: (state, action: PayloadAction<InstrumentList>) => {
+      return {
+        ...state,
+        instrumentList: action.payload,
+        initialized: true
+      }     
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getInstruments.pending, (state, action) => {
@@ -160,3 +170,4 @@ export const instrumentDetailsSlice = createSlice({
   },
 });
 export default instrumentDetailsSlice.reducer;
+export const {setInstrumentsInitialized} = instrumentDetailsSlice.actions;
