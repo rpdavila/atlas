@@ -9,19 +9,19 @@ import { InstrumentList, InstrumentDetails } from "@/app/types/formTypes";
 
 import Loading from "../loading/loading";
 
-export default function SearchInstrument({ data }: { data: InstrumentList }) {
+export default function SearchInstrument() {
   // Grab instrument list in store
   let instrumentSearchResults: InstrumentList = [];
-
+  const displayInstruments = useAppSelector((state) => state.instruments.instrumentList)
   // grab searchfield
   const searchField = useAppSelector(
     (state: RootState) => state.searchOptions.search
   );
 
 
-  if (data) {
+  if (displayInstruments) {
 
-    instrumentSearchResults = data.filter((instrument: InstrumentDetails) => {
+    instrumentSearchResults = displayInstruments.filter((instrument: InstrumentDetails) => {
       return (
         instrument.classification?.includes(searchField) ||
         instrument.brand?.includes(searchField) ||

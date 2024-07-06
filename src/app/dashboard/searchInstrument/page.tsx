@@ -9,26 +9,10 @@ import { useMongoDbDataAccess } from "@/app/hooks/useMongoDbDataAccess";
 import { setStudentsInitialized } from "@/app/lib/ReduxSSR/features/studentListSlice";
 
 export default function InstrumentPage() {
-  const dispatch = useAppDispatch();
-  const { instrumentData, loading: instrumentLoading, error: instrumentError, } = useMongoDbDataAccess({ collectionName: 'instrumentInfo' });
-  const { studentData, loading: studentLoading, error: studentError, } = useMongoDbDataAccess({ collectionName: 'studentInfo' });
 
-  const instrumentsInitialized: boolean = useAppSelector((state) => state.instruments.initialized);
-  const instruments: InstrumentList = useAppSelector((state) => state.instruments.instrumentList);
-
-  const convertedInstrumentData = convertObjectIdToString(instrumentData as InstrumentList)
-  const convertedStudentData = convertObjectIdToString(studentData as StudentList)
-  if (!instrumentsInitialized) {
-    dispatch(setInstrumentsInitialized(convertedInstrumentData as InstrumentList));
-    dispatch(setStudentsInitialized(convertedStudentData as StudentList));
-  } else {
-    dispatch(getInstruments());
-    dispatch(getStudents());
-    dispatch(getDropDownList());
-  }
   return (
     <>
-      <SearchInstrument data={instruments} />
+      <SearchInstrument />
     </>
   )
 }
