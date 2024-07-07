@@ -85,8 +85,8 @@ export default function InstrumentCard({ instrument }: CardProps) {
 
   }
   return (
-    <div className="flex flex-row justify-evenly bg-white w-3/4 rounded-lg m-4 basis-1/3">
-      <div className="flex flex-col w-1/3 items-start justify-center">
+    <div className="flex flex-col items-center lg:flex-row md:flex-row sm:flex-col justify-evenly sm:items-center bg-white w-3/4 rounded-lg m-4 basis-1/3">
+      <div className="flex flex-col w-auto sm:w-1/3 justify-center items-start m-6 ">
         <p>
           <strong>Instrument type: </strong>
           {instrument?.classification}
@@ -105,7 +105,7 @@ export default function InstrumentCard({ instrument }: CardProps) {
         </p>
       </div>
       {instrument?.rentStatus === "Rented" ? (
-        <div className="flex flex-col items-start justify-center">
+        <div className="flex flex-col items-start justify-center m-6">
           <strong>
             <h1>Assigned to: </h1>
           </strong>

@@ -31,13 +31,13 @@ export default function Select({
           <option disabled selected>
             {placeHolder}
           </option>
-          {Array.isArray(options)
+          {Array.isArray(options) //check of object is an array
             ? options.map((item) => (
                 <option key={item.id} value={item.type || item.firsName}>
                   {item.type || `${item.firstName} ${item.lastName}`}
                 </option>
               ))
-            : Object.values(options).map((value) => (
+            : Object.values(options).map((value) => ( //check if object is enumerable
                 <option key={value} value={value}>
                   {value}
                 </option>

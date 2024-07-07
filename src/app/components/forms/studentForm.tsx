@@ -63,7 +63,7 @@ export default function StudentForm({
             type="text"
             name="search"
             value={searchResult}
-            placeHolder="Search Instrument"
+            placeHolder="Search Student"
             onChange={handleChange}
           />
         </div>

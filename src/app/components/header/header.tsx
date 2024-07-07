@@ -1,4 +1,6 @@
 "use client";
+import { useEffect, useState } from "react";
+
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -15,6 +17,8 @@ export default function Header() {
   const pathName = usePathname();
   const router = useRouter();
 
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+
   const handleClickSignIn = () => {
     if (isLoggedIn) {
       dispatch(logOutUser());
@@ -27,60 +31,87 @@ export default function Header() {
   const handleClickNav = () => {
     dispatch(setType(""));
   };
+
+  useEffect(() => {
+    const removeElementWhenScreenSizeChanges = () => {
+      if (window.innerWidth < 640) {
+        console.log("mobile");
+        setIsMobile(true);
+      }
+      if (window.innerWidth > 640) {
+        setIsMobile(false);
+      }
+    }
+    window.addEventListener("resize", removeElementWhenScreenSizeChanges);
+
+    return () => window.removeEventListener("resize", removeElementWhenScreenSizeChanges);
+  }, [])
+  
   return (
-    <header className=" bg-white">
-      <nav className="flex justify-end h-20">
-        <ul className="flex flex-row items-center w-auto">
-          
-          {isLoggedIn ? (
-            <>
-              {dashBoardNavList.map((items, index) => {
-                return (
-                  <li key={index} className="p-2">
-                    <Link
-                      onClick={handleClickNav}
-                      href={items.href}
-                      className={
-                        pathName === items.href
-                          ? "active: text-blue-700 underline underline-offset-4 "
-                          : "text-blue-500 hover:underline underline-offset-4"
-                      }
-                    >
-                      {items.name}
-                    </Link>
-                  </li>
-                );
-              })}
-            </>
-           
-          ) : (
-            <>
-              {navList.map((items, index) => {
-                return (
-                  <li key={index} className="p-2">
-                    <Link
-                      onClick={handleClickNav}
-                      href={items.href}
-                      className={
-                        pathName === items.href
-                          ? "active: text-blue-700 underline underline-offset-4 "
-                          : "text-blue-500 hover:underline underline-offset-4"
-                      }
-                    >
-                      {items.name}
-                    </Link>
-                  </li>
-                );
-              })}
+    <header className=" bg-white w-auto">
+      <nav className="flex items-center sm:flex justify-end h-20">
+        {isMobile
+          ? (
+              <button className="flex justify-evenly items-center flex-col mr-5 w-5 h-10">
+                <div className="bg-black w-full h-1"></div>
+                <div className="bg-black w-full h-1"></div>
+                <div className="bg-black w-full h-1"></div>
+              </button>
+            )
+          : (
+              <>
+                <ul className="flex flex-row items-center w-auto">
+                  {isLoggedIn ? (
+                    <>
+                      {dashBoardNavList.map((items, index) => {
+                        return (
+                          <li key={index} className="p-2">
+                            <Link
+                              onClick={handleClickNav}
+                              href={items.href}
+                              className={
+                                pathName === items.href
+                                  ? "active: text-blue-700 underline underline-offset-4 "
+                                  : "text-blue-500 hover:underline underline-offset-4"
+                              }
+                            >
+                              {items.name}
+                            </Link>
+                          </li>
+                        );
+                      })}
+                    </>
+
+                ) : (
+                  <>
+                    {navList.map((items, index) => {
+                      return (
+                        <li key={index} className="p-2">
+                          <Link
+                            onClick={handleClickNav}
+                            href={items.href}
+                            className={
+                              pathName === items.href
+                                ? "active: text-blue-700 underline underline-offset-4 "
+                                : "text-blue-500 hover:underline underline-offset-4"
+                            }
+                          >
+                            {items.name}
+                          </Link>
+                        </li>
+                      );
+                    })}
+                  </>
+                )}
+                <Button
+                  type="button"
+                  name={isLoggedIn ? "Log Out" : "Log In"}
+                  marginTop="0"
+                  onClick={handleClickSignIn}
+                />
+              </ul>
             </>
           )}
-          <Button
-            type="button"
-            name={isLoggedIn ? "Log Out" : "Log In"}
-            marginTop="0"
-            onClick={handleClickSignIn}
-          />
-        </ul>
       </nav>
     </header>
   );
