@@ -10,14 +10,9 @@ import {
   REGISTER,
 } from "redux-persist";
 
-
 import storage from './storage' // defaults to localStorage for web
 
 import rootReducer from "./features/rootReducer";
-import { createLogger } from "redux-logger";
-
-
-const logger = createLogger()
 
 const persistConfig = {
   key: "root",
