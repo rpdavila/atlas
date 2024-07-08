@@ -24,7 +24,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
   storeRef.current.dispatch(getInstruments());
   storeRef.current.dispatch(getCustomUserData());
   storeRef.current.getState();
-  router.refresh();
+
 
   return (
     <Provider store={storeRef.current}>
