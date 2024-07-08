@@ -14,7 +14,7 @@ export const studentCollection =  db?.collection("studentInfo");
 export const instrumentCollection =  db?.collection("instrumentInfo")
 export const userCollection = db?.collection("users");
 
-export function convertObjectIdToString(result: any[] | undefined ){
+export function convertObjectIdToString(result: InstrumentList | StudentList | undefined ): InstrumentList | StudentList | undefined {
   result?.forEach((document) => {
     document._id = String(document._id);
   });
