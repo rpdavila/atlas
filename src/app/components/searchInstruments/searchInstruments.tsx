@@ -11,14 +11,15 @@ import { getDropDownList } from "@/app/lib/ReduxSSR/features/studentListSlice"
 import InstrumentCardList from "@/app/components/card-list/instrumentCardList";
 import { InstrumentList, InstrumentDetails } from "@/app/types/formTypes";
 import Loading from "../loading/loading";
+import { UnknownAction } from "@reduxjs/toolkit";
 
 
 export default function SearchInstrument() {
   const store = useAppStore();
   const initialized = useRef(false);
   if (!initialized.current) {
-    store.dispatch(getInstruments());
-    store.dispatch(getDropDownList());
+    store.dispatch(getInstruments() as unknown as UnknownAction);
+    store.dispatch(getDropDownList() as unknown as UnknownAction);
     initialized.current = true;
   }
 

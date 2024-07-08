@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { Provider } from "react-redux";
 import { makeStore, AppStore } from "../lib/ReduxSSR/store";
 import { PersistGate } from "redux-persist/integration/react";
@@ -12,15 +12,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
   if (!storeRef.current) {
     // Create the store instance the first time it renders
     storeRef.current = makeStore();
-    storeRef.current.dispatch(getStudents());
-    storeRef.current.dispatch(getDropDownList());
-    storeRef.current.dispatch(getInstruments());
-    storeRef.current.dispatch(getCustomUserData());
   }
-  
+
 
   const persistor = persistStore(storeRef.current);
-  
 
 
   return (

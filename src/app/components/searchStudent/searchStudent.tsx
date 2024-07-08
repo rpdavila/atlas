@@ -6,6 +6,7 @@ import { useRef } from "react";
 import { useAppSelector, useAppDispatch, useAppStore } from "@/app/lib/ReduxSSR/hooks";
 import { RootState } from "@/app/lib/ReduxSSR/store";
 import { getStudents } from "@/app/lib/ReduxSSR/features/studentListSlice";
+import { UnknownAction } from "@reduxjs/toolkit";
 
 //component imports
 import StudentCardList from "../../components/card-list/studentCardList";
@@ -16,10 +17,10 @@ export default function SearchStudent() {
   const store = useAppStore();
   const initialized = useRef(false);
   if (!initialized.current) {
-    store.dispatch(getStudents());
+    store.dispatch(getStudents() as unknown as UnknownAction);
     initialized.current = true;
   }
-  
+
   let studentSearchResults: StudentList = [];
 
   // Grab student list in store
