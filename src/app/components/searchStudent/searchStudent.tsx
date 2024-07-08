@@ -3,9 +3,9 @@
 import { useRef } from "react";
 
 //redux imports
-import { useAppSelector, useAppDispatch, useAppStore } from "@/app/lib/ReduxSSR/hooks";
-import { RootState } from "@/app/lib/ReduxSSR/store";
-import { getStudents } from "@/app/lib/ReduxSSR/features/studentListSlice";
+import { useAppSelector, useAppDispatch, useAppStore } from "@/lib/ReduxSSR/hooks";
+import { RootState } from "@/lib/ReduxSSR/store";
+import { getStudents } from "@/lib/ReduxSSR/features/studentListSlice";
 import { UnknownAction } from "@reduxjs/toolkit";
 
 //component imports

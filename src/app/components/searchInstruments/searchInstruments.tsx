@@ -2,10 +2,10 @@
 import { useRef } from "react";
 
 //redux imports
-import { useAppSelector, useAppStore } from "@/app/lib/ReduxSSR/hooks";
-import { RootState } from "@/app/lib/ReduxSSR/store";
-import { getInstruments } from "@/app/lib/ReduxSSR/features/instrumentSLice";
-import { getDropDownList } from "@/app/lib/ReduxSSR/features/studentListSlice"
+import { useAppSelector, useAppStore } from "@/lib/ReduxSSR/hooks";
+import { RootState } from "@/lib/ReduxSSR/store";
+import { getInstruments } from "@/lib/ReduxSSR/features/instrumentSLice";
+import { getDropDownList } from "@/lib/ReduxSSR/features/studentListSlice"
 
 //component imports
 import InstrumentCardList from "@/app/components/card-list/instrumentCardList";
