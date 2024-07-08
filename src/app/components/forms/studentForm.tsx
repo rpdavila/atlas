@@ -2,9 +2,9 @@
 //react imports
 import React, { useState } from "react";
 // redux imports
-import { useAppDispatch, useAppSelector } from "../../lib/ReduxSSR/hooks";
-import { setSearch } from "@/app/lib/ReduxSSR/features/searchOptionsSlice";
-import { addStudent } from "@/app/lib/ReduxSSR/features/studentListSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/ReduxSSR/hooks";
+import { setSearch } from "@/lib/ReduxSSR/features/searchOptionsSlice";
+import { addStudent } from "@/lib/ReduxSSR/features/studentListSlice";
 //component imports
 import TextInput from "../input/customTextInput";
 import Button from "../button/button";
