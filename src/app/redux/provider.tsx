@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef } from "react";
-import { useRouter } from "next/navigation";
 import { Provider } from "react-redux";
 import { makeStore, AppStore } from "../lib/ReduxSSR/store";
 import { PersistGate } from "redux-persist/integration/react";
@@ -12,18 +11,19 @@ import { getInstruments } from "../lib/ReduxSSR/features/instrumentSLice";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const storeRef = useRef<AppStore>();
-  const router = useRouter();
   if (!storeRef.current) {
     // Create the store instance the first time it renders
     storeRef.current = makeStore();
+    storeRef.current.dispatch(getStudents());
+    storeRef.current.dispatch(getDropDownList());
+    storeRef.current.dispatch(getInstruments());
+    storeRef.current.dispatch(getCustomUserData());
+    // storeRef.current.getState();    
   }
-  const persistor = persistStore(storeRef.current);
+  
 
-  storeRef.current.dispatch(getStudents());
-  storeRef.current.dispatch(getDropDownList());
-  storeRef.current.dispatch(getInstruments());
-  storeRef.current.dispatch(getCustomUserData());
-  storeRef.current.getState();
+  const persistor = persistStore(storeRef.current);
+  
 
 
   return (
