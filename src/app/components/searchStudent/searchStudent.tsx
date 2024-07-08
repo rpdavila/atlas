@@ -1,9 +1,11 @@
 "use client"
+// react imports
+import { useRef } from "react";
 
 //redux imports
-import { useAppSelector, useAppDispatch } from "@/app/lib/ReduxSSR/hooks";
+import { useAppSelector, useAppDispatch, useAppStore } from "@/app/lib/ReduxSSR/hooks";
 import { RootState } from "@/app/lib/ReduxSSR/store";
-
+import { getStudents } from "@/app/lib/ReduxSSR/features/studentListSlice";
 
 //component imports
 import StudentCardList from "../../components/card-list/studentCardList";
@@ -11,6 +13,13 @@ import { StudentInfo, StudentList } from "@/app/types/formTypes";
 import Loading from "../loading/loading";
 
 export default function SearchStudent() {
+  const store = useAppStore();
+  const initialized = useRef(false);
+  if (!initialized.current) {
+    store.dispatch(getStudents());
+    initialized.current = true;
+  }
+  
   let studentSearchResults: StudentList = [];
 
   // Grab student list in store

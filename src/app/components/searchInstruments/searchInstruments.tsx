@@ -1,15 +1,27 @@
-//redux imports
-import { useAppSelector } from "@/app/lib/ReduxSSR/hooks";
-import { RootState } from "@/app/lib/ReduxSSR/store";
+// react imports
+import { useRef } from "react";
 
+//redux imports
+import { useAppSelector, useAppStore } from "@/app/lib/ReduxSSR/hooks";
+import { RootState } from "@/app/lib/ReduxSSR/store";
+import { getInstruments } from "@/app/lib/ReduxSSR/features/instrumentSLice";
+import { getDropDownList } from "@/app/lib/ReduxSSR/features/studentListSlice"
 
 //component imports
 import InstrumentCardList from "@/app/components/card-list/instrumentCardList";
 import { InstrumentList, InstrumentDetails } from "@/app/types/formTypes";
-
 import Loading from "../loading/loading";
 
+
 export default function SearchInstrument() {
+  const store = useAppStore();
+  const initialized = useRef(false);
+  if (!initialized.current) {
+    store.dispatch(getInstruments());
+    store.dispatch(getDropDownList());
+    initialized.current = true;
+  }
+
   // Grab instrument list in store
   let instrumentSearchResults: InstrumentList = [];
   const displayInstruments = useAppSelector((state) => state.instruments.instrumentList)
