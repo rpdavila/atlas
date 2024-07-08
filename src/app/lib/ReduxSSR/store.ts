@@ -34,9 +34,8 @@ export const makeStore = () => {
           ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
         },
       }),
-  });
-  
-}  
+  });  
+};  
 
 export type AppStore = ReturnType<typeof makeStore>
 export type RootState = ReturnType<AppStore['getState']>;

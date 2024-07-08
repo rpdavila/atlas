@@ -1,5 +1,3 @@
-"use client";
-
 import { useRef } from "react";
 import { Provider } from "react-redux";
 import { makeStore, AppStore } from "../lib/ReduxSSR/store";
@@ -18,7 +16,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
     storeRef.current.dispatch(getDropDownList());
     storeRef.current.dispatch(getInstruments());
     storeRef.current.dispatch(getCustomUserData());
-    storeRef.current.getState();
   }
 
 
