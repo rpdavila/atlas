@@ -22,15 +22,14 @@ export default function SearchInstrument() {
     store.dispatch(getDropDownList() as unknown as UnknownAction);
     initialized.current = true;
   }
-
   // Grab instrument list in store
-  let instrumentSearchResults: InstrumentList = [];
   const displayInstruments = useAppSelector((state) => state.instruments.instrumentList)
   // grab searchfield
   const searchField = useAppSelector(
     (state: RootState) => state.searchOptions.search
   );
-
+  let instrumentSearchResults: InstrumentList = [];
+  console.log(displayInstruments)
 
   if (displayInstruments) {
 
