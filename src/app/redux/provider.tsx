@@ -18,12 +18,12 @@ export function Providers({ children }: { children: React.ReactNode }) {
     storeRef.current.dispatch(getDropDownList());
     storeRef.current.dispatch(getInstruments());
     storeRef.current.dispatch(getCustomUserData());
-    // storeRef.current.getState();    
+    storeRef.current.getState();
   }
-  
+
 
   const persistor = persistStore(storeRef.current);
-  
+
 
 
   return (
