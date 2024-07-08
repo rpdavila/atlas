@@ -17,10 +17,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
     storeRef.current.dispatch(getInstruments());
     storeRef.current.dispatch(getCustomUserData());
   }
-
+  
 
   const persistor = persistStore(storeRef.current);
-
+  
 
 
   return (
