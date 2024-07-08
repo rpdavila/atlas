@@ -1,9 +1,9 @@
 "use client";
 
 //redux imports
-import { useAppDispatch, useAppSelector } from "@/app/lib/ReduxSSR/hooks";
-import { addStudentToInstrument, getInstruments, unassignStudentFromInstrument } from "@/app/lib/ReduxSSR/features/instrumentSLice";
-import { assignInstrumentToStudent, getDropDownList, getStudents, unassignInstrumentFromStudent } from "@/app/lib/ReduxSSR/features/studentListSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/ReduxSSR/hooks";
+import { addStudentToInstrument, getInstruments, unassignStudentFromInstrument } from "@/lib/ReduxSSR/features/instrumentSLice";
+import { assignInstrumentToStudent, getDropDownList, getStudents, unassignInstrumentFromStudent } from "@/lib/ReduxSSR/features/studentListSlice";
 
 // type imports
 import { InstrumentDetails, StudentInfo } from "@/app/types/formTypes";
