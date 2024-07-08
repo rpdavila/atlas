@@ -1,8 +1,7 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import { useAppSelector, useAppDispatch } from "../../lib/ReduxSSR/hooks";
-import { getCustomUserData } from "../../lib/ReduxSSR/features/userSlice";
+import { useAppSelector, useAppDispatch } from "@/lib/ReduxSSR/hooks";
 import { UserRole, UpdateUserData } from "../../types/formTypes";
 
 import TextInput from "../../components/input/customTextInput";

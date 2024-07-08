@@ -4,9 +4,9 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
-import { useAppSelector, useAppDispatch } from "@/app/lib/ReduxSSR/hooks";
-import { setType } from "@/app/lib/ReduxSSR/features/searchOptionsSlice";
-import { logOutUser } from "../../lib/ReduxSSR/features/userSlice";
+import { useAppSelector, useAppDispatch } from "@/lib/ReduxSSR/hooks";
+import { setType } from "@/lib/ReduxSSR/features/searchOptionsSlice";
+import { logOutUser } from "@/lib/ReduxSSR/features/userSlice";
 
 import { navList, dashBoardNavList } from "@/app/data/nav-List";
 import Button from "../button/button";

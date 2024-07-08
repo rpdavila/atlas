@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useApp } from "./useApp";
-import { useAppDispatch} from "../lib/ReduxSSR/hooks";
+import { useAppDispatch} from "@/lib/ReduxSSR/hooks";
 import { InstrumentList, StudentList } from "../types/formTypes";
 
 export function useMongoDbDataAccess({
