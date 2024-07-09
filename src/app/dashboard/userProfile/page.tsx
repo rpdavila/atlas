@@ -105,7 +105,7 @@ export default function UserProfile() {
 
   return (
     <>
-      <div className="flex flex-col items-center mt-2 bg-white basis-3/4">
+      <div className="w-full sm:flex flex-col items-center mt-2 bg-white basis-3/4">
         <section className="flex flex-col">
           <h1 className="text-center">
             {userInfo.customUserData

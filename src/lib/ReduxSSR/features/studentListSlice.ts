@@ -1,4 +1,4 @@
-import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 // mongodb utility imports
 import {app, convertObjectIdToString, studentCollection} from "@/app/utilities/mongodb";
@@ -16,7 +16,7 @@ const initialState: StudentState = {
   studentList: [],
   dropDownList: [],
   loading: false,
-  error: null,
+  error: "",
   initialized: false,
 };
 export const getStudents = createAsyncThunk(
@@ -103,22 +103,13 @@ export const studentListSlice = createSlice({
   name: "studentList",
   initialState,
   reducers: {
-    setStudentsInitialized: (state, action: PayloadAction<StudentList>) => {
-      if (state.initialized === true && state.studentList === undefined) {
+    setStudentsInitialized: (state) => {     
         return {
           ...state,
-          studentList: action.payload,
-          dropDownList: action.payload,
-        }
-      } else {
-        return {
-          ...state,
-          studentList: action.payload,
           initialized: true,
         }
-      }
+      } 
     },
-  },
   extraReducers: (builder) => {
     builder
       .addCase(getStudents.pending, (state, action) => {

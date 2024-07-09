@@ -7,8 +7,8 @@ type StudentCardProps = {
 export default function StudentCard({ student }: StudentCardProps) {
   return (
     <>
-      <div className="flex flex-row justify-evenly bg-white w-3/4 rounded-lg m-4 basis-1/3">
-        <div className="flex flex-row w-full items-center justify-evenly">
+      <div className="flex flex-row justify-evenly w-full bg-white rounded-lg m-4">
+        <div className="flex flex-row items-center justify-between w-full basis-3/4 m-2">
           <div className="flex flex-col">
             <h1 className="text-2xl font-bold">
               {student.firstName} {student.lastName}

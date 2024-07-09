@@ -101,10 +101,9 @@ export const instrumentDetailsSlice = createSlice({
   name: "instrumentDetails",
   initialState,
   reducers: {
-    setInstrumentsInitialized: (state, action: PayloadAction<InstrumentList>) => {
+    setInstrumentsInitialized: (state) => {
       return {
         ...state,
-        instrumentList: action.payload,
         initialized: true
       }     
     }

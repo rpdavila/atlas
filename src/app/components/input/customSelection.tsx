@@ -15,7 +15,7 @@ export default function Select({
 }: SelectProps): React.JSX.Element {
   return (
     <>
-      <div className="flex flex-col justify-center mt-5">
+      <div className="flex flex-col justify-center m-5">
         <label
           htmlFor="select"
           className="block text-gray-700 text-sm font-bold"
@@ -33,15 +33,15 @@ export default function Select({
           </option>
           {Array.isArray(options) //check of object is an array
             ? options.map((item) => (
-                <option key={item.id} value={item.type || item.firsName}>
-                  {item.type || `${item.firstName} ${item.lastName}`}
-                </option>
-              ))
+              <option key={item.id} value={item.type || item.firsName}>
+                {item.type || `${item.firstName} ${item.lastName}`}
+              </option>
+            ))
             : Object.values(options).map((value) => ( //check if object is enumerable
-                <option key={value} value={value}>
-                  {value}
-                </option>
-              ))}
+              <option key={value} value={value}>
+                {value}
+              </option>
+            ))}
         </select>
       </div>
     </>

@@ -9,6 +9,7 @@ import { RootState } from "@/lib/ReduxSSR/store";
 import { setType } from "@/lib/ReduxSSR/features/searchOptionsSlice";
 //component imports
 import Radio from "../input/custumInputRadio";
+import useViewport from "@/app/hooks/useViewport";
 
 type SearchOptionProps = {
   children: React.ReactNode;
@@ -17,10 +18,13 @@ type SearchOptionProps = {
 export default function SelectSearchOptions({ children }: SearchOptionProps) {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const isMobile = useViewport();
 
   const selectOption = useAppSelector(
     (state: RootState) => state.searchOptions.type
   );
+
+
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
@@ -29,6 +33,7 @@ export default function SelectSearchOptions({ children }: SearchOptionProps) {
     if (value === "Search Instrument") router.push("/dashboard/searchInstrument");
   }
 
+  
   return (
     <>
       <div className="flex flex-col bg-white rounded-lg p-2 items-center w-full">

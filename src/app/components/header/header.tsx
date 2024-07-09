@@ -1,23 +1,28 @@
 "use client";
-import { useEffect, useState } from "react";
 
+//next imports
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-
+//redux imports
 import { useAppSelector, useAppDispatch } from "@/lib/ReduxSSR/hooks";
 import { setType } from "@/lib/ReduxSSR/features/searchOptionsSlice";
 import { logOutUser } from "@/lib/ReduxSSR/features/userSlice";
-
+import { setIsMobile } from "@/lib/ReduxSSR/features/windowSlice";
+//component imports
 import { navList, dashBoardNavList } from "@/app/data/nav-List";
 import Button from "../button/button";
+//hooks
+import useViewport from "@/app/hooks/useViewport";
 
 export default function Header() {
   const dispatch = useAppDispatch();
   const isLoggedIn = useAppSelector((state) => state.userInfo.isLoggedIn);
+  const isMobile = useAppSelector((state) => state.window.isMobile);
   const pathName = usePathname();
   const router = useRouter();
+  const windowSize = useViewport();
 
-  const [isMobile, setIsMobile] = useState<boolean>(false);
+
 
   const handleClickSignIn = () => {
     if (isLoggedIn) {
@@ -31,22 +36,9 @@ export default function Header() {
   const handleClickNav = () => {
     dispatch(setType(""));
   };
-
-  // move to redux??
-  useEffect(() => {
-    const removeElementWhenScreenSizeChanges = () => {
-      if (window.innerWidth < 640) {
-        setIsMobile(true);
-      }
-      if (window.innerWidth > 640) {
-        setIsMobile(false);
-      }
-    }
-    window.addEventListener("resize", removeElementWhenScreenSizeChanges);
-
-    return () => window.removeEventListener("resize", removeElementWhenScreenSizeChanges);
-  }, [])
-  console.log(`isMobile: ${isMobile}`)
+  
+  //check window size
+  windowSize.width > 768 ? dispatch(setIsMobile(false)) : dispatch(setIsMobile(true));
   return (
     <header className=" bg-white w-auto">
       <nav className="flex items-center sm:flex justify-end h-20">
