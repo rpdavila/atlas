@@ -1,5 +1,6 @@
 "use client";
-
+// react imports
+import { useState } from "react";
 //next imports
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -22,7 +23,7 @@ export default function Header() {
   const router = useRouter();
   const windowSize = useViewport();
 
-
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleClickSignIn = () => {
     if (isLoggedIn) {
@@ -36,7 +37,11 @@ export default function Header() {
   const handleClickNav = () => {
     dispatch(setType(""));
   };
-  
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   //check window size
   windowSize.width > 768 ? dispatch(setIsMobile(false)) : dispatch(setIsMobile(true));
   return (
@@ -44,13 +49,26 @@ export default function Header() {
       <nav className="flex items-center sm:flex justify-end h-20">
         {isMobile
           ? (
-            <button className="flex justify-evenly items-center flex-col mr-5 w-5 h-10">
-              <div className="bg-black w-full h-1"></div>
-              <div className="bg-black w-full h-1"></div>
-              <div className="bg-black w-full h-1"></div>
-            </button>
-          )
-          : (
+            <>
+              <button
+                className="flex justify-evenly items-center flex-col mr-5 w-5 h-10"
+                onClick={toggleMenu}
+              >
+                <span className="bg-black w-full h-0.5"></span>
+                <span className="bg-black w-full h-0.5"></span>
+                <span className="bg-black w-full h-0.5"></span>
+              </button>
+              {isMenuOpen && (
+                <div className="menu-links mt-4">
+                  <Link href="/home" onClick={toggleMenu} className="block py-2 px-4 text-sm text-black hover:bg-gray-700">Home</Link>
+                  <Link href="/about" onClick={toggleMenu} className="block py-2 px-4 text-sm text-black hover:bg-gray-700">About</Link>
+                  <Link href="/services" onClick={toggleMenu} className="block py-2 px-4 text-sm text-black hover:bg-gray-700">Services</Link>
+                  <Link href="/contact" onClick={toggleMenu} className="block py-2 px-4 text-sm text-black hover:bg-gray-700">Contact</Link>
+                  {/* Add more links as needed */}
+                </div>
+              )}
+            </>
+          ) : (
             <>
               <ul className="flex flex-row items-center w-auto">
                 {isLoggedIn ? (
