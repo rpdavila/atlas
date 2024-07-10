@@ -1,27 +1,46 @@
 "use client";
 // react imports
 import { useState } from "react";
+
 //next imports
-import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+
 //redux imports
 import { useAppSelector, useAppDispatch } from "@/lib/ReduxSSR/hooks";
-import { setType } from "@/lib/ReduxSSR/features/searchOptionsSlice";
 import { logOutUser } from "@/lib/ReduxSSR/features/userSlice";
-import { setIsMobile } from "@/lib/ReduxSSR/features/windowSlice";
-//component imports
+
+//nextui components
+import {
+  Navbar,
+  NavbarContent,
+  NavbarItem,
+  NavbarMenuToggle,
+  NavbarMenu,
+  NavbarMenuItem,
+  Link,
+  Button,
+  NavbarBrand,
+  Dropdown,
+  DropdownItem,
+  DropdownTrigger,
+  DropdownMenu
+} from "@nextui-org/react";
+
+//nav lists
 import { navList, dashBoardNavList } from "@/app/data/nav-List";
-import Button from "../button/button";
+
 //hooks
 import useViewport from "@/app/hooks/useViewport";
+
+//data import
+import { tools } from "@/app/data/tools";
 
 export default function Header() {
   const dispatch = useAppDispatch();
   const isLoggedIn = useAppSelector((state) => state.userInfo.isLoggedIn);
-  const isMobile = useAppSelector((state) => state.window.isMobile);
   const pathName = usePathname();
   const router = useRouter();
-  const windowSize = useViewport();
+
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -34,95 +53,122 @@ export default function Header() {
     }
   };
 
-  const handleClickNav = () => {
-    dispatch(setType(""));
-  };
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  // const handleClickNav = () => {
+  //   dispatch(setType(""));
+  // };
 
   //check window size
-  windowSize.width > 768 ? dispatch(setIsMobile(false)) : dispatch(setIsMobile(true));
+  // windowSize.width > 768 ? dispatch(setIsMobile(false)) : dispatch(setIsMobile(true));
   return (
     <header className=" bg-white w-auto">
-      <nav className="flex items-center sm:flex justify-end h-20">
-        {isMobile
-          ? (
-            <>
-              <button
-                className="flex justify-evenly items-center flex-col mr-5 w-5 h-10"
-                onClick={toggleMenu}
-              >
-                <span className="bg-black w-full h-0.5"></span>
-                <span className="bg-black w-full h-0.5"></span>
-                <span className="bg-black w-full h-0.5"></span>
-              </button>
-              {isMenuOpen && (
-                <div className="menu-links mt-4">
-                  <Link href="/home" onClick={toggleMenu} className="block py-2 px-4 text-sm text-black hover:bg-gray-700">Home</Link>
-                  <Link href="/about" onClick={toggleMenu} className="block py-2 px-4 text-sm text-black hover:bg-gray-700">About</Link>
-                  <Link href="/services" onClick={toggleMenu} className="block py-2 px-4 text-sm text-black hover:bg-gray-700">Services</Link>
-                  <Link href="/contact" onClick={toggleMenu} className="block py-2 px-4 text-sm text-black hover:bg-gray-700">Contact</Link>
-                  {/* Add more links as needed */}
-                </div>
-              )}
-            </>
+      <Navbar onMenuOpenChange={setIsMenuOpen}>
+        <NavbarContent>
+          <NavbarMenuToggle
+            aria-label={isMenuOpen ? "close menu" : "open menu"}
+            className="sm:hidden"
+          />
+          <NavbarBrand>
+            {/* add logo here */}
+          </NavbarBrand>
+
+        </NavbarContent>
+        <NavbarContent className="hidden sm:flex gap-4" justify="center">
+          {navList.map((items, index) => {
+            return (
+              <NavbarItem key={index}>
+                <Link href={items.href}>
+                  {items.name}
+                </Link>
+              </NavbarItem>
+            )
+          })}
+        </NavbarContent>
+        <NavbarContent className={isLoggedIn ? "sm:hidden" : "hidden"} justify="center">
+          <NavbarItem>
+            <Dropdown>
+              <DropdownTrigger>
+                <Button variant="bordered">Tools</Button>
+              </DropdownTrigger>
+              <DropdownMenu>
+                <DropdownItem
+                  key="add Student"
+                  href="./addStudentForm"
+                >
+                  Add Student
+                </DropdownItem>
+                <DropdownItem
+                  key="add instrument"
+                  href="./addInstrumentFormm"
+                >
+                  Add Student
+                </DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
+          </NavbarItem>
+        </NavbarContent>
+        {isLoggedIn ? (
+          <NavbarContent justify="end">
+            <NavbarItem>
+              <Button className="hover:bg-sky-700 hover:text-white" onClick={handleClickSignIn} color="primary" href="./register" variant="flat">
+                Sign Out
+              </Button>
+            </NavbarItem>
+          </NavbarContent>
+
+        ) : (
+          <NavbarContent justify="end">
+            <NavbarItem className="hidden lg:flex">
+              <Link href="/signIn">Sign In</Link>
+            </NavbarItem>
+            <NavbarItem>
+              <Button className="hover:bg-sky-700 hover:text-white" as={Link} color="primary" href="./register" variant="flat">
+                Register
+              </Button>
+            </NavbarItem>
+          </NavbarContent>
+        )}
+        <NavbarMenu>
+          {isLoggedIn ? (
+            dashBoardNavList.map((items, index) => {
+              return (
+                <NavbarMenuItem key={index}>
+                  <Link href={items.href}>
+                    {items.name}
+                  </Link>
+                </NavbarMenuItem>
+              )
+            })
           ) : (
             <>
-              <ul className="flex flex-row items-center w-auto">
-                {isLoggedIn ? (
-                  <>
-                    {dashBoardNavList.map((items, index) => {
-                      return (
-                        <li key={index} className="p-2">
-                          <Link
-                            onClick={handleClickNav}
-                            href={items.href}
-                            className={
-                              pathName === items.href
-                                ? "active: text-blue-700 underline underline-offset-4 "
-                                : "text-blue-500 hover:underline underline-offset-4"
-                            }
-                          >
-                            {items.name}
-                          </Link>
-                        </li>
-                      );
-                    })}
-                  </>
+              {navList.map((item, index) => {
+                return (
+                  <NavbarMenuItem key={`${item}-${index}`}>
+                    <Link
+                      color={
+                        pathName === item.href ? "secondary" : "primary"
+                      }
+                      className="w-full"
+                      href={item.href}
+                      size="lg"
+                    >
+                      {item.name}
+                    </Link>
+                  </NavbarMenuItem>
+                )
+              })}
+              <Link
+                color="danger"
+                href="./signIn"
+              >
+                Sign In
+              </Link>
 
-                ) : (
-                  <>
-                    {navList.map((items, index) => {
-                      return (
-                        <li key={index} className="p-2">
-                          <Link
-                            onClick={handleClickNav}
-                            href={items.href}
-                            className={
-                              pathName === items.href
-                                ? "active: text-blue-700 underline underline-offset-4 "
-                                : "text-blue-500 hover:underline underline-offset-4"
-                            }
-                          >
-                            {items.name}
-                          </Link>
-                        </li>
-                      );
-                    })}
-                  </>
-                )}
-                <Button
-                  type="button"
-                  name={isLoggedIn ? "Log Out" : "Log In"}
-                  marginTop="0"
-                  onClick={handleClickSignIn}
-                />
-              </ul>
             </>
           )}
-      </nav>
+        </NavbarMenu>
+
+
+      </Navbar>
     </header>
   );
 }
