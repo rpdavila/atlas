@@ -49,7 +49,7 @@ export default function InstrumentForm({
     alert(`Instrument added to database`);
   };
 
-  
+
   return (
     <div className="flex flex-col bg-white rounded-lg items-center w-full pb-2 mt-2">
       <h1 className="bg-blue-500 rounded-t-lg w-full self-center text-white text-center">

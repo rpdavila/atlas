@@ -1,6 +1,6 @@
 export const tools = [
   {key: "Add Student", label: "Add Student"},
-  {key: "Add Instrument", label: "Add Instrument"},
-  {key: "SearchStudent", label: "SearchStudent"},
+  {key: "Add Instrument", label: "Add Instrument"}, 
+  {key: "Search Student", label: "Search Student"},
   {key: "Search Instrument", label: "Search Instrument"},  
 ];

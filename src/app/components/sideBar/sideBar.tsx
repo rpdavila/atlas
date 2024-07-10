@@ -36,7 +36,7 @@ export default function SideBar() {
     }
   }
   return (
-    <aside className="flex flex-col basis-1/4 items-center m-2 rounded-lg">
+    <aside className="hidden sm:flex flex-col basis-1/4 items-center m-2 rounded-lg">
       <SelectSearchOptions>
         {getFormComponent(selectOption)}
       </SelectSearchOptions>

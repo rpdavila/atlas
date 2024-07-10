@@ -1,6 +1,6 @@
 "use client";
 // react imports
-import { useState } from "react";
+import React, { useState } from "react";
 
 //next imports
 import { usePathname, useRouter } from "next/navigation";
@@ -8,7 +8,7 @@ import { usePathname, useRouter } from "next/navigation";
 //redux imports
 import { useAppSelector, useAppDispatch } from "@/lib/ReduxSSR/hooks";
 import { logOutUser } from "@/lib/ReduxSSR/features/userSlice";
-
+import { setType } from "@/lib/ReduxSSR/features/searchOptionsSlice";
 //nextui components
 import {
   Navbar,
@@ -28,6 +28,7 @@ import {
 
 //nav lists
 import { navList, dashBoardNavList } from "@/app/data/nav-List";
+import { tools } from "@/app/data/tools";
 
 export default function Header() {
   const dispatch = useAppDispatch();
@@ -47,12 +48,15 @@ export default function Header() {
     }
   };
 
-  // const handleClickNav = () => {
-  //   dispatch(setType(""));
-  // };
+  const handleChange = (key: React.Key) => {
+    const value = key.toString()
+    dispatch(setType(value));
+    if (value === "Search Student") router.push("/dashboard/searchStudent");
+    if (value === "Search Instrument") router.push("/dashboard/searchInstrument");
+    if (value === "Add Student") router.push("/dashboard/studentForm");
+    if (value === "Add Instrument") router.push("/dashboard/instrumentForm");
+  }
 
-  //check window size
-  // windowSize.width > 768 ? dispatch(setIsMobile(false)) : dispatch(setIsMobile(true));
   return (
     <header className=" bg-white w-auto">
       <Navbar onMenuOpenChange={setIsMenuOpen}>
@@ -67,15 +71,35 @@ export default function Header() {
 
         </NavbarContent>
         <NavbarContent className="hidden sm:flex gap-4" justify="center">
-          {navList.map((items, index) => {
-            return (
-              <NavbarItem key={index}>
-                <Link href={items.href}>
-                  {items.name}
-                </Link>
-              </NavbarItem>
+          {
+            isLoggedIn ? (
+              dashBoardNavList.map((items, index) => (
+                <NavbarItem key={index}>
+                  <Link
+                    className={pathName === items.href ? "active" : ""}
+                    href={items.href}
+                  >
+                    {items.name}
+                  </Link>
+                </NavbarItem>
+              ))
+            ) : (
+              navList.map((item, index) => (
+                <NavbarItem key={`${item}-${index}`}>
+                  <Link
+                    className={pathName === item.href ? "active" : ""}
+                    color={
+                      pathName === item.href ? "secondary" : "primary"
+                    }
+                    href={item.href}
+                    size="lg"
+                  >
+                    {item.name}
+                  </Link>
+                </NavbarItem>
+              ))
             )
-          })}
+          }
         </NavbarContent>
         <NavbarContent className={isLoggedIn ? "sm:hidden" : "hidden"} justify="center">
           <NavbarItem>
@@ -83,19 +107,16 @@ export default function Header() {
               <DropdownTrigger>
                 <Button variant="bordered">Tools</Button>
               </DropdownTrigger>
-              <DropdownMenu>
-                <DropdownItem
-                  key="add Student"
-                  href="./addStudentForm"
-                >
-                  Add Student
-                </DropdownItem>
-                <DropdownItem
-                  key="add instrument"
-                  href="./addInstrumentFormm"
-                >
-                  Add Student
-                </DropdownItem>
+              <DropdownMenu
+                onAction={handleChange}
+              >
+                {tools.map((items, index) => (
+                  <DropdownItem
+                    key={items.key}
+                  >
+                    {items.label}
+                  </DropdownItem>
+                ))}
               </DropdownMenu>
             </Dropdown>
           </NavbarItem>
