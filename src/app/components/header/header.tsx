@@ -29,12 +29,6 @@ import {
 //nav lists
 import { navList, dashBoardNavList } from "@/app/data/nav-List";
 
-//hooks
-import useViewport from "@/app/hooks/useViewport";
-
-//data import
-import { tools } from "@/app/data/tools";
-
 export default function Header() {
   const dispatch = useAppDispatch();
   const isLoggedIn = useAppSelector((state) => state.userInfo.isLoggedIn);
@@ -117,7 +111,7 @@ export default function Header() {
 
         ) : (
           <NavbarContent justify="end">
-            <NavbarItem className="hidden lg:flex">
+            <NavbarItem className="hidden sm:flex">
               <Link href="/signIn">Sign In</Link>
             </NavbarItem>
             <NavbarItem>
