@@ -16,7 +16,7 @@ export default function UserDetail() {
   const userLastName = user.customUserData?.lastName as string;
 
   return (
-    <section className="flex justify-center text-2xl  bg-white rounded-lg h-full">
+    <section className="flex justify-center text-2xl  bg-white rounded-lg basis-3/4">
       <h1>
         Hello {userFirstName} {userLastName}
       </h1>

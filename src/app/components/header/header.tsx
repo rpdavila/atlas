@@ -63,14 +63,14 @@ export default function Header() {
         <NavbarContent>
           <NavbarMenuToggle
             aria-label={isMenuOpen ? "close menu" : "open menu"}
-            className="sm:hidden"
+            className="md:hidden"
           />
           <NavbarBrand>
             {/* add logo here */}
           </NavbarBrand>
 
         </NavbarContent>
-        <NavbarContent className="hidden sm:flex gap-4" justify="center">
+        <NavbarContent className="hidden md:flex gap-4" justify="center">
           {
             isLoggedIn ? (
               dashBoardNavList.map((items, index) => (
@@ -101,7 +101,7 @@ export default function Header() {
             )
           }
         </NavbarContent>
-        <NavbarContent className={isLoggedIn ? "sm:hidden" : "hidden"} justify="center">
+        <NavbarContent className={isLoggedIn ? "md:hidden" : "hidden"} justify="center">
           <NavbarItem>
             <Dropdown>
               <DropdownTrigger>

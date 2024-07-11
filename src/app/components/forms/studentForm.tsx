@@ -6,9 +6,9 @@ import { useAppDispatch, useAppSelector } from "@/lib/ReduxSSR/hooks";
 import { setSearch } from "@/lib/ReduxSSR/features/searchOptionsSlice";
 import { addStudent } from "@/lib/ReduxSSR/features/studentListSlice";
 //component imports
-import TextInput from "../input/customTextInput";
-import Button from "../button/button";
+
 import { StudentInfo } from "@/app/types/formTypes";
+import { Input, Button } from "@nextui-org/react";
 
 type StudentFormProps = {
   formTitle: string;
@@ -51,12 +51,12 @@ export default function StudentForm({
   };
 
   return (
-    <div className="flex flex-col bg-white rounded-lg items-center w-full pb-2 mt-2">
+    <div className="flex flex-col bg-white rounded-lg items-center mt-2 w-full h-screen md:h-auto">
       <h1 className="bg-blue-500 rounded-t-lg w-full self-center text-white text-center">
         {formTitle}
       </h1>
-
-      {selectOption === "Search Student" && (
+      {/* Move to searchStudent Component */}
+      {/* {selectOption === "Search Student" && (
         <div>
           <TextInput
             labelName="Search"
@@ -67,42 +67,81 @@ export default function StudentForm({
             onChange={handleChange}
           />
         </div>
-      )}
+      )} */}
       {selectOption === "Add Student" && (
-        <div>
-          <TextInput
-            labelName="First Name"
-            type="text"
+        <div className="flex flex-col justify-center items-center w-1/2 gap-4 mt-20 sm:w-full md:w-full md:mt-2">
+          <Input
             name="firstName"
+            label="First Name"
+            labelPlacement="outside"
+            placeholder="Enter first name"
+            variant="bordered"
             value={studentInfo.firstName}
-            placeHolder="First Name"
             onChange={handleChange}
+            isClearable
+            onClear={() => setStudentInfo({ ...studentInfo, firstName: "" })}
+            className="w-full"
           />
-          <TextInput
-            type="text"
-            labelName="Last Name"
+
+          <Input
             name="lastName"
+            label="Last Name"
+            labelPlacement="outside"
+            placeholder="Enter last name"
+            variant="bordered"
             value={studentInfo.lastName}
-            placeHolder="Last Name"
             onChange={handleChange}
+            isClearable
+            onClear={() => setStudentInfo({ ...studentInfo, lastName: "" })}
+            className="w-full"
           />
-          <TextInput
-            labelName="Student ID Number"
-            type="text"
+
+          <Input
             name="studentIdNumber"
+            label="Student Id Number"
+            labelPlacement="outside"
+            placeholder="Enter Student Id Number"
+            variant="bordered"
             value={studentInfo.studentIdNumber}
-            placeHolder="Student ID Number"
             onChange={handleChange}
+            isClearable
+            onClear={() => setStudentInfo({ ...studentInfo, lastName: "" })}
+            className="w-full"
           />
 
           <Button
-            type="submit"
-            marginTop="5"
-            name={studentInfoLoading ? "Submitting" : buttonText}
+            className="w-full md:rounded-lg"
+            color="primary"
+            isLoading={studentInfoLoading}
             onClick={handleAddStudent}
-          />
+            spinner={
+              <svg
+                className="animate-spin h-5 w-5 text-current"
+                fill="none"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
+                <path
+                  className="opacity-75"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  fill="currentColor"
+                />
+              </svg>
+            }
+          >
+            {studentInfoLoading ? "Submitting" : "Submit"}
+          </Button>
         </div>
       )}
+
     </div>
   );
 }

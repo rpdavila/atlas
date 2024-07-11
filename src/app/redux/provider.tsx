@@ -11,20 +11,17 @@ import { NextUIProvider } from "@nextui-org/react";
 
 
 export function Providers(
-  { 
-    children   
-  }: 
-  { 
-    children: React.ReactNode,    
-  }) {
+  {
+    children
+  }:
+    {
+      children: React.ReactNode,
+    }) {
   const storeRef = useRef<AppStore>();
   const router = useRouter();
   if (!storeRef.current) {
     // Create the store instance the first time it renders
     storeRef.current = makeStore();
-    storeRef.current.dispatch(getStudents());
-    storeRef.current.dispatch(getDropDownList());
-    storeRef.current.dispatch(getInstruments());
   }
 
 
