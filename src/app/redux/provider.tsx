@@ -22,6 +22,9 @@ export function Providers(
   if (!storeRef.current) {
     // Create the store instance the first time it renders
     storeRef.current = makeStore();
+    storeRef.current.dispatch(getInstruments());
+    storeRef.current.dispatch(getStudents());
+    storeRef.current.dispatch(getDropDownList());
   }
 
 

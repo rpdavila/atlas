@@ -51,7 +51,7 @@ export const addStudent = createAsyncThunk(
   "studentList/addStudent",
   async (studentDetails: StudentInfo) => {
     try {
-      return studentCollection?.insertOne({
+      return await studentCollection?.insertOne({
         firstName: studentDetails.firstName,
         lastName: studentDetails.lastName,
         studentIdNumber: studentDetails.studentIdNumber,

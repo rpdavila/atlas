@@ -166,6 +166,18 @@ export const instrumentDetailsSlice = createSlice({
           loading: false,
         }
       })
+      .addCase(addInstrument.pending, (state) => {
+        return {
+          ...state,
+          loading: true
+        }
+      })
+      .addCase(addInstrument.fulfilled, (state) => {
+        return {
+          ...state,
+          loading: false
+        }
+      })  
   },
 });
 export default instrumentDetailsSlice.reducer;

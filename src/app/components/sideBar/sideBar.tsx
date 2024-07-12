@@ -19,7 +19,6 @@ export default function SideBar() {
         return (
           <InstrumentForm
             formTitle="Search Instrument"
-            buttonText="Search Instrument"
           />
         );
 
@@ -30,7 +29,6 @@ export default function SideBar() {
         return (
           <InstrumentForm
             formTitle="Add Instrument"
-            buttonText="Add Instrument"
           />
         );
     }
