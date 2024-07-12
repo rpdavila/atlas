@@ -1,15 +1,19 @@
 "use client";
 //react imports
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+
+//nextjs imports
+import { usePathname, useRouter } from "next/navigation";
+
 // redux imports
 import { useAppDispatch, useAppSelector } from "@/lib/ReduxSSR/hooks";
 import { setSearch } from "@/lib/ReduxSSR/features/searchOptionsSlice";
 import { addStudent } from "@/lib/ReduxSSR/features/studentListSlice";
 //component imports
-
 import { StudentInfo } from "@/app/types/formTypes";
 import { Input, Button } from "@nextui-org/react";
-
+//hooks imports
+import useViewport from "@/app/hooks/useViewport";
 type StudentFormProps = {
   formTitle: string;
   buttonText: string;
@@ -19,6 +23,8 @@ export default function StudentForm({
   formTitle,
   buttonText,
 }: StudentFormProps) {
+  const router = useRouter();
+  const pathName = usePathname();
   const dispatch = useAppDispatch();
   const selectOption = useAppSelector((state) => state.searchOptions.type);
   const searchResult = useAppSelector((state) => state.searchOptions.search);
@@ -31,7 +37,7 @@ export default function StudentForm({
   };
 
   const [studentInfo, setStudentInfo] = useState<StudentInfo>(initialState);
-
+  const viewPort = useViewport();
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     selectOption === "Search Student"
@@ -69,7 +75,7 @@ export default function StudentForm({
         </div>
       )} */}
       {selectOption === "Add Student" && (
-        <div className="flex flex-col justify-center items-center w-1/2 gap-4 mt-20 sm:w-full md:w-full md:mt-2">
+        <div className="flex flex-col justify-center items-center w-2/3 gap-4 mt-20 sm:w-2/3 md:w-full md:mt-2">
           <Input
             name="firstName"
             label="First Name"
