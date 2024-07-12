@@ -12,7 +12,7 @@ export default function SideBar() {
     switch (selectOption) {
       case "Search Student":
         return (
-          <StudentForm formTitle="Search Student" buttonText="Search Student" />
+          <StudentForm formTitle="Search Student" />
         );
 
       case "Search Instrument":
@@ -23,7 +23,7 @@ export default function SideBar() {
         );
 
       case "Add Student":
-        return <StudentForm formTitle="Add Student" buttonText="Add Student" />;
+        return <StudentForm formTitle="Add Student" />;
 
       case "Add Instrument":
         return (
