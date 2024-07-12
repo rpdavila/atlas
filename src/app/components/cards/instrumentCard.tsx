@@ -85,7 +85,7 @@ export default function InstrumentCard({ instrument }: CardProps) {
 
   }
   return (
-    <div className="flex flex-col items-center w-full sm:flex-row justify-evenly bg-white sm:w-3/4 rounded-lg m-2">
+    <section className="flex flex-col items-center w-full justify-evenly bg-white sm:flex-row sm:w-full rounded-lg">
       <div className="flex flex-col w-auto sm:w-1/3 justify-center items-start m-6 ">
         <p>
           <strong>Instrument type: </strong>
@@ -131,6 +131,7 @@ export default function InstrumentCard({ instrument }: CardProps) {
           placeHolder="Assign Student"
         />
       )}
-    </div>
+    </section>
+
   );
 }

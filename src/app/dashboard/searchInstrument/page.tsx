@@ -8,6 +8,7 @@ import { useAppSelector, useAppDispatch } from "@/lib/ReduxSSR/hooks";
 import SearchInstrument from "@/app/components/searchInstruments/searchInstruments"
 import { getInstruments, setInstrumentsInitialized } from "@/lib/ReduxSSR/features/instrumentSLice";
 import { getStudents, getDropDownList, setStudentsInitialized } from "@/lib/ReduxSSR/features/studentListSlice";
+import InstrumentSearchForm from "@/app/components/forms/instrumentSearchFrom";
 
 export default function InstrumentPage() {
   const dispatch = useAppDispatch();
@@ -29,7 +30,7 @@ export default function InstrumentPage() {
   }, [dispatch, instrumentsInitialized, studentsInitialized])
   return (
     <>
-      <SearchInstrument displayInstruments={displayInstruments}  />
+      <SearchInstrument displayInstruments={displayInstruments} />      
     </>
   )
 }

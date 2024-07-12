@@ -10,9 +10,7 @@ import { addInstrument } from "@/lib/ReduxSSR/features/instrumentSLice";
 //compnent imports
 import { Input, Button, Select, SelectItem } from "@nextui-org/react";
 import { InstrumentDetails, RentStatus } from "@/app/types/formTypes";
-
-
-
+import InstrumentSearchForm from "./instrumentSearchFrom";
 
 export default function InstrumentForm({
   formTitle,
@@ -65,20 +63,10 @@ export default function InstrumentForm({
       <h1 className="bg-blue-500 rounded-t-lg w-full self-center text-white text-center">
         {formTitle}
       </h1>
-      {selectOption === "Search Instrument" && (
-        <section>
-          <Input
-            name="search"
-            label="Search"
-            labelPlacement="outside"
-            value={searchResult}
-            placeholder="Search Instrument"
-            onChange={handleChange}
-            isClearable
-            onClear={() => dispatch(setSearch(""))}
-          />
-        </section>
-      )}
+      <section className="w-full">
+        <InstrumentSearchForm />
+      </section>
+
       {selectOption === "Add Instrument" && (
         <div className="flex flex-col justify-center items-center w-2/3 gap-4 mt-20 sm:w-2/3 md:w-full md:mt-2">
           <Input

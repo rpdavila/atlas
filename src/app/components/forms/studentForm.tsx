@@ -1,6 +1,6 @@
 "use client";
 //react imports
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 //nextjs imports
 import { usePathname, useRouter } from "next/navigation";
@@ -16,12 +16,10 @@ import { Input, Button } from "@nextui-org/react";
 import useViewport from "@/app/hooks/useViewport";
 type StudentFormProps = {
   formTitle: string;
-  buttonText: string;
 };
 
 export default function StudentForm({
-  formTitle,
-  buttonText,
+  formTitle
 }: StudentFormProps) {
   const router = useRouter();
   const pathName = usePathname();
@@ -61,19 +59,21 @@ export default function StudentForm({
       <h1 className="bg-blue-500 rounded-t-lg w-full self-center text-white text-center">
         {formTitle}
       </h1>
-      {/* Move to searchStudent Component */}
-      {/* {selectOption === "Search Student" && (
-        <div>
-          <TextInput
-            labelName="Search"
-            type="text"
+
+      {selectOption === "Search Student" && (
+        <section>
+          <Input
             name="search"
+            label="Search"
+            labelPlacement="outside"
             value={searchResult}
-            placeHolder="Search Student"
+            placeholder="Search Student"
             onChange={handleChange}
+            isClearable
+            onClear={() => dispatch(setSearch(""))}
           />
-        </div>
-      )} */}
+        </section>
+      )}
       {selectOption === "Add Student" && (
         <div className="flex flex-col justify-center items-center w-2/3 gap-4 mt-20 sm:w-2/3 md:w-full md:mt-2">
           <Input
