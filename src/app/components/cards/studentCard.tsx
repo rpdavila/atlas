@@ -7,36 +7,45 @@ type StudentCardProps = {
 export default function StudentCard({ student }: StudentCardProps) {
   return (
     <>
-      <div className="flex flex-col sm:flex-row w-full bg-white rounded-lg p-2">
-        <div className="flex flex-row items-center justify-between w-full basis-3/4">
-          <div className="flex flex-col">
-            <h1 className="text-2xl font-bold">
-              {student.firstName} {student.lastName}
-            </h1>
-            <p>
-              <strong>Student Id : </strong>
-              {student.studentIdNumber}
-            </p>
-          </div>
-          {student.instrument ? (
-            <div className="flex flex-col">
-              <p>
+      <div className="container grid grid-cols-2 grid-rows-4 justify-center items-center bg-white rounded-lg">
+        <div className="flex justify-center col-span-2 border-cyan-600 border-b-small">
+          <h1 className="text-2xl font-bold">
+            {student.firstName} {student.lastName}
+          </h1>
+        </div>
+        <div className="flex justify-center col-span-2 border-cyan-600 border-b-small">
+          <p>
+            <strong>Student Id: </strong>
+            {student.studentIdNumber}
+          </p>
+        </div>
+        {student.instrument ? (
+          <>
+            <section className="flex flex-row justify-center border-cyan-600 border-b-small">
+              <p >
                 <strong>Type: </strong>
                 {student.instrument?.classification}
               </p>
+            </section>
+            <section className="flex justify-center border-cyan-600 border-b-small">
               <p>
                 <strong>Brand: </strong>
                 {student.instrument?.brand}
               </p>
-              <p>
+            </section>
+            <section className="flex justify-center col-span-2">
+              <p >
                 <strong>Serial Number: </strong>
                 {student.instrument.serialNumber}
               </p>
-            </div>
-          ) : (
-            "No instrument assigned"
-          )}
-        </div>
+            </section>
+          </>
+
+        ) : (
+          <div className="flex justify-center col-span-2 row-span-2">
+            <span>No instrument assigned</span>
+          </div>
+        )}
       </div>
     </>
   );
