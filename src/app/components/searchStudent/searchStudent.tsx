@@ -44,7 +44,7 @@ export default function SearchStudent() {
   }
 
   return (
-    <section className="flex flex-col basis-3/4 w-full items-center justify-between p-1 gap-1">
+    <section className="flex flex-col basis-3/4 w-full items-center p-1 gap-1">
       <section className="flex w-full md:hidden">
         <StudentSearchForm />
       </section>
