@@ -59,7 +59,7 @@ export default function InstrumentForm({
     setInstrumentDetails({ ...instrumentDetails, [name]: value });
   };
   return (
-    <div className="flex flex-col bg-white rounded-lg items-center w-full h-screen md:h-auto">
+    <div className="flex flex-col bg-white rounded-lg items-center w-full h-screen md:h-auto mt-2">
       <h1 className="bg-blue-500 rounded-t-lg w-full self-center text-white text-center">
         {formTitle}
       </h1>
