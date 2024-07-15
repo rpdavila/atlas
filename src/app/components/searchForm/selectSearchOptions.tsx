@@ -39,7 +39,7 @@ export default function SelectSearchOptions({ children }: SearchOptionProps) {
       <div className="hidden sm:flex w-full">
         <Select
           label="Tools"
-          className="max-w-xs"
+          className="max-w-screen-xl"
           onChange={handleChange}
         >
           {tools.map((tool) => (

@@ -12,6 +12,7 @@ import { UnknownAction } from "@reduxjs/toolkit";
 import StudentCardList from "../../components/card-list/studentCardList";
 import { StudentInfo, StudentList } from "@/app/types/formTypes";
 import Loading from "../loading/loading";
+import StudentSearchForm from "../forms/studentSearchForm";
 
 export default function SearchStudent() {
   const store = useAppStore();
@@ -32,7 +33,7 @@ export default function SearchStudent() {
     (state: RootState) => state.searchOptions.search
   );
 
-  if (displayStudents) {
+  if (!!displayStudents) {
     studentSearchResults = displayStudents.filter((student: StudentInfo) => {
       return (
         student.firstName?.includes(searchField) ||
@@ -43,7 +44,10 @@ export default function SearchStudent() {
   }
 
   return (
-    <section className="flex flex-col basis-3/4 w-full items-center justify-between">
+    <section className="flex flex-col basis-3/4 w-full items-center justify-between p-1 gap-1">
+      <section className="flex w-full md:hidden">
+        <StudentSearchForm />
+      </section>
       <StudentCardList studentSearchResult={studentSearchResults} />
     </section>
   );

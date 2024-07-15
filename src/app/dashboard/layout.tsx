@@ -7,7 +7,7 @@ export default async function DashboardLayout({
 }) {
 
   return (
-    <section className="flex flex-col  bg-slate-700 sm:flex-row sm:justify-center w-full gap-2 md:w-full">
+    <section className="flex flex-col  bg-slate-700 w-full sm:flex-row sm:justify-center md:w-full">
       <section className="hidden md:flex flex-row basis-1/4">
         <SideBar />
       </section>

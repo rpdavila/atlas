@@ -4,7 +4,7 @@ import { Input } from "@nextui-org/react";
 //redux imports
 import { useAppDispatch, useAppSelector } from "@/lib/ReduxSSR/hooks";
 import { setSearch } from "@/lib/ReduxSSR/features/searchOptionsSlice";
-export default function InstrumentSearchForm() {
+export default function StudentSearchForm() {
   const dispatch = useAppDispatch()
   const selectOption = useAppSelector((state) => state.searchOptions.type);
   const searchResult = useAppSelector((state) => state.searchOptions.search);
@@ -14,16 +14,17 @@ export default function InstrumentSearchForm() {
   };
   return (
     <>
-      {selectOption === "Search Instrument" && (
+      {selectOption === "Search Student" && (
         <Input
           name="search"
           label="Search"
           labelPlacement="inside"
           value={searchResult}
-          placeholder="Search Instrument"
+          placeholder="Search Student"
           onChange={handleChange}
           isClearable
           onClear={() => dispatch(setSearch(""))}
+          className="sm:mt-2"
         />
       )}
     </>
