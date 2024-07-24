@@ -24,13 +24,13 @@ export default function StudentCard({ student }: StudentCardProps) {
             <section className="flex flex-row justify-center border-cyan-600 border-b-small">
               <p >
                 <strong>Type: </strong>
-                {student.instrument?.classification}
+                {student.instrument.classification}
               </p>
             </section>
             <section className="flex justify-center border-cyan-600 border-b-small">
               <p>
                 <strong>Brand: </strong>
-                {student.instrument?.brand}
+                {student.instrument.brand}
               </p>
             </section>
             <section className="flex justify-center col-span-2">

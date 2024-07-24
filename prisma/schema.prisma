@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+type InstrumentInfoAssignedTo {
+  firstName       String
+  lastName        String
+  studentIdNumber String
+}
+
+type StudentInfoInstrument {
+  brand          String?
+  classification String?
+  serialNumber   String?
+}
+
+model instrumentInfo {
+  id             String                    @id @default(auto()) @map("_id") @db.ObjectId
+  assignedTo     InstrumentInfoAssignedTo?
+  brand          String
+  classification String
+  rentStatus     String
+  serialNumber   String
+  teacherId      String?
+}
+
+model studentInfo {
+  id              String                 @id @default(auto()) @map("_id") @db.ObjectId
+  firstName       String
+  instrument      StudentInfoInstrument?
+  lastName        String
+  studentIdNumber String
+}
+
+model users {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  district  String
+  firstName String
+  lastName  String
+  role      String
+  school    String[]
+  userId    String
+}

@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@nextui-org/react": "^2.4.2",
+    "@nextui-org/use-infinite-scroll": "^2.1.5",
+    "@prisma/client": "^5.17.0",
     "@reduxjs/toolkit": "^2.2.3",
     "@types/redux-logger": "^3.0.10",
     "bcrypt": "^5.1.1",
@@ -32,6 +34,7 @@
     "eslint": "latest",
     "eslint-config-next": "^14.2.3",
     "postcss": "^8.4.39",
+    "prisma": "^5.17.0",
     "tailwindcss": "^3.4.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.2"

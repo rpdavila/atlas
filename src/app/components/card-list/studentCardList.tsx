@@ -3,7 +3,7 @@ import { StudentList } from "@/app/types/formTypes";
 import StudentCard from "../cards/studentCard";
 
 type CardListProps = {
-  studentSearchResult: StudentList;
+  studentSearchResult: StudentList
 };
 
 export default function StudentCardList({
@@ -12,7 +12,7 @@ export default function StudentCardList({
   return (
     <>
       {studentSearchResult.map((items) => {
-        return <StudentCard key={items._id} student={items} />;
+        return <StudentCard key={items.id} student={items} />;
       })}
     </>
   );

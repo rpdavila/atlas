@@ -1,89 +1,40 @@
-"use client";
-
+// react imports
+import { useState } from "react";
 //redux imports
-import { useAppDispatch, useAppSelector } from "@/lib/ReduxSSR/hooks";
-import { addStudentToInstrument, getInstruments, unassignStudentFromInstrument } from "@/lib/ReduxSSR/features/instrumentSLice";
-import { assignInstrumentToStudent, getDropDownList, getStudents, unassignInstrumentFromStudent } from "@/lib/ReduxSSR/features/studentListSlice";
+// import { useAppDispatch, useAppSelector } from "@/lib/ReduxSSR/hooks";
+// import { addStudentToInstrument, getInstruments, unassignStudentFromInstrument } from "@/lib/ReduxSSR/features/instrumentSLice";
+// import { assignInstrumentToStudent, getDropDownList, getStudents, unassignInstrumentFromStudent } from "@/lib/ReduxSSR/features/studentListSlice";
 
 // type imports
-import { InstrumentDetails, StudentInfo } from "@/app/types/formTypes";
+import { InstrumentDetails, StudentInfo, StudentList } from "@/app/types/formTypes";
 //component imports
-import Select from "../input/customSelection";
 import Button from "../button/button";
-
+import { Select, SelectItem } from "@nextui-org/react";
+import { useInfiniteScroll } from "@nextui-org/use-infinite-scroll";
+import { useStudentList } from "@/app/hooks/useStudentList";
+// server action
+import { getStudents, updateInstrument } from "@/actions/actions";
+import InstrumentSearchForm from "../forms/instrumentSearchFrom";
 type CardProps = {
   instrument: InstrumentDetails;
+  hasMore: boolean;
+  isLoading: boolean;
+  studentDropDownList: StudentList,
+  onLoadMore: () => void;
 };
 
-export default function InstrumentCard({ instrument }: CardProps) {
-  const dispatch = useAppDispatch();
-  const displayInstruments = useAppSelector(
-    (state) => state.instruments.instrumentList
-  );
-  const displayStudents = useAppSelector(
-    (state) => state.students.dropDownList
-  );
-  const handleSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
-
-    const value = event.target.value.split(" ");
-    // get a matching student
-    const matchingStudent = displayStudents.find((student: StudentInfo) => {
-      if (student.firstName === value[0] && student.lastName === value[1]) {
-        return student
-      }
-    });
-
-    //get a matching instrument
-    const matchingInstrument = displayInstruments.find((item: InstrumentDetails) => {
-      if (item._id === instrument._id) {
-        return item;
-      }
-    });
+export default function InstrumentCard({ instrument, hasMore, isLoading, onLoadMore, studentDropDownList }: CardProps) {
+  const [isOpen, setIsOpen] = useState(false);
 
 
-    // dispatch and add the student to instrument collection
-    await dispatch(
-      addStudentToInstrument({
-        serialNumber: matchingInstrument?.serialNumber,
-        student: {
-          firstName: matchingStudent?.firstName,
-          lastName: matchingStudent?.lastName,
-          studentIdNumber: matchingStudent?.studentIdNumber
-        }
-      })
-    );
 
-    // dispatch and add instrument to the student collection
-    await dispatch(
-      assignInstrumentToStudent({
-        studentIdNumber: matchingStudent?.studentIdNumber,
-        instrument: {
-          classification: matchingInstrument?.classification,
-          brand: matchingInstrument?.brand,
-          serialNumber: matchingInstrument?.serialNumber,
-        }
-      })
-    );
+  const [, scrollerRef] = useInfiniteScroll({
+    hasMore,
+    isEnabled: isOpen,
+    shouldUseLoader: false,
+    onLoadMore,
+  });
 
-    // get updated instrument list
-    await dispatch(getInstruments())
-
-    // get updated student list
-    await dispatch(getStudents())
-
-    // update the dropDownList
-    await dispatch(getDropDownList())
-  };
-
-  const handleUnassignStudent = async (instrumentSerialNumber: string | undefined, studentIdNumber: string | undefined) => {
-
-    await dispatch(unassignStudentFromInstrument(instrumentSerialNumber))
-    await dispatch(unassignInstrumentFromStudent(studentIdNumber))
-    await dispatch(getInstruments())
-    await dispatch(getStudents())
-    await dispatch(getDropDownList())
-
-  }
   return (
     <section className="flex flex-col items-center w-full justify-evenly bg-white sm:flex-row sm:w-full rounded-lg">
       <div className="flex flex-col w-auto sm:w-1/3 justify-center items-start m-6 ">
@@ -120,16 +71,28 @@ export default function InstrumentCard({ instrument }: CardProps) {
             <strong>Student Id Number: </strong>
             {instrument.assignedTo?.studentIdNumber}
           </p>
-          <Button type="button" name="Unassign Student" marginTop="0" onClick={() => handleUnassignStudent(instrument.serialNumber, instrument.assignedTo?.studentIdNumber)} />
+          <Button type="submit" name="Unassign Student" loadingName="Unassigning Student..." marginTop="0" />
         </div>
 
       ) : (
+
         <Select
-          category="Available Students"
-          options={displayStudents}
-          onChange={handleSelect}
-          placeHolder="Assign Student"
-        />
+          isLoading={isLoading}
+          items={studentDropDownList as StudentList}
+          label="Assign Student"
+          placeholder="Assign Student"
+          scrollRef={scrollerRef}
+          selectionMode="single"
+          onOpenChange={setIsOpen}
+          className="max-w-xs"
+
+        >
+          {(item) => (
+            <SelectItem key={item.studentIdNumber} textValue={`${item.firstName} ${item.lastName}`}>
+              {item.firstName} {item.lastName}
+            </SelectItem>
+          )}
+        </Select>
       )}
     </section>
 

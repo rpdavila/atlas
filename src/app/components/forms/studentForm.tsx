@@ -1,19 +1,19 @@
 "use client";
 //react imports
-import React, { useState } from "react";
-
-//nextjs imports
-import { usePathname, useRouter } from "next/navigation";
+import React, { useRef } from "react";
 
 // redux imports
-import { useAppDispatch, useAppSelector } from "@/lib/ReduxSSR/hooks";
-import { setSearch } from "@/lib/ReduxSSR/features/searchOptionsSlice";
-import { addStudent } from "@/lib/ReduxSSR/features/studentListSlice";
+import { useAppSelector } from "@/lib/ReduxSSR/hooks";
+
 //component imports
-import { StudentInfo } from "@/app/types/formTypes";
-import { Input, Button } from "@nextui-org/react";
+import { Input } from "@nextui-org/react";
+import Button from "../button/button";
 //hooks imports
-import useViewport from "@/app/hooks/useViewport";
+import StudentSearchForm from "./studentSearchForm";
+
+//server actions
+import { addStudent } from "@/actions/actions";
+
 type StudentFormProps = {
   formTitle: string;
 };
@@ -21,71 +21,37 @@ type StudentFormProps = {
 export default function StudentForm({
   formTitle
 }: StudentFormProps) {
-  const router = useRouter();
-  const pathName = usePathname();
-  const dispatch = useAppDispatch();
+  
+  const ref = useRef<HTMLFormElement>(null)
   const selectOption = useAppSelector((state) => state.searchOptions.type);
-  const searchResult = useAppSelector((state) => state.searchOptions.search);
-  const studentInfoLoading = useAppSelector((state) => state.students.loading);
-  const initialState: StudentInfo = {
-    firstName: "",
-    lastName: "",
-    studentIdNumber: "",
-    instrument: undefined,
-  };
 
-  const [studentInfo, setStudentInfo] = useState<StudentInfo>(initialState);
-  const viewPort = useViewport();
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    selectOption === "Search Student"
-      ? dispatch(setSearch(value))
-      : setStudentInfo({ ...studentInfo, [name]: value });
-  };
-
-  const handleAddStudent = async () => {
-    await dispatch(
-      addStudent({
-        firstName: studentInfo.firstName,
-        lastName: studentInfo.lastName,
-        studentIdNumber: studentInfo.studentIdNumber,
-      })
-    );
-    setStudentInfo(initialState);
-  };
 
   return (
     <div className="flex flex-col bg-white rounded-lg items-center mt-2 w-full h-screen md:h-auto">
       <h1 className="bg-blue-500 rounded-t-lg w-full self-center text-white text-center">
         {formTitle}
       </h1>
-
       {selectOption === "Search Student" && (
         <section>
-          <Input
-            name="search"
-            label="Search"
-            labelPlacement="outside"
-            value={searchResult}
-            placeholder="Search Student"
-            onChange={handleChange}
-            isClearable
-            onClear={() => dispatch(setSearch(""))}
-          />
+          <StudentSearchForm />
         </section>
       )}
       {selectOption === "Add Student" && (
-        <div className="flex flex-col justify-center items-center w-2/3 gap-4 mt-20 sm:w-2/3 md:w-full md:mt-2">
+        <form
+          className="flex flex-col justify-center items-center w-2/3 gap-4 mt-20 sm:w-2/3 md:w-full md:mt-2"
+          ref={ref}
+          action={async formData => {
+            ref.current?.reset();
+            await addStudent(formData);
+          }}
+        >
           <Input
             name="firstName"
             label="First Name"
             labelPlacement="outside"
             placeholder="Enter first name"
             variant="bordered"
-            value={studentInfo.firstName}
-            onChange={handleChange}
             isClearable
-            onClear={() => setStudentInfo({ ...studentInfo, firstName: "" })}
             className="w-full"
           />
 
@@ -95,10 +61,7 @@ export default function StudentForm({
             labelPlacement="outside"
             placeholder="Enter last name"
             variant="bordered"
-            value={studentInfo.lastName}
-            onChange={handleChange}
             isClearable
-            onClear={() => setStudentInfo({ ...studentInfo, lastName: "" })}
             className="w-full"
           />
 
@@ -108,46 +71,17 @@ export default function StudentForm({
             labelPlacement="outside"
             placeholder="Enter Student Id Number"
             variant="bordered"
-            value={studentInfo.studentIdNumber}
-            onChange={handleChange}
             isClearable
-            onClear={() => setStudentInfo({ ...studentInfo, lastName: "" })}
             className="w-full"
           />
 
           <Button
-            className="w-full md:rounded-lg"
-            color="primary"
-            isLoading={studentInfoLoading}
-            onClick={handleAddStudent}
-            spinner={
-              <svg
-                className="animate-spin h-5 w-5 text-current"
-                fill="none"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                />
-                <path
-                  className="opacity-75"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  fill="currentColor"
-                />
-              </svg>
-            }
-          >
-            {studentInfoLoading ? "Submitting" : "Submit"}
-          </Button>
-        </div>
+            type="submit"
+            name="Add Student"
+            loadingName="Adding Student"
+          />
+        </form>
       )}
-
     </div>
   );
 }

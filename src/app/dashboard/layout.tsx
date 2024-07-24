@@ -1,5 +1,6 @@
 import SideBar from "../components/sideBar/sideBar";
-
+import { Suspense } from "react";
+import Loading from "@/app/components/loading/loading";
 export default async function DashboardLayout({
   children, // will be a page or nested layout
 }: {
@@ -11,7 +12,7 @@ export default async function DashboardLayout({
       <section className="hidden md:flex flex-row basis-1/4">
         <SideBar />
       </section>
-      {children}
+      <Suspense fallback={<Loading />}>{children}</Suspense>
     </section>
   );
 }

@@ -1,18 +1,20 @@
+"use client";
 //redux imports
 import { useAppSelector } from "@/lib/ReduxSSR/hooks";
 import { RootState } from "@/lib/ReduxSSR/store";
 
 //component imports
 import InstrumentCardList from "@/app/components/card-list/instrumentCardList";
-import { InstrumentList, InstrumentDetails } from "@/app/types/formTypes";
+import { InstrumentList, InstrumentDetails, StudentList } from "@/app/types/formTypes";
 import InstrumentSearchForm from "../forms/instrumentSearchFrom";
 
 
 export default function SearchInstrument(
   {
-    displayInstruments
+    displayInstruments    
   }: {
     displayInstruments: InstrumentList
+
   }) {
 
   // grab searchfield
@@ -39,8 +41,6 @@ export default function SearchInstrument(
         <InstrumentSearchForm />
       </section>
       <InstrumentCardList instrumentSearchResults={instrumentSearchResults} />
-
-
     </section>
   );
 }

@@ -1,34 +1,25 @@
 "use client"
-// react imports
-import { useRef } from "react";
-
 //redux imports
 import { useAppSelector, useAppDispatch, useAppStore } from "@/lib/ReduxSSR/hooks";
 import { RootState } from "@/lib/ReduxSSR/store";
-import { getStudents } from "@/lib/ReduxSSR/features/studentListSlice";
-import { UnknownAction } from "@reduxjs/toolkit";
+// import { getStudents } from "@/lib/ReduxSSR/features/studentListSlice";
+// import { UnknownAction } from "@reduxjs/toolkit";
 
 //component imports
 import StudentCardList from "../../components/card-list/studentCardList";
 import { StudentInfo, StudentList } from "@/app/types/formTypes";
-import Loading from "../loading/loading";
 import StudentSearchForm from "../forms/studentSearchForm";
 
-export default function SearchStudent() {
-  const store = useAppStore();
-  const initialized = useRef(false);
-  if (!initialized.current) {
-    store.dispatch(getStudents() as unknown as UnknownAction);
-    initialized.current = true;
+export default function SearchStudent(
+  {
+    displayStudents
+  }: {
+    displayStudents: StudentList
   }
+) {
 
   let studentSearchResults: StudentList = [];
-
-  // Grab student list in store
-  const displayStudents: StudentList = useAppSelector(
-    (state: RootState) => state.students.studentList
-  );
-  // grab searchfield
+  //grab searchfield
   const searchField: string = useAppSelector(
     (state: RootState) => state.searchOptions.search
   );
@@ -36,9 +27,9 @@ export default function SearchStudent() {
   if (!!displayStudents) {
     studentSearchResults = displayStudents.filter((student: StudentInfo) => {
       return (
-        student.firstName?.includes(searchField) ||
-        student.lastName?.includes(searchField) ||
-        student.studentIdNumber?.includes(searchField)
+        student.firstName.includes(searchField) ||
+        student.lastName.includes(searchField) ||
+        student.studentIdNumber.includes(searchField)
       );
     });
   }
