@@ -1,3 +1,7 @@
+import { RentStatus as PrismaRentStatus } from 'c:/Users/rafae/nodeProjects/atlas/node_modules/.prisma/client/index';
+
+export type RentStatus = PrismaRentStatus;
+
 export type UserInformation = {
   id: string | undefined;
   isLoggedIn: boolean | undefined;
@@ -22,36 +26,36 @@ export enum UserRole {
 }
 
 export type InstrumentDetails = {
-  _id?: string | number;
-  classification: string| undefined;
-  brand: string| undefined;
-  serialNumber: string| undefined;
+  id: string;
+  classification: string;
+  brand: string;
+  serialNumber: string;
   rentStatus: RentStatus;
-  assignedTo?: OnlyStudentData;
+  assignedTo: OnlyStudentData | null;
 };
 
 export type InstrumentList = Array<InstrumentDetails>;
 
-export enum RentStatus {
-  Rented = "Rented",
-  Available = "Available",
-}
+// export enum RentStatus {
+//   Rented = "Rented",
+//   Available = "Available",
+// }
 
 export type StudentInfo = {
-  _id?: string | number | undefined;
-  firstName: string| undefined;
-  lastName: string| undefined;
-  studentIdNumber: string| undefined;
-  instrument?: OnlyInstrumentData;
+  id: string 
+  firstName: string;
+  lastName: string;
+  studentIdNumber: string;
+  instrument: OnlyInstrumentData | null;
 };
 
 export type StudentList = Array<StudentInfo>;
 
-export type OnlyStudentData = Omit<StudentInfo, "instrument" | "_id">;
+export type OnlyStudentData = Omit<StudentInfo, "instrument" | "id">;
 
 export type OnlyInstrumentData = Omit<
   InstrumentDetails,
-  "rentStatus" | "assignedTo" | "_id" | "instrumentList"
+  "rentStatus" | "assignedTo" | "id" | "instrumentList" | "teacherId"
 >;
 export type Getinfo = {
   studentInfo: OnlyStudentData;
@@ -65,7 +69,7 @@ export type AssignStudentToInstrument = {
 
 export type OnlyInstrumentType = Omit<
   InstrumentDetails,
-  "_id" | "brand" | "serialNumber" | "rentStatus" | "assignedTo"
+  "id" | "brand" | "serialNumber" | "rentStatus" | "assignedTo"
 >;
 
 export type OnlyInstrumentId = Omit<
@@ -75,7 +79,7 @@ export type OnlyInstrumentId = Omit<
 
 export type OnlyStudentId = Omit<
   StudentInfo,
-  "instrument" | "_id" | "firstName" | "lastName"
+  "instrument" | "id" | "firstName" | "lastName"
 >;
 
-export type WithoutId = Omit<InstrumentDetails, "_id">;
+export type WithoutId = Omit<InstrumentDetails, "id">;
