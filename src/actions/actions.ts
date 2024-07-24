@@ -1,7 +1,7 @@
 "use server"
 import { cache } from "react";
 import prisma from "@/lib/prisma";
-import { RentStatus } from "@prisma/client";
+import { RentStatus } from "@/app/types/formTypes";
 import { revalidatePath } from "next/cache";
 import { InstrumentList, StudentList } from "@/app/types/formTypes";
 import next from "next";
