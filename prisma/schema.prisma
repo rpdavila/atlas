@@ -14,9 +14,9 @@ type InstrumentInfoAssignedTo {
 }
 
 type StudentInfoInstrument {
-  brand          String?
-  classification String?
-  serialNumber   String?
+  brand          String
+  classification String
+  serialNumber   String
 }
 
 model instrumentInfo {
