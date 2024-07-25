@@ -11,7 +11,7 @@ import InstrumentSearchForm from "../forms/instrumentSearchFrom";
 
 export default function SearchInstrument(
   {
-    displayInstruments    
+    displayInstruments
   }: {
     displayInstruments: InstrumentList
 

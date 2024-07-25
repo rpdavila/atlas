@@ -88,7 +88,7 @@ export default function InstrumentCard({ instrument, hasMore, isLoading, onLoadM
 
         >
           {(item) => (
-            <SelectItem key={item.studentIdNumber} textValue={`${item.firstName} ${item.lastName}`}>
+            <SelectItem key={item.id} textValue={`${item.firstName} ${item.lastName}`}>
               {item.firstName} {item.lastName}
             </SelectItem>
           )}

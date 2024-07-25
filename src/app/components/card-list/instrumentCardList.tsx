@@ -18,10 +18,10 @@ export default function InstrumentCardList({
   //render the instrument cards
   return (
     <>
-      {instrumentSearchResults.map((items) => {
+      {instrumentSearchResults.map((items, index) => {
 
         return <InstrumentCard
-          key={items.id} instrument={items}
+          key={index} instrument={items}
           studentDropDownList={studentDropDownList}
           hasMore={hasMore}
           isLoading={isLoading}
