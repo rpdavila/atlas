@@ -169,6 +169,7 @@ export default function UserProfile() {
 
           <Button
             name="Update"
+            loadingName="Updating"
             onClick={handleUpdate}
             type="button"
             marginTop="5"
