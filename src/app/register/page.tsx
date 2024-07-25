@@ -65,6 +65,7 @@ export default function Register() {
       <Button
         type="button"
         name="Register"
+        loadingName="Registering"
         marginTop="5"
         onClick={handleClick}
       />
