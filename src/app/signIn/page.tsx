@@ -59,9 +59,8 @@ export default function SignIn() {
       />
       <Button
         type="button"
-        name={
-          loading ? "Logging In" : isLoggedIn ? "Logged In" : "Sign In"
-        }
+        name="Sign in"
+        loadingName="Signing in"
         marginTop="5"
         onClick={handleClick}
         disabled={isLoggedIn}
