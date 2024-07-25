@@ -19,12 +19,17 @@ type StudentInfoInstrument {
   serialNumber   String
 }
 
+enum RentStatus {
+  Available
+  Rented
+}
+
 model instrumentInfo {
   id             String                    @id @default(auto()) @map("_id") @db.ObjectId
   assignedTo     InstrumentInfoAssignedTo?
   brand          String
   classification String
-  rentStatus     String
+  rentStatus     RentStatus
   serialNumber   String
   teacherId      String?
 }

@@ -1,7 +1,6 @@
-import { RentStatus } from '@prisma/client';
+import { RentStatus as PrismaRentStatus } from '@prisma/client';
 
-export  { RentStatus as PrismaRentStatus } from 'c:/Users/rafae/nodeProjects/atlas/node_modules/.prisma/client/index';
-
+export type RentStatus = PrismaRentStatus;
 
 export type UserInformation = {
   id: string | undefined;
@@ -32,15 +31,10 @@ export type InstrumentDetails = {
   brand: string;
   serialNumber: string;
   rentStatus: RentStatus;
-  assignedTo?: OnlyStudentData | null | undefined;
+  assignedTo?: OnlyStudentData | null;
 }
 
 export type InstrumentList = Array<InstrumentDetails> 
-
-// export enum RentStatus {
-//   Rented = "Rented",
-//   Available = "Available",
-// }
 
 export type StudentInfo = {
   id: string 
@@ -52,21 +46,11 @@ export type StudentInfo = {
 
 export type StudentList = Array<StudentInfo>;
 
-export type OnlyStudentData = Omit<StudentInfo, "instrument" | "id"
-> & {
-  brand: string | null;
-  classification: string | null;
-  serialNumber: string | null;
-};
+export type OnlyStudentData = Omit<StudentInfo, "instrument" | "id">
 
 export type OnlyInstrumentData = Omit<
   InstrumentDetails,
-  "rentStatus" | "assignedTo" | "id" | "instrumentList" | "teacherId"
-> & {
-  brand: string | null;
-  classification: string | null;
-  serialNumber: string | null;
-}
+  "rentStatus" | "assignedTo" | "id" | "instrumentList" | "teacherId">
 
 export type Getinfo = {
   studentInfo: OnlyStudentData;
