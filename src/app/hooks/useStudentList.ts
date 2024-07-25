@@ -38,7 +38,6 @@ export function useStudentList() {
         console.error("There was an error fetching data:", error);
       } finally {
         setIsLoading(false);
-        console.log(studentDropDownList)
       }
     }; 
     loadfirstQuery()
@@ -48,7 +47,6 @@ export function useStudentList() {
     const newCursor = studentDropDownList[studentDropDownList.length - 1].id;
     setCursor(newCursor);
     loadNextQuery();
-    console.log(studentDropDownList)
   }
 
   
