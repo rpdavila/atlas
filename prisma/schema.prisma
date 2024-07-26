@@ -20,8 +20,8 @@ type StudentInfoInstrument {
 }
 
 enum RentStatus {
-  Available
   Rented
+  Available
 }
 
 model instrumentInfo {
