@@ -1,10 +1,9 @@
 //redux imports
-import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createSlice} from "@reduxjs/toolkit";
 //mongodb Imports
-import {app, convertObjectIdToString, instrumentCollection} from "@/app/utilities/mongodb";
 
 //type imports
-import {InstrumentDetails, InstrumentList, StudentInfo, RentStatus} from "@/app/types/formTypes";
+import {InstrumentList} from "@/app/types/formTypes";
 
 
 // initial state types

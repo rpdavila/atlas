@@ -1,9 +1,7 @@
-import {createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {createSlice } from "@reduxjs/toolkit";
 
-// mongodb utility imports
-import {app, convertObjectIdToString, studentCollection} from "@/app/utilities/mongodb";
 //type imports
-import { OnlyInstrumentData, StudentInfo, StudentList,} from "@/app/types/formTypes";
+import { StudentList,} from "@/app/types/formTypes";
 
 type StudentState = {
   studentList: StudentList;
