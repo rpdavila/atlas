@@ -1,10 +1,36 @@
-import { getStudents } from "@/actions/actions";
+// react imports
+import { Suspense } from "react";
+// sever actions
+import { getStudentsByUserId } from "@/actions/actions";
+// components
+import Loading from "@/app/components/loading/loading";
 import SearchStudent from "@/app/components/searchStudent/searchStudent";
-import { StudentList } from "@/app/types/formTypes";
+import { StudentListWithoutUserId } from "@/app/types/formTypes";
+// auth
+import { auth } from "@/auth";
+import { permanentRedirect } from "next/navigation";
 
 export default async function StudentPage() {
-  const displayStudents: StudentList = await getStudents();
-  return (
-    <SearchStudent displayStudents={displayStudents} />
-  )
+  const session = await auth();
+
+  if (!session?.user) {
+    permanentRedirect("/signIn")
+  };
+
+  const studentData = await getStudentsByUserId(session.user?.id as string);
+
+  if (studentData?.profile?.students.length) {
+    const displayStudents: StudentListWithoutUserId = studentData.profile?.students;
+    return (
+      <Suspense fallback={<Loading />}>
+        <SearchStudent displayStudents={displayStudents} />
+      </Suspense>
+    )
+  } else {
+    return (
+      <div className="flex justify-center h-screen text-slate-50 w-full">
+        <h1 className="flex self-center text-8xl"> No students found</h1>
+      </div>
+    )
+  }
 }
