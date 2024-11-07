@@ -1,6 +1,6 @@
 "use client";
 // react imports
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 //next imports
 import { usePathname, useRouter } from "next/navigation";
@@ -8,8 +8,8 @@ import Image from "next/image";
 
 //redux imports
 import { useAppDispatch } from "@/lib/ReduxSSR/hooks";
-
 import { setType } from "@/lib/ReduxSSR/features/searchOptionsSlice";
+
 //nextui components
 import {
   Navbar,
@@ -49,7 +49,11 @@ export default function Header() {
     if (value === "Add Student") router.push("/dashboard/studentForm");
     if (value === "Add Instrument") router.push("/dashboard/instrumentForm");
   }
-
+  useEffect(() => {
+    if (pathName === "/dashboard") {
+      dispatch(setType(""))
+    }
+  }, [dispatch, pathName])
   return (
     <header className=" bg-white w-full">
       <Navbar onMenuOpenChange={setIsMenuOpen}>
