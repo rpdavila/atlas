@@ -31,6 +31,7 @@ export default function SelectSearchOptions({ children }: SearchOptionProps) {
     dispatch(setType(value));
     if (value === "Search Student") router.push("/dashboard/searchStudent");
     if (value === "Search Instrument") router.push("/dashboard/searchInstrument");
+    if (value === "Search District") router.push("/dashboard/districtInstruments");
   }
 
 
