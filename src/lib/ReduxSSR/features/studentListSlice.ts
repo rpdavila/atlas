@@ -1,21 +1,13 @@
-import {createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 //type imports
-import { StudentList,} from "@/app/types/formTypes";
+import { StudentListWithoutUserIdAndInstrument, } from "@/app/types/formTypes";
 
 type StudentState = {
-  studentList: StudentList;
-  dropDownList: StudentList;
-  loading: boolean;
-  error: unknown;
-  initialized: boolean;
+  dropDownList: StudentListWithoutUserIdAndInstrument;
 };
 const initialState: StudentState = {
-  studentList: [],
   dropDownList: [],
-  loading: false,
-  error: "",
-  initialized: false,
 };
 
 
@@ -23,14 +15,17 @@ export const studentListSlice = createSlice({
   name: "studentList",
   initialState,
   reducers: {
-    setStudentsInitialized: (state) => {     
-        return {
-          ...state,
-          initialized: true,
-        }
-      } 
-    }, 
+    setDropDownList: (state, action) => {
+      return { ...state, dropDownList: action.payload };
+    },
+    addStudentToDropDownList: (state, action) => {
+      return {
+        ...state,
+        dropDownList: [...state.dropDownList, action.payload]
+      }
+    }
+  },
 });
 
 export default studentListSlice.reducer;
-export const {setStudentsInitialized} = studentListSlice.actions;
+export const { setDropDownList, addStudentToDropDownList } = studentListSlice.actions;

@@ -10,21 +10,17 @@ import { NextUIProvider } from "@nextui-org/react";
 
 export function Providers(
   {
-    children
-  }:
-    {
-      children: React.ReactNode,
-    }) {
+    children,
+  }: {
+    children: React.ReactNode,
+  }) {
   const storeRef = useRef<AppStore>();
   const router = useRouter();
   if (!storeRef.current) {
     // Create the store instance the first time it renders
     storeRef.current = makeStore();
   }
-
-
   const persistor = persistStore(storeRef.current);
-
 
   return (
     <NextUIProvider navigate={router.push}>
@@ -34,5 +30,6 @@ export function Providers(
         </PersistGate>
       </Provider>
     </NextUIProvider>
+
   )
 }
