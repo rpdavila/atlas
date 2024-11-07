@@ -1,19 +1,15 @@
-import { RentStatus as PrismaRentStatus } from '@prisma/client';
+import { School } from "@prisma/client";
 
-export type RentStatus = PrismaRentStatus;
+
+export type RentStatus = "Rented" | "Available";
 
 export type UserInformation = {
-  id: string | undefined;
-  isLoggedIn: boolean | undefined;
-  accessToken: string | null | undefined;
-  customUserData: SimpleObject | undefined;
-  email: string | undefined;
-  loading: boolean;
+  schools: { id: string, name: string }[]
+  district: string
 };
 
 export enum UpdateUserData {
-  firstName = "First Name",
-  lastName = "Last Name",
+  name = "Name",
   school = "School",
   role = "Role",
   district = "District",
@@ -25,32 +21,48 @@ export enum UserRole {
   Recruiter = "Recruiter",
 }
 
-export type InstrumentDetails = {
+export type Instrument = {
   id: string;
+  userId: string | null;
   classification: string;
   brand: string;
   serialNumber: string;
   rentStatus: RentStatus;
-  assignedTo?: OnlyStudentData | null;
+  assignedTo: OnlyStudentData | null;
+  school: {
+    name: string
+  } | null;
 }
 
-export type InstrumentList = Array<InstrumentDetails> 
-
-export type StudentInfo = {
-  id: string 
+export type InstrumentWithoutUserId = Omit<Instrument, "userId">
+export type InstrumentListWithoutUserId = Array<InstrumentWithoutUserId>
+export type InstrumentList = Array<Instrument>
+export type DistrictInstrumentsWithouUserId = Omit<Instrument, "userId" | "rentStatus" | "assignedTo">
+export type DistrictList = Array<DistrictInstrumentsWithouUserId>
+export type Student = {
+  id: string;
+  userId: string;
+  instrumentId: string | null;
   firstName: string;
   lastName: string;
   studentIdNumber: string;
   instrument: OnlyInstrumentData | null;
+  school: {
+    name: string;
+  } | null;
 };
 
-export type StudentList = Array<StudentInfo>;
+export type StudentWithoutUserId = Omit<Student, "userId" | "instrumentId">
+export type StudentListWithoutUserId = Array<StudentWithoutUserId>
+export type StudentWithoutUserIdAndInstrument = Omit<StudentWithoutUserId, "instrument">
+export type StudentListWithoutUserIdAndInstrument = Array<StudentWithoutUserIdAndInstrument>
+export type StudentList = Array<Student>;
 
-export type OnlyStudentData = Omit<StudentInfo, "instrument" | "id">
+export type OnlyStudentData = Omit<Student, "userId" | "instrumentId" | "instrument">
 
 export type OnlyInstrumentData = Omit<
-  InstrumentDetails,
-  "rentStatus" | "assignedTo" | "id" | "instrumentList" | "teacherId">
+  Instrument,
+  "rentStatus" | "assignedTo" | "id" | "instrumentList" | "teacherId" | "userId">
 
 export type Getinfo = {
   studentInfo: OnlyStudentData;
@@ -63,18 +75,18 @@ export type AssignStudentToInstrument = {
 };
 
 export type OnlyInstrumentType = Omit<
-  InstrumentDetails,
+  Instrument,
   "id" | "brand" | "serialNumber" | "rentStatus" | "assignedTo"
 >;
 
 export type OnlyInstrumentId = Omit<
-  InstrumentDetails,
+  Instrument,
   "serialNumber" | "brand" | "rentStatus" | "assignedTo" | "classification"
 >;
 
 export type OnlyStudentId = Omit<
-  StudentInfo,
+  Student,
   "instrument" | "id" | "firstName" | "lastName"
 >;
 
-export type WithoutId = Omit<InstrumentDetails, "id">;
+export type WithoutId = Omit<Instrument, "id">;

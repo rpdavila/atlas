@@ -1,88 +1,70 @@
 "use client";
-import { useState } from "react";
-
-import Link from "next/link";
-
-import TextInput from "../components/input/customTextInput";
+import { useRef } from "react";
 import Button from "../components/button/button";
-
-import { useAppDispatch, useAppSelector } from "@/lib/ReduxSSR/hooks";
-import { loginUser } from "@/lib/ReduxSSR/features/userSlice";
-
-type SignInProps = {
-  email: string;
-  password: string;
-  loading: boolean;
-};
+import { handleSignIn } from "@/actions/actions";
+import { FaGoogle } from "react-icons/fa";
 
 export default function SignIn() {
-  const dispatch = useAppDispatch();
-  const isLoggedIn = useAppSelector((state) => state.userInfo.isLoggedIn);
-  const loading = useAppSelector((state) => state.userInfo.loading);
-
-  const initialState: SignInProps = {
-    email: "",
-    password: "",
-    loading: false,
-  };
-
-  const [userData, setUserData] = useState<SignInProps>(initialState);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setUserData({ ...userData, [name]: value });
-  };
-
-  const handleClick = () => {
-    setUserData({ ...userData, loading: true });
-    dispatch(loginUser({ email: userData.email, password: userData.password }));
-    setUserData({ ...userData, email: "", password: "", loading: false });
-  };
+  const ref = useRef<HTMLFormElement>(null);
 
   return (
-    <section className="flex flex-col w-1/2">
-      <TextInput
-        labelName="Email"
-        type="email"
-        name="email"
-        value={userData.email}
-        placeHolder="Email"
-        onChange={handleChange}
-      />
-      <TextInput
-        labelName="Password"
-        type="password"
-        name="password"
-        value={userData.password}
-        placeHolder="Password"
-        onChange={handleChange}
-      />
-      <Button
-        type="button"
-        name="Sign in"
-        loadingName="Signing in"
-        marginTop="5"
-        onClick={handleClick}
-        disabled={isLoggedIn}
-        disabledColor={isLoggedIn}
-      />
-      <small className="flex flex-row justify-evenly">
-        <span>
-          Need an account? click{" "}
-          <Link className="text-sky-500 hover:text-sky-700" href={"/register"}>
-            here
-          </Link>
-        </span>
-        <p>
-          Forgot your password? click{" "}
-          <Link
-            className="text-sky-500 hover:text-sky-700"
-            href={"/resetPassword"}
+    <div className="flex w-screen h-screen items-center justify-center">
+      <article className="flex justify-center items-center w-1/4 sm:w-1/3 h-56 gap-2 bg-slate-50 rounded-lg mt-5">
+        <section className="w-fit h-fit bg-white p-2 border-small rounded-md border-black">
+          <form
+            ref={ref}
+            action={async () => {
+              await handleSignIn("google", { redirectTo: "/dashboard" });
+            }}
           >
-            here
-          </Link>
-        </p>
-      </small>
-    </section>
+            <Button name="Sign in with Google" type="submit" icon={<FaGoogle />} />
+          </form>
+        </section>
+        {/* <section className="flex flex-col w-full bg-white p-5 rounded-lg">
+        <form
+          ref={ref}
+          className="flex flex-col justify-center items-center w-full gap-4 mt-20 sm:w-full md:w-full md:mt-2"
+          action={async formData => {
+
+          }}>
+          <Input
+            label="Email"
+            type="email"
+            name="email"
+            placeholder="Email"
+          />
+          <Input
+            label="Password"
+            type="password"
+            name="password"
+            placeholder="Password"
+
+          />
+          <Button
+            type="submit"
+            name="Sign in"
+            marginTop="5"
+          />
+        </form>
+        <small className="flex flex-row justify-evenly">
+          <span>
+            Need an account? click{" "}
+            <Link className="text-sky-500 hover:text-sky-700" href={"/register"}>
+              here
+            </Link>
+          </span>
+          <p>
+            Forgot your password? click{" "}
+            <Link
+              className="text-sky-500 hover:text-sky-700"
+              href={"/resetPassword"}
+            >
+              here
+            </Link>
+          </p>
+        </small>
+      </section> */}
+      </article>
+    </div>
   );
 }
