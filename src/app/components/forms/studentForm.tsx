@@ -3,28 +3,44 @@
 import React, { useRef } from "react";
 
 // redux imports
-import { useAppSelector } from "@/lib/ReduxSSR/hooks";
+import { useAppSelector, useAppDispatch } from "@/lib/ReduxSSR/hooks";
 
 //component imports
-import { Input } from "@nextui-org/react";
+import { Input, Select, SelectItem } from "@nextui-org/react";
 import Button from "../button/button";
 //hooks imports
 import StudentSearchForm from "./studentSearchForm";
-
+//sesison import
+import { useSession } from "next-auth/react";
 //server actions
-import { addStudent } from "@/actions/actions";
+import { addStudent, getDropDownList } from "@/actions/actions";
+import { permanentRedirect } from "next/navigation";
+import { setDropDownList } from "@/lib/ReduxSSR/features/studentListSlice";
+
+//types
+type School = {
+  name: string;
+  id: string;
+}
 
 type StudentFormProps = {
   formTitle: string;
-};
+  schools: School[];
+}
 
 export default function StudentForm({
-  formTitle
+  formTitle,
+  schools
 }: StudentFormProps) {
-  
+
   const ref = useRef<HTMLFormElement>(null)
   const selectOption = useAppSelector((state) => state.searchOptions.type);
+  const session = useSession();
+  const dispatch = useAppDispatch();
 
+  if (session.status === "unauthenticated") {
+    permanentRedirect("/signIn");
+  }
 
   return (
     <div className="flex flex-col bg-white rounded-lg items-center mt-2 w-full h-screen md:h-auto">
@@ -42,7 +58,9 @@ export default function StudentForm({
           ref={ref}
           action={async formData => {
             ref.current?.reset();
-            await addStudent(formData);
+            await addStudent(formData, session.data?.user?.id as string);
+            const students = await getDropDownList(session.data?.user?.id as string);
+            dispatch(setDropDownList(students))
           }}
         >
           <Input
@@ -75,10 +93,25 @@ export default function StudentForm({
             className="w-full"
           />
 
+          <Select
+            name="schools"
+            label="Schools"
+            labelPlacement="outside"
+            placeholder="Schools"
+            items={schools}
+            selectionMode="single"
+            variant="bordered"
+          >
+            {schools?.map((school) => (
+              <SelectItem key={school.name} textValue={school.name}>
+                {school.name}
+              </SelectItem>
+            ))}
+          </Select>
+
           <Button
             type="submit"
             name="Add Student"
-            loadingName="Adding Student"
           />
         </form>
       )}

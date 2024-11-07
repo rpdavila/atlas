@@ -13,20 +13,18 @@ export default function StudentSearchForm() {
     dispatch(setSearch(e.target.value));
   };
   return (
-    <>
+    <section>
       {selectOption === "Search Student" && (
         <Input
           name="search"
-          label="Search"
-          labelPlacement="inside"
           value={searchResult}
           placeholder="Search Student"
           onChange={handleChange}
           isClearable
           onClear={() => dispatch(setSearch(""))}
-          className="sm:mt-2"
+          className="sm:mt-2 h-auto"
         />
       )}
-    </>
+    </section>
   );
 }
