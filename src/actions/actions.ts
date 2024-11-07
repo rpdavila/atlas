@@ -656,7 +656,7 @@ export async function getTeacherEmailByInstument(instrumentId: string, school: s
     const teacherData = await prisma.user.findFirst({
       where: {
         id: userId?.userId,
-        
+
       },
       select: {
         email: true,
@@ -664,8 +664,61 @@ export async function getTeacherEmailByInstument(instrumentId: string, school: s
       }
     })
 
-    return {teacherName: teacherData?.name, teacherEmail: teacherData?.email}
+    return { teacherName: teacherData?.name, teacherEmail: teacherData?.email }
   } catch (e) {
     console.log(e)
   }
+}
+
+export async function getAvailableInstrumentCount(userId: string) {
+  const availableInstruments = await prisma.user.findFirst({
+    where: {
+      id: userId
+    },
+    select: {
+      profile: {
+        select: {
+          _count: {
+            select: {
+              instruments: {
+                where: {
+                  rentStatus: "Available"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  })
+
+  return availableInstruments?.profile?._count.instruments
+}
+
+export async function getAvailableInstrumentCountByDistrict(userId: string) {
+  const availableInstruments = await prisma.user.findFirst({
+    where: {
+      id: userId
+    },
+    select: {
+      profile: {
+        select: {
+          district: {
+            select: {
+              _count: {
+                select: {
+                  instruments: {
+                    where: {
+                      rentStatus: "Available"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  })
+  return availableInstruments?.profile?.district?._count.instruments
 }
