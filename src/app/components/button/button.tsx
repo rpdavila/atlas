@@ -2,21 +2,21 @@ import { useFormStatus } from "react-dom";
 import { Spinner } from "@nextui-org/react";
 
 type ButtonProps = {
-  loadingName: string;
   name: string;
   marginTop?: string;
   type: "submit" | "reset" | "button";
   disabled?: boolean;
   onClick?: () => void;
   disabledColor?: boolean;
+  icon?: React.JSX.Element;
 };
 
 export default function Button({
-  loadingName,
   name,
   type,
   marginTop,
   onClick,
+  icon
 }: ButtonProps): React.JSX.Element {
   const buttonClass = `bg-blue-500 hover:bg-blue-700 text-white p-2 mt-${marginTop} w-full sm:w-full rounded-lg`;
   const greyColor = `bg-gray-300 text-black p-2 mt-${marginTop} w-full rounded-lg`;
@@ -28,10 +28,13 @@ export default function Button({
       type={type}
       onClick={onClick}
       disabled={pending}
-    >
-      {pending && <Spinner size="sm" color="default" />}
-      {pending && loadingName}
-      {!pending && name}
+
+    > 
+      <div className="flex flex-row justify-center items-center gap-2">
+        {pending && <Spinner size="sm" color="primary" />}
+        {icon && icon}
+        {!pending && name}
+      </div>
     </button>
 
   );
