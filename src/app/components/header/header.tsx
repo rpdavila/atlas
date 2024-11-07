@@ -4,10 +4,11 @@ import React, { useState } from "react";
 
 //next imports
 import { usePathname, useRouter } from "next/navigation";
+import Image from "next/image";
 
 //redux imports
-import { useAppSelector, useAppDispatch } from "@/lib/ReduxSSR/hooks";
-import { logOutUser } from "@/lib/ReduxSSR/features/userSlice";
+import { useAppDispatch } from "@/lib/ReduxSSR/hooks";
+
 import { setType } from "@/lib/ReduxSSR/features/searchOptionsSlice";
 //nextui components
 import {
@@ -17,36 +18,28 @@ import {
   NavbarMenuToggle,
   NavbarMenu,
   NavbarMenuItem,
-  Link,
   Button,
   NavbarBrand,
   Dropdown,
   DropdownItem,
   DropdownTrigger,
-  DropdownMenu
+  DropdownMenu,
+  Link
 } from "@nextui-org/react";
-
 //nav lists
 import { navList, dashBoardNavList } from "@/app/data/nav-List";
 import { tools } from "@/app/data/tools";
+//auth
+import { useSession } from "next-auth/react";
+import { signOut, signIn } from "next-auth/react";
 
 export default function Header() {
   const dispatch = useAppDispatch();
-  const isLoggedIn = useAppSelector((state) => state.userInfo.isLoggedIn);
   const pathName = usePathname();
   const router = useRouter();
-
+  const { data: session } = useSession();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const handleClickSignIn = () => {
-    if (isLoggedIn) {
-      dispatch(logOutUser());
-      router.push("/");
-    } else {
-      router.push("/signIn");
-    }
-  };
 
   const handleChange = (key: React.Key) => {
     const value = key.toString()
@@ -58,28 +51,29 @@ export default function Header() {
   }
 
   return (
-    <header className=" bg-white w-auto">
+    <header className=" bg-white w-full">
       <Navbar onMenuOpenChange={setIsMenuOpen}>
         <NavbarContent>
           <NavbarMenuToggle
             aria-label={isMenuOpen ? "close menu" : "open menu"}
             className="md:hidden"
           />
-          <NavbarBrand>
-            {/* add logo here */}
+          <NavbarBrand className="flex flex-col">
+            <Image src="/images/CrescendoCloudLogo.png" alt="Cescendo Cloud Logo" height={75} width={75}></Image>
           </NavbarBrand>
 
         </NavbarContent>
         <NavbarContent className="hidden md:flex gap-4" justify="center">
           {
-            isLoggedIn ? (
-              dashBoardNavList.map((items, index) => (
-                <NavbarItem key={index}>
+            session?.user ? (
+              dashBoardNavList.map((item, index) => (
+                <NavbarItem key={`${item}-${index}`}>
                   <Link
-                    className={pathName === items.href ? "active" : ""}
-                    href={items.href}
+                    className={pathName === item.href ? "active" : ""}
+                    href={item.href}
+                    color={pathName === item.href ? "secondary" : "primary"}
                   >
-                    {items.name}
+                    {item.name}
                   </Link>
                 </NavbarItem>
               ))
@@ -87,7 +81,7 @@ export default function Header() {
               navList.map((item, index) => (
                 <NavbarItem key={`${item}-${index}`}>
                   <Link
-                    className={pathName === item.href ? "active" : ""}
+                    className={pathName === item.href ? "active underline" : ""}
                     color={
                       pathName === item.href ? "secondary" : "primary"
                     }
@@ -101,7 +95,7 @@ export default function Header() {
             )
           }
         </NavbarContent>
-        <NavbarContent className={isLoggedIn ? "md:hidden" : "hidden"} justify="center">
+        <NavbarContent className={session?.user ? "md:hidden" : "hidden"} justify="center">
           <NavbarItem>
             <Dropdown>
               <DropdownTrigger>
@@ -110,7 +104,7 @@ export default function Header() {
               <DropdownMenu
                 onAction={handleChange}
               >
-                {tools.map((items, index) => (
+                {tools.map((items) => (
                   <DropdownItem
                     key={items.key}
                   >
@@ -121,10 +115,13 @@ export default function Header() {
             </Dropdown>
           </NavbarItem>
         </NavbarContent>
-        {isLoggedIn ? (
+        {session?.user ? (
           <NavbarContent justify="end">
             <NavbarItem>
-              <Button className="hover:bg-sky-700 hover:text-white" onClick={handleClickSignIn} color="primary" href="./register" variant="flat">
+              <Button
+                className="hover:bg-sky-700 hover:text-white" color="primary" variant="flat"
+                onClick={() => signOut({ callbackUrl: 'http://localhost:3000' })}
+              >
                 Sign Out
               </Button>
             </NavbarItem>
@@ -133,22 +130,22 @@ export default function Header() {
         ) : (
           <NavbarContent justify="end">
             <NavbarItem className="hidden sm:flex">
-              <Link href="/signIn">Sign In</Link>
-            </NavbarItem>
-            <NavbarItem>
-              <Button className="hover:bg-sky-700 hover:text-white" as={Link} color="primary" href="./register" variant="flat">
-                Register
+              <Button
+                className="hover:bg-sky-700 hover:text-white" color="primary" variant="flat"
+                onPress={() => signIn()}
+              >
+                Sign In
               </Button>
             </NavbarItem>
           </NavbarContent>
         )}
         <NavbarMenu>
-          {isLoggedIn ? (
-            dashBoardNavList.map((items, index) => {
+          {session?.user ? (
+            dashBoardNavList.map((item, index) => {
               return (
-                <NavbarMenuItem key={index}>
-                  <Link href={items.href}>
-                    {items.name}
+                <NavbarMenuItem key={`${item}-${index}`}>
+                  <Link href={item.href}>
+                    {item.name}
                   </Link>
                 </NavbarMenuItem>
               )
@@ -173,16 +170,13 @@ export default function Header() {
               })}
               <Link
                 color="danger"
-                href="./signIn"
+                href="/signIn"
               >
                 Sign In
               </Link>
-
             </>
           )}
         </NavbarMenu>
-
-
       </Navbar>
     </header>
   );
