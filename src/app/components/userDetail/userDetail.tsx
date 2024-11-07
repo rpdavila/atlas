@@ -1,17 +1,18 @@
-"use client";
-import { useRef } from "react";
-import { useAppSelector, useAppStore } from "@/lib/ReduxSSR/hooks";
-import { getCustomUserData } from "@/lib/ReduxSSR/features/userSlice";
-import { UnknownAction } from "@reduxjs/toolkit";
+import { auth } from "@/auth"
 
-export default function UserDetail() {
-
+export default async function UserDetail() {
+  const session = await auth();
 
   return (
-    <section className="flex justify-center text-2xl bg-white rounded-lg basis-3/4">
+    <section className="flex flex-col justify-evenly items-center text-2xl bg-white rounded-lg basis-3/4 sm:flex- sm:flex-wrap">
       <h1>
-        Hello
+        Hello {session?.user?.name}
       </h1>
+      <section>
+        <p>Number of instruments</p>
+        <p># of instruments available school wide</p>
+        <p># of instruments available district wide</p>
+      </section>
     </section>
 
   );
