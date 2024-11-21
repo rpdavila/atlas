@@ -36,20 +36,21 @@ model Profile {
   schools     School[]
   students    Student[]
   instruments Instrument[]
-  district    District?    @relation(fields: [districtId], references: [id])
+  district    District?    @relation(fields: [districtId], references: [id], onDelete: Cascade)
   role        String
   districtId  String?      @db.ObjectId
 }
 
 model School {
-  id          String       @id @default(auto()) @map("_id") @db.ObjectId
-  districtId  String?      @db.ObjectId
-  name        String
-  district    District?    @relation(fields: [districtId], references: [id])
-  instruments Instrument[]
-  profile     Profile?     @relation(fields: [profileId], references: [id])
-  profileId   String?      @db.ObjectId
-  students    Student[]
+  id                    String                 @id @default(auto()) @map("_id") @db.ObjectId
+  districtId            String?                @db.ObjectId
+  name                  String
+  district              District?              @relation(fields: [districtId], references: [id])
+  instruments           Instrument[]
+  profile               Profile?               @relation(fields: [profileId], references: [id])
+  profileId             String?                @db.ObjectId
+  students              Student[]
+  instrumentAssignments InstrumentAssignment[]
 }
 
 model District {
@@ -63,33 +64,42 @@ model District {
 }
 
 model Student {
-  id              String      @id @default(auto()) @map("_id") @db.ObjectId
-  instrumentId    String?     @unique @db.ObjectId
-  schoolId        String?     @db.ObjectId
-  firstName       String
-  lastName        String
-  studentIdNumber String
-  school          School?     @relation(fields: [schoolId], references: [id])
+  id                   String                @id @default(auto()) @map("_id") @db.ObjectId
+  schoolId             String?               @db.ObjectId
+  firstName            String
+  lastName             String
+  studentIdNumber      String
+  instrumentAssignment InstrumentAssignment?
   // relations
-  instrument      Instrument? @relation(fields: [instrumentId], references: [id])
-  Profile         Profile?    @relation(fields: [profileId], references: [id])
-  profileId       String?     @db.ObjectId
+  school               School?               @relation(fields: [schoolId], references: [id])
+  Profile              Profile?              @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId            String?               @db.ObjectId
 }
 
 model Instrument {
-  id             String     @id @default(auto()) @map("_id") @db.ObjectId
-  districtId     String     @db.ObjectId
-  schoolId       String     @db.ObjectId
-  classification String
-  brand          String
-  serialNumber   String
-  rentStatus     RentStatus
-  assignedTo     Student?
+  id                   String                @id @default(auto()) @map("_id") @db.ObjectId
+  districtId           String                @db.ObjectId
+  schoolId             String                @db.ObjectId
+  classification       String
+  brand                String
+  serialNumber         String
+  rentStatus           RentStatus
+  instrumentAssignment InstrumentAssignment? 
   // relations
-  school         School     @relation(fields: [schoolId], references: [id])
-  district       District   @relation(fields: [districtId], references: [id])
-  Profile        Profile?   @relation(fields: [profileId], references: [id])
-  profileId      String?    @db.ObjectId
+  school               School                @relation(fields: [schoolId], references: [id])
+  district             District              @relation(fields: [districtId], references: [id])
+  Profile              Profile?              @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profileId            String?               @db.ObjectId
+}
+
+model InstrumentAssignment {
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  studentId    String     @unique @db.ObjectId
+  instrumentId String     @unique @db.ObjectId
+  schoolId     String     @db.ObjectId
+  student      Student    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  instrument   Instrument @relation(fields: [instrumentId], references: [id], onDelete: Cascade)
+  school       School?    @relation(fields: [schoolId], references: [id])
 }
 
 model Account {
