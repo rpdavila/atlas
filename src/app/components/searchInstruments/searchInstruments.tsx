@@ -2,18 +2,39 @@
 //redux imports
 import { useAppSelector } from "@/lib/ReduxSSR/hooks";
 import { RootState } from "@/lib/ReduxSSR/store";
-//type imports
-import { InstrumentWithoutUserId, InstrumentListWithoutUserId, DistrictInstrumentsWithouUserId, DistrictList } from "@/app/types/formTypes";
+// types
+import { RentStatus } from "@prisma/client";
 //component imports
 import InstrumentCardList from "@/app/components/card-list/instrumentCardList";
 import InstrumentSearchForm from "../forms/instrumentSearchForm";
 
+type Instrument = {
+  id: string;
+  classification: string;
+  brand: string;
+  serialNumber: string;
+  rentStatus: RentStatus;
+  instrumentAssignment: {
+    id: string;
+    student: {
+      id: string;
+      firstName: string;
+      lastName: string;
+      studentIdNumber: string;
+    };
+  } | null;
+  school: {
+    name: string;
+  };
+} | undefined
+
+type InstrumentList = Instrument[]
 
 export default function SearchInstrument(
   {
     displayInstruments
   }: {
-    displayInstruments: InstrumentListWithoutUserId;
+    displayInstruments: InstrumentList;
   }) {
 
   // grab searchfield
@@ -22,16 +43,16 @@ export default function SearchInstrument(
   );
 
 
-  let instrumentSearchResults: InstrumentListWithoutUserId = [];
+  let instrumentSearchResults: InstrumentList = [];
 
   if (!!displayInstruments) {
 
-    instrumentSearchResults = displayInstruments.filter((instrument: InstrumentWithoutUserId) => {
+    instrumentSearchResults = displayInstruments.filter((instrument: Instrument) => {
       return (
-        instrument.classification?.includes(searchField) ||
-        instrument.brand?.includes(searchField) ||
-        instrument.serialNumber?.includes(searchField) ||
-        instrument.rentStatus?.includes(searchField)
+        instrument?.classification?.includes(searchField) ||
+        instrument?.brand?.includes(searchField) ||
+        instrument?.serialNumber?.includes(searchField) ||
+        instrument?.rentStatus?.includes(searchField)
       );
     });
   }
