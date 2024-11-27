@@ -5,7 +5,7 @@ import { getStudentsByUserId } from "@/actions/actions";
 // components
 import Loading from "@/app/components/loading/loading";
 import SearchStudent from "@/app/components/searchStudent/searchStudent";
-import { StudentListWithoutUserId } from "@/app/types/formTypes";
+
 // auth
 import { auth } from "@/auth";
 import { permanentRedirect } from "next/navigation";
@@ -19,8 +19,8 @@ export default async function StudentPage() {
 
   const studentData = await getStudentsByUserId(session.user?.id as string);
 
-  if (studentData?.profile?.students.length) {
-    const displayStudents: StudentListWithoutUserId = studentData.profile?.students;
+  if (studentData?.length) {
+    const displayStudents = studentData;
     return (
       <Suspense fallback={<Loading />}>
         <SearchStudent displayStudents={displayStudents} />
