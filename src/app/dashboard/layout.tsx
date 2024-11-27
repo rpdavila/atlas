@@ -11,7 +11,7 @@ export default async function DashboardLayout({
     permanentRedirect("/signIn");
   }
   return (
-    <section className=" container flex flex-col h-full bg-slate-700 w-full sm:grid grid-cols-11 grid-rows-6 gap-2">
+    <section className="container flex flex-col h-full bg-slate-700 w-full sm:grid grid-cols-11 grid-rows-6 gap-2">
       <section className="hidden sm:grid col-start-1 col-end-4">
         <SideBar />
       </section>
