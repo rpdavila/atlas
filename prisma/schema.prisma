@@ -72,7 +72,7 @@ model Student {
   instrumentAssignment InstrumentAssignment?
   // relations
   school               School?               @relation(fields: [schoolId], references: [id])
-  Profile              Profile?              @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  Profile              Profile?              @relation(fields: [profileId], references: [id])
   profileId            String?               @db.ObjectId
 }
 
@@ -84,7 +84,7 @@ model Instrument {
   brand                String
   serialNumber         String
   rentStatus           RentStatus
-  instrumentAssignment InstrumentAssignment? 
+  instrumentAssignment InstrumentAssignment?
   // relations
   school               School                @relation(fields: [schoolId], references: [id])
   district             District              @relation(fields: [districtId], references: [id])
@@ -119,7 +119,7 @@ model Account {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id])
 
   @@unique([provider, providerAccountId])
 }
