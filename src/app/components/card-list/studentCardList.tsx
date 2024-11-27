@@ -1,13 +1,37 @@
 
 import { Table, TableBody, TableRow, TableCell, TableColumn, TableHeader } from "@nextui-org/react";
-import { StudentListWithoutUserId, StudentWithoutUserId } from "@/app/types/formTypes";
-import Button from "../button/button";
-import { useAppSelector, useAppDispatch } from "@/lib/ReduxSSR/hooks";
-import { setSearch } from "@/lib/ReduxSSR/features/searchOptionsSlice";
+
+import { useAppSelector } from "@/lib/ReduxSSR/hooks";
+
 import { useRouter } from "next/navigation";
 
+import { RentStatus } from "@prisma/client";
+
+type Student = {
+  school: {
+    name: string;
+  } | null;
+  firstName: string;
+  lastName: string;
+  studentIdNumber: string;
+  id: string;
+  instrumentAssignment: {
+    instrument: {
+      school: {
+        name: string;
+      };
+      id: string;
+      classification: string;
+      brand: string;
+      serialNumber: string;
+      rentStatus: RentStatus;
+    };
+  } | null;
+}
+
+type Students = Student[]
 type CardListProps = {
-  studentSearchResult: StudentListWithoutUserId
+  studentSearchResult: Students
 };
 
 const columns = [
@@ -54,7 +78,7 @@ export default function StudentCardList({
         {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
       </TableHeader>
       <TableBody>
-        {filterStudentsBySchool.map((items: StudentWithoutUserId) => (
+        {filterStudentsBySchool.map((items: Student) => (
           <TableRow
             className="hover:cursor-pointer hover:bg-slate-400 rounded-lg"
             key={items.id}
@@ -63,9 +87,9 @@ export default function StudentCardList({
             <TableCell>{items.firstName} {items.lastName}</TableCell>
             <TableCell>{items.studentIdNumber}</TableCell>
             <TableCell>{items.school?.name}</TableCell>
-            <TableCell>{items.instrument ? items.instrument.classification : `${null}`}</TableCell>
-            <TableCell>{items.instrument ? items.instrument?.school?.name : `${null}`}</TableCell>
-            <TableCell>{items.instrument ? items.instrument?.serialNumber : `${null}`}</TableCell>
+            <TableCell>{items.instrumentAssignment ? items.instrumentAssignment.instrument.classification : `${null}`}</TableCell>
+            <TableCell>{items.instrumentAssignment ? items.instrumentAssignment?.instrument.school.name : `${null}`}</TableCell>
+            <TableCell>{items.instrumentAssignment ? items.instrumentAssignment?.instrument.serialNumber : `${null}`}</TableCell>
           </TableRow>
         ))}
       </TableBody>
