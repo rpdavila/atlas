@@ -10,9 +10,10 @@ import Profile from "@/app/components/profile/profile";
 export default function UserProfile() {
 
   return (
-    <Suspense fallback={<Loading />}>
-      <Profile />
-    </Suspense>
+    <section className="h-screen">
+      <Suspense fallback={<Loading />}>
+        <Profile />
+      </Suspense>
+    </section>
   )
-
 }

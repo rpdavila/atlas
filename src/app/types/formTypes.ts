@@ -1,92 +1,138 @@
-import { School } from "@prisma/client";
-
-
-export type RentStatus = "Rented" | "Available";
-
-export type UserInformation = {
-  schools: { id: string, name: string }[]
-  district: string
-};
-
-export enum UpdateUserData {
-  name = "Name",
-  school = "School",
-  role = "Role",
-  district = "District",
+export enum RentStatus {
+  Available = 'Available',
+  Rented = 'Rented'
 }
 
-export enum UserRole {
-  Administrator = "Administrator",
-  Teacher = "Teacher",
-  Recruiter = "Recruiter",
+export interface User {
+  id: string
+  name?: string | null
+  email?: string | null
+  emailVerified?: Date | null
+  image?: string | null
+  accounts: Account[]
+  sessions: Session[]
+  Authenticator: Authenticator[]
+  profile?: Profile | null
+  createdAt: Date
+  updatedAt: Date
 }
 
-export type Instrument = {
-  id: string;
-  userId: string | null;
-  classification: string;
-  brand: string;
-  serialNumber: string;
-  rentStatus: RentStatus;
-  assignedTo: OnlyStudentData | null;
-  school: {
-    name: string
-  } | null;
+export interface Profile {
+  id: string
+  userId: string
+  user: User
+  schools: School[]
+  students: Student[]
+  instruments: Instrument[]
+  district?: District | null
+  role: string
+  districtId?: string | null
 }
 
-export type InstrumentWithoutUserId = Omit<Instrument, "userId">
-export type InstrumentListWithoutUserId = Array<InstrumentWithoutUserId>
-export type InstrumentList = Array<Instrument>
-export type DistrictInstrumentsWithouUserId = Omit<Instrument, "userId" | "rentStatus" | "assignedTo">
-export type DistrictList = Array<DistrictInstrumentsWithouUserId>
-export type Student = {
-  id: string;
-  userId: string;
-  instrumentId: string | null;
-  firstName: string;
-  lastName: string;
-  studentIdNumber: string;
-  instrument: OnlyInstrumentData | null;
-  school: {
-    name: string;
-  } | null;
-};
+export interface School {
+  id: string
+  districtId?: string | null
+  name: string
+  district?: District | null
+  instruments: Instrument[]
+  profile?: Profile | null
+  profileId?: string | null
+  students: Student[]
+  instrumentAssignments: InstrumentAssignment[]
+}
 
-export type StudentWithoutUserId = Omit<Student, "userId" | "instrumentId">
-export type StudentListWithoutUserId = Array<StudentWithoutUserId>
-export type StudentWithoutUserIdAndInstrument = Omit<StudentWithoutUserId, "instrument">
-export type StudentListWithoutUserIdAndInstrument = Array<StudentWithoutUserIdAndInstrument>
-export type StudentList = Array<Student>;
+export interface District {
+  id: string
+  name: string
+  state: string
+  schools: School[]
+  instruments: Instrument[]
+  profile: Profile[]
+  profileId?: string | null
+}
 
-export type OnlyStudentData = Omit<Student, "userId" | "instrumentId" | "instrument">
+export interface Student {
+  id: string
+  schoolId?: string | null
+  firstName: string
+  lastName: string
+  studentIdNumber: string
+  instrumentAssignment?: InstrumentAssignment | null
+  school?: School | null
+  Profile?: Profile | null
+  profileId?: string | null
+}
 
-export type OnlyInstrumentData = Omit<
-  Instrument,
-  "rentStatus" | "assignedTo" | "id" | "instrumentList" | "teacherId" | "userId">
+export interface Instrument {
+  id: string
+  districtId: string
+  schoolId: string
+  classification: string
+  brand: string
+  serialNumber: string
+  rentStatus: RentStatus
+  instrumentAssignment?: InstrumentAssignment | null
+  school: School
+  district: District
+  Profile?: Profile | null
+  profileId?: string | null
+}
 
-export type Getinfo = {
-  studentInfo: OnlyStudentData;
-  instrumentInfo: OnlyInstrumentId;
-};
+export interface InstrumentAssignment {
+  id: string
+  studentId: string
+  instrumentId: string
+  schoolId: string
+  student: Student
+  instrument: Instrument
+  school?: School | null
+}
 
-export type AssignStudentToInstrument = {
-  studentInfo: OnlyStudentId | undefined;
-  instrumentInfo: OnlyInstrumentData | undefined;
-};
+interface Account {
+  id: string
+  userId: string
+  type: string
+  provider: string
+  providerAccountId: string
+  refresh_token?: string | null
+  access_token?: string | null
+  expires_at?: number | null
+  token_type?: string | null
+  scope?: string | null
+  id_token?: string | null
+  session_state?: string | null
+  createdAt: Date
+  updatedAt: Date
+  user: User
+}
 
-export type OnlyInstrumentType = Omit<
-  Instrument,
-  "id" | "brand" | "serialNumber" | "rentStatus" | "assignedTo"
->;
+interface Session {
+  id: string
+  sessionToken: string
+  userId: string
+  expires: Date
+  user: User
+  createdAt: Date
+  updatedAt: Date
+}
 
-export type OnlyInstrumentId = Omit<
-  Instrument,
-  "serialNumber" | "brand" | "rentStatus" | "assignedTo" | "classification"
->;
+interface VerificationToken {
+  id: string
+  identifier: string
+  token: string
+  expires: Date
+}
 
-export type OnlyStudentId = Omit<
-  Student,
-  "instrument" | "id" | "firstName" | "lastName"
->;
+interface Authenticator {
+  credentialID: string
+  userId: string
+  providerAccountId: string
+  credentialPublicKey: string
+  counter: number
+  credentialDeviceType: string
+  credentialBackedUp: boolean
+  transports?: string | null
+  user: User
+}
 
-export type WithoutId = Omit<Instrument, "id">;
+

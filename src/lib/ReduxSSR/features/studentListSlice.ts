@@ -1,15 +1,29 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 //type imports
-import { StudentListWithoutUserIdAndInstrument, } from "@/app/types/formTypes";
+
+type Student = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  studentIdNumber: string;
+  school: {
+    id: string;
+    districtId: string | null;
+    profileId: string | null;
+    name: string;
+  } | null;
+} | undefined
+
+type StudentList = Student[]
+
 
 type StudentState = {
-  dropDownList: StudentListWithoutUserIdAndInstrument;
+  dropDownList: StudentList;
 };
 const initialState: StudentState = {
-  dropDownList: [],
+  dropDownList: []
 };
-
 
 export const studentListSlice = createSlice({
   name: "studentList",
