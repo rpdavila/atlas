@@ -31,13 +31,13 @@ export default function RootLayout({
             <Header />
             <main className="flex flex-col justify-center flex-1 px-4 sm:px-6 lg:px-8 text-center bg-slate-700">
 
-            {children}
+              {children}
 
-            <footer className="flex items-center justify-center w-full h-24 border-t mt-8">
-              <Link href="/" target="_blank" rel="noopener noreferrer">
-                Powered by Crescendo Cloud
-              </Link>
-            </footer>
+              <footer className="flex items-center justify-center w-full h-24 border-t mt-8">
+                <Link href="/" target="_blank" rel="noopener noreferrer">
+                  Powered by Crescendo Cloud
+                </Link>
+              </footer>
             </main>
           </Providers>
         </NextAuthProvider>
