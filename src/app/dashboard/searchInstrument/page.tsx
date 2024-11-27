@@ -1,7 +1,4 @@
 
-// type imports
-import { InstrumentListWithoutUserId } from "@/app/types/formTypes";
-
 // auth import 
 import { auth } from "@/auth"
 
@@ -9,7 +6,7 @@ import { auth } from "@/auth"
 import SearchInstrument from "@/app/components/searchInstruments/searchInstruments"
 
 // actions imports
-import { getInstrumentsByUserId} from "@/actions/actions";
+import { getInstrumentsByUserId } from "@/actions/actions";
 import { permanentRedirect } from "next/navigation";
 import { Suspense } from "react";
 import Loading from "@/app/components/loading/loading";
@@ -23,8 +20,8 @@ export default async function InstrumentPage() {
 
   const instrumentData = await getInstrumentsByUserId(session.user.id as string);
 
-  if (instrumentData?.profile?.instruments.length) {
-    const displayInstruments: InstrumentListWithoutUserId = instrumentData.profile?.instruments;
+  if (instrumentData?.length) {
+    const displayInstruments = instrumentData;
     return (
       <Suspense fallback={<Loading />}>
         <SearchInstrument displayInstruments={displayInstruments} />
