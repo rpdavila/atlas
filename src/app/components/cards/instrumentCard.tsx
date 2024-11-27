@@ -1,6 +1,5 @@
 import { useEffect } from "react";
-// type imports
-import { InstrumentWithoutUserId, StudentListWithoutUserIdAndInstrument } from "@/app/types/formTypes";
+
 //component imports
 import Button from "../button/button";
 import { Select, SelectItem } from "@nextui-org/react";
@@ -11,9 +10,49 @@ import { useSession } from "next-auth/react";
 //redux 
 import { useAppDispatch } from "@/lib/ReduxSSR/hooks";
 import { setDropDownList } from "@/lib/ReduxSSR/features/studentListSlice";
+
+//type 
+import { RentStatus } from "@prisma/client";
+
+type Student = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  studentIdNumber: string;
+  school: {
+    id: string;
+    districtId: string | null;
+    profileId: string | null;
+    name: string;
+  } | null;
+} | undefined
+
+type StudentList = Student[]
+
+type Instrument = {
+  id: string;
+  classification: string;
+  brand: string;
+  serialNumber: string;
+  rentStatus: RentStatus;
+  instrumentAssignment: {
+    id: string;
+    student: {
+      id: string;
+      firstName: string;
+      lastName: string;
+      studentIdNumber: string;
+    };
+  } | null;
+  school: {
+    name: string;
+  };
+} | undefined
+
+
 type CardProps = {
-  instrument: InstrumentWithoutUserId;
-  studentDropDownList: StudentListWithoutUserIdAndInstrument,
+  instrument: Instrument;
+  studentDropDownList: StudentList,
 };
 
 export default function InstrumentCard({ instrument, studentDropDownList }: CardProps) {
@@ -25,10 +64,10 @@ export default function InstrumentCard({ instrument, studentDropDownList }: Card
       dispatch(setDropDownList(students))
     }
     fetchData()
-  },[dispatch, session.data?.user?.id])
+  }, [dispatch, session.data?.user?.id])
   return (
     <section className="flex flex-col items-center w-full justify-evenly m-2 bg-white sm:flex-row sm:w-full rounded-lg">
-      <div className="flex flex-col w-auto sm:w-1/3 justify-center items-start m-6 ">
+      <div className="flex flex-col w-full sm:w-1/3  items-start m-6 justify-between ">
         <p>
           <strong>Instrument type: </strong>
           {instrument?.classification}
@@ -50,26 +89,25 @@ export default function InstrumentCard({ instrument, studentDropDownList }: Card
           {instrument?.school?.name}
         </p>
       </div>
-      {instrument.assignedTo ? (
+      {instrument?.instrumentAssignment ? (
         <div className="flex flex-col items-start justify-center m-6">
           <strong>
             <h1>Assigned to: </h1>
-
           </strong>
           <p>
             <strong>First Name:</strong>
-            {instrument.assignedTo?.firstName}
+            {instrument.instrumentAssignment.student.firstName}
           </p>
           <p>
             <strong>Last Name: </strong>
-            {instrument.assignedTo?.lastName}
+            {instrument.instrumentAssignment.student.lastName}
           </p>
           <p>
             <strong>Student Id Number: </strong>
-            {instrument.assignedTo?.studentIdNumber}
+            {instrument.instrumentAssignment.student.studentIdNumber}
           </p>
           <form action={async () => {
-            await unassignStudentFromInstrument(session.data?.user?.id as string, instrument.id)
+            await unassignStudentFromInstrument(instrument.id, instrument.instrumentAssignment?.student.id as string)
             const students = await getDropDownList(session.data?.user?.id as string)
             dispatch(setDropDownList(students))
           }}>
@@ -82,7 +120,7 @@ export default function InstrumentCard({ instrument, studentDropDownList }: Card
           <form
             className="w-full"
             action={async (formData: FormData) => {
-              await assignStudentToInstrument(formData, instrument.id)
+              await assignStudentToInstrument(formData, instrument?.id as string)
               const students = await getDropDownList(session.data?.user?.id as string)
               dispatch(setDropDownList(students))
             }}
@@ -96,10 +134,10 @@ export default function InstrumentCard({ instrument, studentDropDownList }: Card
               {studentDropDownList.map((student) => {
                 return (
                   <SelectItem
-                    key={student.id}
-                    textValue={`${student.firstName} ${student.lastName}`}
+                    key={student?.id as string}
+                    textValue={`${student?.firstName} ${student?.lastName}`}
                   >
-                    {student.firstName} {student.lastName}
+                    {student?.firstName} {student?.lastName}
                   </SelectItem>
                 );
               })}
