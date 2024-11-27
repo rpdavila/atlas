@@ -116,6 +116,33 @@ export const createProfile = async (formData: FormData, userId: string) => {
       })
     }
 
+    //get students if any
+    const studentIds = await prisma.student.findMany({
+      where: {
+        school: {
+          name: {
+            in: schoolNamesArray
+          }
+        }
+      },
+      select: {
+        id: true
+      }
+    })
+
+    const instrumentIds = await prisma.instrument.findMany({
+      where: {
+        school: {
+          name: {
+            in: schoolNamesArray
+          }
+        }
+      },
+      select: {
+        id: true
+      }
+    })
+
     // create the user profile and connect all related records
     const profileData = await prisma.profile.create({
       data: {
@@ -132,6 +159,12 @@ export const createProfile = async (formData: FormData, userId: string) => {
           connect: {
             id: userId
           }
+        },
+        students: {
+          connect: studentIds ?? []
+        },
+        instruments: {
+          connect: instrumentIds ?? []
         }
       },
       // return newly created profile
@@ -154,6 +187,8 @@ export const createProfile = async (formData: FormData, userId: string) => {
         }
       }
     });
+
+
     revalidatePath("/userProfile")
     return profileData
   } catch (error) {
@@ -540,7 +575,7 @@ export async function unassignStudentFromInstrument(instrumentId: string, studen
     if (!assignment) {
       throw new Error("Instrument assignment not found.")
     }
-    
+
 
     // delete record
     await prisma.instrumentAssignment.delete({
@@ -619,11 +654,65 @@ export async function getInstrumentsByDistrict(districtId: string) {
 }
 
 export async function deleteAccount(userId: string) {
-  await prisma.user.delete({
-    where: {
-      id: userId
+  try {
+    // get profile
+    const userProfile = await prisma.profile.findUnique({
+      where: {
+        userId: userId
+      },
+    })
+
+    if (userProfile) {
+      // update all instruments to remove profile reference
+      await prisma.instrument.updateMany({
+        where: {
+          profileId: userProfile.id
+        },
+        data: {
+          profileId: null
+        }
+      })
+
+      await prisma.student.updateMany({
+        where: {
+          profileId: userProfile.id
+        },
+        data: {
+          profileId: null
+        }
+      })
     }
-  })
+
+    await prisma.profile.delete({
+      where: {
+        userId: userId
+      }
+    })
+
+    await prisma.session.deleteMany({
+      where: { userId: userId }
+    })
+
+    await prisma.authenticator.deleteMany({
+      where: { userId: userId }
+    })
+
+    await prisma.account.deleteMany({
+      where: { userId: userId }
+    })
+
+    await prisma.user.delete({
+      where: {
+        id: userId
+      }
+    })
+
+    return { success: true, message: "Account deleted" }
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    return { success: false, message: "Error deleting account" }
+
+  }
 }
 
 export async function getTeacherEmailByInstument(instrumentId: string, school: string) {
