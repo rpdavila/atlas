@@ -105,7 +105,7 @@ export default function InstrumentForm({
 
 
 
-          <Button type="submit" name="Add Instrument" />
+          <Button danger={false} type="submit" name="Add Instrument" />
         </form>
       )}
     </div>
