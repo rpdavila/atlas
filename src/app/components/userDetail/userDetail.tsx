@@ -4,17 +4,17 @@ import { auth } from "@/auth"
 export default async function UserDetail() {
   const session = await auth();
   const instrumentCountSchoolWide = await getAvailableInstrumentCount(session?.user?.id as string)
-  const inastrumentCountDistrict = await getAvailableInstrumentCountByDistrict(session?.user?.id as string)
+  const instrumentCountDistrict = await getAvailableInstrumentCountByDistrict(session?.user?.id as string)
 
   return (
     <section className="flex flex-col justify-evenly items-center text-2xl bg-white rounded-lg basis-3/4 sm:flex- sm:flex-wrap">
       <h1>
-        Hello {session?.user?.name}
+        Hello, {session?.user?.name}
       </h1>
       <section>
         <p>Number of instruments</p>
-        <p># of instruments available school wide: {instrumentCountSchoolWide}</p>
-        <p># of instruments available district wide: {inastrumentCountDistrict}</p>
+        <p>Number of instruments available school wide: {instrumentCountSchoolWide}</p>
+        <p>Number of instruments available district wide: {instrumentCountDistrict}</p>
       </section>
     </section>
   );
