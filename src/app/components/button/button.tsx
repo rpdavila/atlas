@@ -9,7 +9,8 @@ type ButtonProps = {
   onClick?: () => void;
   disabledColor?: boolean;
   icon?: React.JSX.Element;
-  danger?: boolean
+  danger?: boolean;
+  signIn?: boolean
 };
 
 export default function Button({
@@ -18,7 +19,8 @@ export default function Button({
   marginTop,
   onClick,
   icon,
-  danger
+  danger,
+  signIn
 }: ButtonProps): React.JSX.Element {
   const buttonClass = `bg-blue-500 hover:bg-blue-700 text-white p-2 mt-${marginTop} w-full sm:w-full rounded-lg`;
   const greyColor = `bg-gray-300 text-black p-2 mt-${marginTop} w-full rounded-lg`;
@@ -30,9 +32,8 @@ export default function Button({
       type={type}
       onClick={onClick}
       disabled={pending}
-
     >
-      <div className="flex flex-row justify-center items-center gap-2">
+      <div className="flex flex-row justify-center items-center gap-2 w-44">
         {pending && <Spinner size="sm" color="primary" />}
         {icon && icon}
         {!pending && name}
