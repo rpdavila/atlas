@@ -628,10 +628,19 @@ export async function getDropDownList(userId: string) {
   return students?.students
 }
 
-export async function getInstrumentsByDistrict(districtId: string) {
+export async function getInstrumentsByDistrict(userId: string) {
+  const districtId = await prisma.profile.findUnique({
+    where: {
+      userId: userId
+    },
+    select: {
+      districtId: true
+    }
+  })
+
   const instruments = await prisma.district.findUnique({
     where: {
-      id: districtId
+      id: districtId?.districtId as string
     },
     select: {
       instruments: {
@@ -752,39 +761,51 @@ export async function getTeacherEmailByInstument(instrumentId: string, school: s
   }
 }
 
-export async function getAvailableInstrumentCount(schoolId: string) {
-  const availableInstruments = await prisma.school.findUnique({
-    where: { id: schoolId },
-    include: {
-      _count: {
+export async function getAvailableInstrumentCount(userId: string) {
+  const schoolId = await prisma.profile.findUnique({
+    where: {
+      userId: userId
+    },
+    select: {
+      schools: {
         select: {
-          instruments: {
-            where: {
-              rentStatus: "Available"
-            }
-          }
+          id: true
         }
       }
     }
   })
 
-  return availableInstruments?._count
+  const availableInstruments = await prisma.instrument.count({
+    where: {
+      schoolId: {
+        // check multiple schools
+        in: schoolId?.schools.map(school => school.id)
+      },
+      rentStatus: "Available"
+    },
+  })
+  return availableInstruments
 }
 
-export async function getAvailableInstrumentCountByDistrict(districtId: string) {
-  const availableInstruments = await prisma.district.findUnique({
-    where: { id: districtId },
-    include: {
-      _count: {
+export async function getAvailableInstrumentCountByDistrict(userId: string) {
+  const districtId = await prisma.profile.findUnique({
+    where: {
+      userId: userId
+    },
+    select: {
+      district: {
         select: {
-          instruments: {
-            where: {
-              rentStatus: "Available"
-            }
-          }
+          id: true
         }
       }
     }
   })
-  return availableInstruments?._count
+
+  const availableInstruments = await prisma.instrument.count({
+    where: {
+      districtId: districtId?.district?.id,
+      rentStatus: "Available"
+    }
+  })
+  return availableInstruments
 }
