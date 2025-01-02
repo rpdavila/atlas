@@ -1,7 +1,7 @@
 // react imports
 import { Suspense } from "react";
 // type imports
-import { getInstrumentsByDistrictWithUersId } from "@/actions/actions";
+import { getInstrumentsByDistrict } from "@/actions/actions";
 //auth imports
 import { auth } from "@/auth";
 //next imports
@@ -15,9 +15,9 @@ export default async function DistrictInstruments() {
   //redirect to signIn page if user is not signed in
   if (!session?.user) permanentRedirect("signIn")
 
-  const districtData = await getInstrumentsByDistrictWithUersId(session?.user?.id as string)
-  if (districtData?.profile?.district?.instruments.length) {
-    const displayInstruments = districtData.profile.district.instruments;
+  const districtData = await getInstrumentsByDistrict(session?.user?.id as string)
+  if (districtData?.length) {
+    const displayInstruments = districtData;
     return (
       <Suspense fallback={<Loading />}>
         <SearchDistrictInstruments displayInstruments={displayInstruments} />
