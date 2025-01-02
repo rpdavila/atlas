@@ -36,7 +36,7 @@ export default function ProfileData({ profile }: { profile: ProfileData }) {
 
   return (
     <>
-      {message && <p className={`${message ? "bg-green-500" : "bg-red-500"} text-slate-100 w-3`}>{message}</p>}
+      {message && <p className={`${message ? "bg-green-500 w-full h-auto" : "bg-red-500 w-full h-auto"} text-slate-100 w-3`}>{message}</p>}
       <table className="bg-slate-50 rounded-lg">
         <tbody>
           <tr className="border-b-small border-slate-700 rounded-lg">
@@ -85,8 +85,7 @@ export default function ProfileData({ profile }: { profile: ProfileData }) {
             setMessage(null)
           }, 3000)
         }
-      }
-      }
+      }}
       >
         {profile?.profile?.role && <Button danger type="submit" name="Delete Account" />}
       </form>
