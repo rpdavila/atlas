@@ -11,10 +11,10 @@ export default async function UserDetail() {
       <h1>
         Hello, {session?.user?.name}
       </h1>
-      <section>
-        <p>Number of instruments</p>
+      <section className="flex flex-col gap-4">
+        <p className="underline-offset-6 underline text-4xl">Number of instruments</p>
         <p>Number of instruments available school wide: {instrumentCountSchoolWide}</p>
-        <p>Number of instruments available district wide: {instrumentCountDistrict}</p>
+        <p>Number of instruments available district wide: {instrumentCountDistrict - instrumentCountSchoolWide}</p>
       </section>
     </section>
   );
