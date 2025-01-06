@@ -33,7 +33,7 @@ export default function Button({
       onClick={onClick}
       disabled={pending}
     >
-      <div className="flex flex-row justify-center items-center gap-2 w-44">
+      <div className="flex flex-row justify-center items-center gap-2 w-auto self-center">
         {pending && <Spinner size="sm" color="primary" />}
         {icon && icon}
         {!pending && name}
