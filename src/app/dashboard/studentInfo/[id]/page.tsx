@@ -1,8 +1,6 @@
 import { getStudentById } from "@/actions/actions"
 import { notFound } from "next/navigation"
-type Props = {
-  params: { id: string }
-}
+
 type Student = {
   firstName: string;
   lastName: string;
@@ -19,7 +17,7 @@ type Student = {
   } | null;
 } | null
 
-export default async function StudentInfo({ params }: Props) {
+export default async function StudentInfo({ params }: {params: {id: string}}) {
   try {
     const student: Student = await getStudentById(params.id)
     if (!student) {
