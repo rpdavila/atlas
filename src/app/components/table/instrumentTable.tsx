@@ -2,10 +2,11 @@
 import { useState } from "react";
 // type imports
 import { getTeacherEmailByInstument } from "@/actions/actions";
-import { DistrictList } from "@/app/types/formTypes";
+import { RentStatus } from "@prisma/client";
 import { useAppSelector } from "@/lib/ReduxSSR/hooks";
-//session
-import { auth } from "@/auth";
+//auth
+import { useSession } from "next-auth/react";
+
 //ui imports
 import {
   Table,
@@ -15,8 +16,20 @@ import {
   TableRow,
   TableCell,
 } from "@nextui-org/react"
-import { useSession } from "next-auth/react";
 
+
+type DistrictInstrument = {
+  school: {
+    name: string;
+  };
+  id: string;
+  classification: string;
+  brand: string;
+  serialNumber: string;
+  rentStatus: RentStatus;
+} | undefined
+
+type DistrictInstruments = Array<DistrictInstrument>
 
 const columns = [
   {
@@ -40,14 +53,14 @@ const columns = [
 export default function DistrictTable({
   districtInstrumentSearchResults
 }: {
-  districtInstrumentSearchResults: DistrictList
+  districtInstrumentSearchResults: DistrictInstruments
 }) {
   const session = useSession()
   const [emailSent, setEmailSent] = useState<boolean>(false)
 
-  const excludeSchools = useAppSelector(state => state.userInfo.schools).map(school => school.name as string)
+  const excludeSchools = useAppSelector(state => state.userInfo.schools).map((school: { name: string; }) => school.name)
   const filteredSchools = districtInstrumentSearchResults.filter(school =>
-    !excludeSchools.includes(school.school?.name as string)
+    !excludeSchools.includes(school?.school.name as string)
   )
 
   const handleClick = async (
@@ -110,13 +123,13 @@ export default function DistrictTable({
           {filteredSchools.map((item) => (
             <TableRow
               className="hover:cursor-pointer hover:bg-slate-400 rounded-lg"
-              key={item.id}
-              onClick={() => handleClick(item.school?.name as string, item.id, item.classification, item.serialNumber)}
+              key={`${item?.id}-${item?.serialNumber}`}
+            // onClick={() => handleClick(item?.school?.name as string, item?.id as string, item?.classification as string, item?.serialNumber as string)}
             >
-              <TableCell>{item.classification}</TableCell>
-              <TableCell>{item.brand}</TableCell>
-              <TableCell>{item.serialNumber}</TableCell>
-              <TableCell>{item.school?.name}</TableCell>
+              <TableCell>{item?.classification}</TableCell>
+              <TableCell>{item?.brand}</TableCell>
+              <TableCell>{item?.serialNumber}</TableCell>
+              <TableCell>{item?.school?.name}</TableCell>
             </TableRow>
           ))}
         </TableBody>
