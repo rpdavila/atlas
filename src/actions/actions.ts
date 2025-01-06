@@ -301,7 +301,7 @@ export const getStudentById = async (id: string) => {
       }
     }
   })
-  return student
+  return student ?? null
 }
 export const getStudentsByUserId = async (userId: string) => {
   const students = await prisma.profile.findUnique({
