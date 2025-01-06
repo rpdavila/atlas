@@ -1,7 +1,7 @@
 "use client";
 //react imports
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 // redux imports
 import { useAppSelector, useAppDispatch } from "@/lib/ReduxSSR/hooks";
@@ -18,6 +18,7 @@ type SearchOptionProps = {
 
 export default function SelectSearchOptions({ children }: SearchOptionProps) {
   const dispatch = useAppDispatch();
+  const pathName = usePathname();
   const router = useRouter();
 
   const selectOption = useAppSelector(
@@ -51,8 +52,6 @@ export default function SelectSearchOptions({ children }: SearchOptionProps) {
             </SelectItem>
           ))}
         </Select>
-
-
       </div>
       {children}
     </>
