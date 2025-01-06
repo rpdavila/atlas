@@ -67,6 +67,9 @@ export default function StudentCardList({
   const schoolName = useAppSelector(state => state.searchOptions.school)
   const filterStudentsBySchool = studentSearchResult.filter(student => student.school?.name === schoolName)
 
+  const handleStudent = (id: string,) => {
+    router.push(`/dashboard/studentInfo/${id}`)
+  }
   return (
     <Table
       aria-label="Students"
@@ -79,6 +82,7 @@ export default function StudentCardList({
           <TableRow
             className="hover:cursor-pointer hover:bg-slate-400 rounded-lg"
             key={items.id}
+            onClick={() => handleStudent(items.id)}
           >
             <TableCell>{items.firstName} {items.lastName}</TableCell>
             <TableCell>{items.studentIdNumber}</TableCell>
