@@ -12,6 +12,7 @@ import { useSession } from "next-auth/react";
 // redux
 import { useAppDispatch } from "@/lib/ReduxSSR/hooks";
 import { setDistrict, setSchools } from "@/lib/ReduxSSR/features/userSlice";
+import { District } from "@prisma/client";
 
 
 export default function ProfileForm() {
@@ -26,12 +27,14 @@ export default function ProfileForm() {
       action={async (formData: FormData) => {
         ref.current?.reset();
         const data = await createProfile(formData, session.data?.user?.id as string)
-        
+
         dispatch(setSchools({
           district: data?.district?.name,
           schools: data?.schools
         }))
-        dispatch(setDistrict(data?.district?.name as string ))
+        dispatch(setDistrict({
+          name: data?.district?.name as string
+        }))
       }}
     >
       <Input
@@ -80,6 +83,6 @@ export default function ProfileForm() {
       <Button
         type="submit"
         name="Add Profile" />
-    </form >    
+    </form >
   )
 }
