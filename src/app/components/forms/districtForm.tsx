@@ -37,7 +37,7 @@ export default function DistrictForm() {
     }
     if (!districtName) {
       getDistrict()
-        .then(data => dispatch(setDistrict(data?.profile?.district?.name as string)))
+        .then(data => dispatch(setDistrict({ name: data?.profile?.district?.name as string })))
 
     }
   }, [dispatch, districtName, session.data?.user?.id])
@@ -55,7 +55,7 @@ export default function DistrictForm() {
               isSelected={districtSearch}
               onChange={handleCheckboxChange}
             >
-              {districtName}
+              {districtName.name}
             </Checkbox>
           </form>
         </section>
