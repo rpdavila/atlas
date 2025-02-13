@@ -1,9 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { UserInformation } from "@/app/types/formTypes";
+import { School, District } from "@prisma/client";
 
-const initialState: UserInformation = {
+type DistrictName = Omit<District, "id" | "profileId" | "state">
+type UserState = {
+  schools: School[];
+  district: DistrictName | undefined;
+};
+const initialState: UserState = {
   schools: [],
-  district: ''
+  district: {
+    name: ""
+  },
 };
 
 export const userInformationSlice = createSlice({
@@ -17,10 +24,12 @@ export const userInformationSlice = createSlice({
         district: action.payload.district
       };
     },
-    setDistrict: (state, action: PayloadAction<string>) => {
+    setDistrict: (state, action: PayloadAction<DistrictName>) => {
       return {
         ...state,
-        district: action.payload
+        district: {
+          name: action.payload.name
+        }
       };
     },
   },
