@@ -1,3 +1,4 @@
+"use client";
 //nextui
 import { RadioGroup, Radio } from "@heroui/react";
 // redux

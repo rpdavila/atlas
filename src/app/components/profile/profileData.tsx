@@ -73,7 +73,7 @@ export default function ProfileData({ profile }: { profile: ProfileData }) {
       </table>
       <form action={async () => {
         const response = await deleteAccount(session.data?.user?.id as string)
-        if (response.success) {
+        if (response?.success) {
           setMessage(response.message)
           setTimeout(() => {
             setMessage(null)

@@ -1,3 +1,4 @@
+"use clinet";
 import { useFormStatus } from "react-dom";
 import { Spinner } from "@heroui/react";
 
