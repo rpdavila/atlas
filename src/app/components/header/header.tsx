@@ -25,7 +25,7 @@ import {
   DropdownTrigger,
   DropdownMenu,
   Link
-} from "@nextui-org/react";
+} from "@heroui/react";
 //nav lists
 import { navList, dashBoardNavList } from "@/app/data/nav-List";
 import { tools } from "@/app/data/tools";

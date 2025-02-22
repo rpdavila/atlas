@@ -2,7 +2,7 @@
 //react imports
 import { useRef } from "react";
 //ui imports
-import { Input, Select, SelectItem } from "@nextui-org/react"
+import { Input, Select, SelectItem } from "@heroui/react"
 import Button from "../button/button"
 // action imports
 import { createProfile } from "@/actions/actions";

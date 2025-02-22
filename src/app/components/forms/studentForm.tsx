@@ -6,7 +6,7 @@ import React, { useRef } from "react";
 import { useAppSelector, useAppDispatch } from "@/lib/ReduxSSR/hooks";
 
 //component imports
-import { Input, Select, SelectItem } from "@nextui-org/react";
+import { Input, Select, SelectItem } from "@heroui/react";
 import Button from "../button/button";
 //hooks imports
 import StudentSearchForm from "./studentSearchForm";

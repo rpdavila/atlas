@@ -1,5 +1,5 @@
 import { useFormStatus } from "react-dom";
-import { Spinner } from "@nextui-org/react";
+import { Spinner } from "@heroui/react";
 
 type ButtonProps = {
   name: string;

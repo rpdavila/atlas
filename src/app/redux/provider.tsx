@@ -5,7 +5,7 @@ import { makeStore, AppStore } from "@/lib/ReduxSSR/store";
 import { PersistGate } from "redux-persist/integration/react";
 import persistStore from "redux-persist/es/persistStore";
 import { useRouter } from "next/navigation";
-import { NextUIProvider } from "@nextui-org/react";
+import { HeroUIProvider } from "@heroui/react";
 
 
 export function Providers(
@@ -23,13 +23,13 @@ export function Providers(
   const persistor = persistStore(storeRef.current);
 
   return (
-    <NextUIProvider navigate={router.push}>
+    <HeroUIProvider navigate={router.push}>
       <Provider store={storeRef.current}>
         <PersistGate loading={null} persistor={persistor}>
           {children}
         </PersistGate>
       </Provider>
-    </NextUIProvider>
+    </HeroUIProvider>
 
   )
 }

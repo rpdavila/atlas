@@ -1,6 +1,6 @@
 "use client";
 //component imports
-import { Input } from "@nextui-org/react";
+import { Input } from "@heroui/react";
 //redux imports
 import { useAppDispatch, useAppSelector } from "@/lib/ReduxSSR/hooks";
 import { setSearch } from "@/lib/ReduxSSR/features/searchOptionsSlice";

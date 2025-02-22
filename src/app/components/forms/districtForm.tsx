@@ -1,7 +1,7 @@
 //react
 import { useEffect } from "react";
 //components
-import { Checkbox } from "@nextui-org/react"
+import { Checkbox } from "@heroui/react"
 import { useAppSelector, useAppDispatch } from "@/lib/ReduxSSR/hooks";
 // server actions
 import { getDistrictFromUserId } from "@/actions/actions";

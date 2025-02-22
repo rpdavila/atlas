@@ -8,7 +8,7 @@ import { Inter } from "next/font/google";
 import { Providers } from "@/app/redux/provider";
 import Header from "./components/header/header";
 import { NextAuthProvider } from "./nextAuthProvider/nextAuthProvider";
-import { Link } from "@nextui-org/react";
+import { Link } from "@heroui/react";
 
 
 const inter = Inter({ subsets: ["latin"] });

@@ -6,7 +6,7 @@ import React, { useRef } from "react";
 import { useAppSelector } from "@/lib/ReduxSSR/hooks";
 
 //compOnent imports
-import { Input, Select, SelectItem } from "@nextui-org/react";
+import { Input, Select, SelectItem } from "@heroui/react";
 import InstrumentSearchForm from "./instrumentSearchForm";
 import { RentStatus } from "@prisma/client";
 import Button from "../button/button";

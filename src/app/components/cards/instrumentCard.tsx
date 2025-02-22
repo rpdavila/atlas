@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 //component imports
 import Button from "../button/button";
-import { Select, SelectItem } from "@nextui-org/react";
+import { Select, SelectItem } from "@heroui/react";
 // server actions
 import { assignStudentToInstrument, getDropDownList, unassignStudentFromInstrument } from "@/actions/actions";
 // auth

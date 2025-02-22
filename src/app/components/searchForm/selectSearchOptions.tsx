@@ -9,7 +9,7 @@ import { RootState } from "@/lib/ReduxSSR/store";
 import { setType } from "@/lib/ReduxSSR/features/searchOptionsSlice";
 //component imports
 
-import { Select, SelectItem } from "@nextui-org/react";
+import { Select, SelectItem } from "@heroui/react";
 import { tools } from "@/app/data/tools";
 
 type SearchOptionProps = {

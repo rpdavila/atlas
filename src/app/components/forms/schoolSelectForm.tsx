@@ -1,5 +1,5 @@
 //nextui
-import { RadioGroup, Radio } from "@nextui-org/react";
+import { RadioGroup, Radio } from "@heroui/react";
 // redux
 import { useAppDispatch, useAppSelector } from "@/lib/ReduxSSR/hooks";
 import { setSchool } from "@/lib/ReduxSSR/features/searchOptionsSlice";

@@ -1,5 +1,5 @@
 
-import { Table, TableBody, TableRow, TableCell, TableColumn, TableHeader } from "@nextui-org/react";
+import { Table, TableBody, TableRow, TableCell, TableColumn, TableHeader } from "@heroui/react";
 
 import { useAppSelector } from "@/lib/ReduxSSR/hooks";
 
