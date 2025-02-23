@@ -8,9 +8,7 @@ import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { signIn, signOut } from "../auth";
 import { Profile, User, Instrument, School, District, RentStatus } from "@/app/types/formTypes";
-
-
-
+import { IoPrismSharp } from "react-icons/io5";
 
 export const handleSignIn = async (provider?: (string & {}) | undefined, options?: FormData | ({
   redirectTo?: string;
@@ -40,157 +38,160 @@ export const createProfile = async (formData: FormData, userId: string) => {
   let schools: Array<Omit<School, "districtId" | "district" | "instruments" | "profile" | "profileId" | "students" | "instrumentAssignments">> | null = null
   let schoolIds: Array<Omit<School, "name" | "districtId" | "district" | "instruments" | "profile" | "profileId" | "students" | "instrumentAssignments">> | null = null
   try {
-    //find district
-    console.log("Searching if District exists")
-    districtId = await prisma.district.findFirst({
-      where: {
-        name: districtName,
-        state: state
-      },
-      select: {
-        id: true
-      }
-    });
 
-    // if district not found create the district
-    if (!districtId?.id) {
-      console.log("District not found, creating district")
-      await prisma.district.create({
-        data: {
+    await prisma.$transaction(async (tx) => {
+      //find district
+      console.log("Searching if District exists")
+      districtId = await tx.district.findFirst({
+        where: {
           name: districtName,
           state: state
         },
-      })
-    }
+        select: {
+          id: true
+        }
+      });
 
-    //find existing schools
-    console.log("finding schools")
-    schools = await prisma.school.findMany({
-      where: {
-        name: {
-          in: schoolNamesArray
-        },
-        districtId: districtId?.id
-      },
-    })
-    if (schools.length > 0) {
-      schoolIds = schools.map(school => ({ id: school.id }));
-    }
-    // if no schools create the schools
-    if (!schools.length) {
-      console.log("No schools found in DB, creating schools")
-      await prisma.school.createMany({
-        data: schoolNamesArray.map((name) => ({
-          name: name,
-          districtId: districtId?.id
-        })),
-      })
-    }
+      // if district not found create the district
+      if (!districtId?.id) {
+        console.log("District not found, creating district")
+        await tx.district.create({
+          data: {
+            name: districtName,
+            state: state
+          },
+        })
+      }
 
-    //find the newly created school
-    if (!schools?.length) {
-      console.log("finding newly created schools")
-      schoolIds = await prisma.school.findMany({
+      //find existing schools
+      console.log("finding schools")
+      schools = await tx.school.findMany({
         where: {
           name: {
             in: schoolNamesArray
           },
           districtId: districtId?.id
         },
-        select: {
-          id: true
-        }
       })
-    }
 
-    //find the newly created district if it was not found before
-    if (!districtId?.id) {
-      console.log("finding newly created district")
-      districtId = await prisma.district.findFirst({
-        where: {
-          name: districtName
-        },
-        select: {
-          id: true
-        }
-      })
-    }
-
-    //get students if any
-    const studentIds = await prisma.student.findMany({
-      where: {
-        school: {
-          name: {
-            in: schoolNamesArray
-          }
-        }
-      },
-      select: {
-        id: true
+      if (schools.length > 0) {
+        schoolIds = schools.map(school => ({ id: school.id }));
       }
-    })
 
-    const instrumentIds = await prisma.instrument.findMany({
-      where: {
-        school: {
-          name: {
-            in: schoolNamesArray
-          }
-        }
-      },
-      select: {
-        id: true
+      // if no schools create the schools
+      if (!schools.length) {
+        console.log("No schools found in DB, creating schools")
+        await tx.school.createMany({
+          data: schoolNamesArray.map((name) => ({
+            name: name,
+            districtId: districtId?.id
+          })),
+        })
       }
-    })
 
-    // create the user profile and connect all related records
-    const profileData = await prisma.profile.create({
-      data: {
-        role: role as string,
-        district: {
-          connect: {
-            id: districtId?.id
-          }
-        },
-        schools: {
-          connect: schoolIds ?? []
-        },
-        user: {
-          connect: {
-            id: userId
-          }
-        },
-        students: {
-          connect: studentIds ?? []
-        },
-        instruments: {
-          connect: instrumentIds ?? []
-        }
-      },
-      // return newly created profile
-      select: {
-        district: {
+      //find the newly created school
+      if (!schools?.length) {
+        console.log("finding newly created schools")
+        schoolIds = await tx.school.findMany({
+          where: {
+            name: {
+              in: schoolNamesArray
+            },
+            districtId: districtId?.id
+          },
           select: {
-            name: true,
-          }
-        },
-        schools: {
-          select: {
-            name: true,
             id: true
           }
-        },
-        user: {
+        })
+      }
+
+      //find the newly created district if it was not found before
+      if (!districtId?.id) {
+        console.log("finding newly created district")
+        districtId = await tx.district.findFirst({
+          where: {
+            name: districtName
+          },
           select: {
-            email: true
+            id: true
+          }
+        })
+      }
+
+      //get students if any
+      const studentIds = await tx.student.findMany({
+        where: {
+          school: {
+            name: {
+              in: schoolNamesArray
+            }
+          }
+        },
+        select: {
+          id: true
+        }
+      })
+
+      const instrumentIds = await tx.instrument.findMany({
+        where: {
+          school: {
+            name: {
+              in: schoolNamesArray
+            }
+          }
+        },
+        select: {
+          id: true
+        }
+      })
+
+      // create the user profile and connect all related records
+      const profileData = await tx.profile.create({
+        data: {
+          role: role as string,
+          district: {
+            connect: {
+              id: districtId?.id
+            }
+          },
+          schools: {
+            connect: schoolIds ?? []
+          },
+          user: {
+            connect: {
+              id: userId
+            }
+          },
+          students: {
+            connect: studentIds ?? []
+          },
+          instruments: {
+            connect: instrumentIds ?? []
+          }
+        },
+        // return newly created profile
+        select: {
+          district: {
+            select: {
+              name: true,
+            }
+          },
+          schools: {
+            select: {
+              name: true,
+              id: true
+            }
+          },
+          user: {
+            select: {
+              email: true
+            }
           }
         }
-      }
-    });
-
-
-    revalidatePath("/userProfile")
-    return profileData
+      });
+      revalidatePath("/userProfile")
+      return profileData
+    })
   } catch (error) {
     console.error(error)
   }
@@ -352,63 +353,61 @@ export const addStudent = async (formData: FormData, userId: string,) => {
   const schoolName = formData.get("schools") as string;
 
   try {
-    // First, get the profile associated with the user
-    const userProfile = await prisma.profile.findUnique({
-      where: {
-        userId: userId
-      },
-      select: {
-
-
-        id: true,
-        schools: {
-          where: {
-            name: schoolName
-          },
-          select: {
-            id: true
+    await prisma.$transaction(async (tx) => {
+      // First, get the profile associated with the user
+      const userProfile = await tx.profile.findUnique({
+        where: {
+          userId: userId
+        },
+        select: {
+          id: true,
+          schools: {
+            where: {
+              name: schoolName
+            },
+            select: {
+              id: true
+            }
           }
         }
+      });
 
-
+      if (!userProfile?.id) {
+        throw new Error("Profile not found");
       }
-    });
 
-    if (!userProfile?.id) {
-      throw new Error("Profile not found");
-    }
+      const student = await tx.student.create({
+        data: {
+          firstName: firstName,
+          lastName: lastName,
+          studentIdNumber: studentIdNumber,
+          school: {
+            connect: {
+              id: userProfile.schools[0]?.id
+            }
+          }
+        },
+        select: {
+          id: true
+        }
+      });
 
-    const student = await prisma.student.create({
-      data: {
-        firstName: firstName,
-        lastName: lastName,
-        studentIdNumber: studentIdNumber,
-        school: {
-          connect: {
-            id: userProfile.schools[0]?.id
+      // Now update the profile using the correct profile ID
+      await tx.profile.update({
+        where: {
+          id: userProfile.id  // Use the actual profile ID
+        },
+        data: {
+          students: {
+            connect: {
+              id: student.id
+            }
           }
         }
-      },
-      select: {
-        id: true
-      }
-    });
+      });
 
-    // Now update the profile using the correct profile ID
-    await prisma.profile.update({
-      where: {
-        id: userProfile.id  // Use the actual profile ID
-      },
-      data: {
-        students: {
-          connect: {
-            id: student.id
-          }
-        }
-      }
-    });
-
-    revalidatePath("/searchStudent");
+      revalidatePath("/searchStudent");
+    })
   } catch (error) {
     console.error(error);
   }
@@ -460,63 +459,64 @@ export async function addInstrument(formData: FormData, userId: string) {
   const rentStatus = formData.get("rentStatus") as RentStatus;
   const schoolName = formData.get("schools") as string;
   try {
-    const schoolAndDistrict = await prisma.profile.findUnique({
-      where: {
-        userId: userId
-      },
-      select: {
-        schools: {
-          where: {
-            name: schoolName
+    await prisma.$transaction(async (tx) => {
+      const schoolAndDistrict = await tx.profile.findUnique({
+        where: {
+          userId: userId
+        },
+        select: {
+          schools: {
+            where: {
+              name: schoolName
+            },
+            select: {
+              id: true
+            }
           },
-          select: {
-            id: true
+          district: {
+            select: {
+              id: true
+            }
           }
         },
-        district: {
-          select: {
-            id: true
-          }
-        }
-      },
-    })
+      })
 
-    const instrumentId = await prisma.instrument.create({
-      data: {
-        classification: classification,
-        brand: brand,
-        serialNumber: serialNumber,
-        rentStatus: rentStatus,
-        school: {
-          connect: {
-            id: schoolAndDistrict?.schools[0].id
+      const instrumentId = await tx.instrument.create({
+        data: {
+          classification: classification,
+          brand: brand,
+          serialNumber: serialNumber,
+          rentStatus: rentStatus,
+          school: {
+            connect: {
+              id: schoolAndDistrict?.schools[0].id
+            }
+          },
+          district: {
+            connect: {
+              id: schoolAndDistrict?.district?.id
+            }
           }
         },
-        district: {
-          connect: {
-            id: schoolAndDistrict?.district?.id
+        select: {
+          id: true
+        }
+      })
+      await tx.profile.update({
+        where: {
+          userId: userId
+        },
+        data: {
+          instruments: {
+            connect: {
+              id: instrumentId.id
+            }
           }
         }
-      },
-      select: {
-        id: true
-      }
-    })
+      })
 
-    await prisma.profile.update({
-      where: {
-        userId: userId
-      },
-      data: {
-        instruments: {
-          connect: {
-            id: instrumentId.id
-          }
-        }
-      }
+      revalidatePath("/searchInstrument")
     })
-
-    revalidatePath("/searchInstrument")
   } catch (error) {
     console.error(error)
   }
@@ -525,39 +525,41 @@ export async function addInstrument(formData: FormData, userId: string) {
 export async function assignStudentToInstrument(formData: FormData, instrumentId: string) {
   const studentId = formData.get("student") as string;
   try {
-    // get school Id
-    const schoolId = await prisma.instrument.findUnique({
-      where: {
-        id: instrumentId
-      },
-      select: {
-        schoolId: true
-      }
-    })
+    await prisma.$transaction(async (tx) => {
+      // get school Id
+      const schoolId = await tx.instrument.findUnique({
+        where: {
+          id: instrumentId
+        },
+        select: {
+          schoolId: true
+        }
+      })
 
-    // create assignment and return assignment ID
-    const instrumentAssignment = await prisma.instrumentAssignment.create({
-      data: {
-        instrumentId: instrumentId,
-        studentId: studentId,
-        schoolId: schoolId?.schoolId as string
-      },
-      select: {
-        id: true,
-        studentId: true,
-        instrumentId: true
-      }
-    })
+      // create assignment and return assignment ID
+      const instrumentAssignment = await tx.instrumentAssignment.create({
+        data: {
+          instrumentId: instrumentId,
+          studentId: studentId,
+          schoolId: schoolId?.schoolId as string
+        },
+        select: {
+          id: true,
+          studentId: true,
+          instrumentId: true
+        }
+      })
 
-    await prisma.instrument.update({
-      where: {
-        id: instrumentAssignment.instrumentId
-      },
-      data: {
-        rentStatus: RentStatus.Rented
-      }
+      await tx.instrument.update({
+        where: {
+          id: instrumentAssignment.instrumentId
+        },
+        data: {
+          rentStatus: RentStatus.Rented
+        }
+      })
+      revalidatePath("/searchInstrument")
     })
-    revalidatePath("/searchInstrument")
   } catch (error) {
     console.error(error)
   }
@@ -565,36 +567,37 @@ export async function assignStudentToInstrument(formData: FormData, instrumentId
 
 export async function unassignStudentFromInstrument(instrumentId: string, studentId: string) {
   try {
-    const assignment = await prisma.instrumentAssignment.findFirst({
-      where: {
-        instrumentId: instrumentId,
-        studentId: studentId
+    await prisma.$transaction(async (tx) => {
+      const assignment = await tx.instrumentAssignment.findFirst({
+        where: {
+          instrumentId: instrumentId,
+          studentId: studentId
+        }
+      })
+
+      if (!assignment) {
+        throw new Error("Instrument assignment not found.")
       }
+
+      // delete record
+      await tx.instrumentAssignment.delete({
+        where: {
+          id: assignment.id
+        },
+      });
+
+      //update instrument record
+      await tx.instrument.update({
+        where: {
+          id: instrumentId
+        },
+        data: {
+          rentStatus: RentStatus.Available
+        }
+      })
+
+      revalidatePath("/searchInstrument");
     })
-
-    if (!assignment) {
-      throw new Error("Instrument assignment not found.")
-    }
-
-
-    // delete record
-    await prisma.instrumentAssignment.delete({
-      where: {
-        id: assignment.id
-      },
-    });
-
-    //update instrument record
-    await prisma.instrument.update({
-      where: {
-        id: instrumentId
-      },
-      data: {
-        rentStatus: RentStatus.Available
-      }
-    })
-
-    revalidatePath("/searchInstrument");
   } catch (error) {
     if (error) {
       console.error('Error unassigning instrument', error);
@@ -664,63 +667,62 @@ export async function getInstrumentsByDistrict(userId: string) {
 
 export async function deleteAccount(userId: string) {
   try {
-    // get profile
-    const userProfile = await prisma.profile.findUnique({
-      where: {
-        userId: userId
-      },
-    })
-
-    if (userProfile) {
-      // update all instruments to remove profile reference
-      await prisma.instrument.updateMany({
+    await prisma.$transaction(async (tx) => {
+      // get profile
+      const userProfile = await tx.profile.findUnique({
         where: {
-          profileId: userProfile.id
+          userId: userId
         },
-        data: {
-          profileId: null
+      })
+
+      if (userProfile) {
+        // update all instruments to remove profile reference
+        await tx.instrument.updateMany({
+          where: {
+            profileId: userProfile.id
+          },
+          data: {
+            profileId: null
+          }
+        })
+        // update all students
+        await tx.student.updateMany({
+          where: {
+            profileId: userProfile.id
+          },
+          data: {
+            profileId: null
+          }
+        })
+      }
+      await tx.profile.delete({
+        where: {
+          userId: userId
         }
       })
 
-      await prisma.student.updateMany({
+      await tx.session.deleteMany({
+        where: { userId: userId }
+      })
+
+      await tx.authenticator.deleteMany({
+        where: { userId: userId }
+      })
+
+      await tx.account.deleteMany({
+        where: { userId: userId }
+      })
+
+      await tx.user.delete({
         where: {
-          profileId: userProfile.id
-        },
-        data: {
-          profileId: null
+          id: userId
         }
       })
-    }
-
-    await prisma.profile.delete({
-      where: {
-        userId: userId
-      }
+      return { success: true, message: "Account deleted" }
     })
-
-    await prisma.session.deleteMany({
-      where: { userId: userId }
-    })
-
-    await prisma.authenticator.deleteMany({
-      where: { userId: userId }
-    })
-
-    await prisma.account.deleteMany({
-      where: { userId: userId }
-    })
-
-    await prisma.user.delete({
-      where: {
-        id: userId
-      }
-    })
-
-    return { success: true, message: "Account deleted" }
   } catch (error) {
     console.error('Error deleting user:', error);
     return { success: false, message: "Error deleting account" }
-
   }
 }
 
