@@ -4,7 +4,9 @@ import Button from "@/app/components/button/button"
 import { deleteAccount } from "@/actions/actions"
 
 import { signOut, useSession, } from "next-auth/react"
-import { useRouter } from "next/navigation"
+import FormWrapper from "../notification/formWrapper"
+
+
 
 
 type ProfileData = {
@@ -31,12 +33,29 @@ type ProfileData = {
 
 export default function ProfileData({ profile }: { profile: ProfileData }) {
   const session = useSession();
-
-  const [message, setMessage] = useState<string | null>(null)
-
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
+  const handleDelete = async () => {
+    if (!session.data?.user?.id) {
+      return { success: false, message: "No user id found" }
+    }
+    try {
+      setIsDeleting(true)
+      const response = await deleteAccount(session.data?.user?.id as string)
+      if (response.success) {
+        setTimeout(async () => {
+          await signOut({ redirect: true, callbackUrl: "/" })
+        }, 3000);
+        return { success: response.success, message: response.message }
+      }
+      return { success: response.success, message: response.message }
+    } catch (error) {
+      return { success: false, message: `Error: ${error}` }
+    } finally {
+      setIsDeleting(false)
+    }
+  }
   return (
     <>
-      {message && <p className={`${message ? "bg-green-500 w-full h-auto" : "bg-red-500 w-full h-auto"} text-slate-100 w-3`}>{message}</p>}
       <table className="bg-slate-50 rounded-lg">
         <tbody>
           <tr className="border-b-small border-slate-700 rounded-lg">
@@ -71,24 +90,23 @@ export default function ProfileData({ profile }: { profile: ProfileData }) {
           </tr>
         </tbody>
       </table>
-      <form action={async () => {
-        const response = await deleteAccount(session.data?.user?.id as string)
-        if (response?.success) {
-          setMessage(response.message)
-          setTimeout(() => {
-            setMessage(null)
-          }, 3000)
-          await signOut({ redirect: true, callbackUrl: "/" })
-        } else {
-          setMessage("Error deleting account")
-          setTimeout(() => {
-            setMessage(null)
-          }, 3000)
-        }
-      }}
-      >
-        {profile?.profile?.role && <Button danger type="submit" name="Delete Account" />}
-      </form>
+
+
+      {profile?.profile?.role && (
+        <FormWrapper
+          action={handleDelete}
+          submitButton={{
+            name: "Delete Account",
+            type: "submit",
+            disabled: isDeleting,
+            danger: true,
+            pendingName: "Deleting Account"
+          }}
+          className="mt-4"
+        >
+          <p className="text-red-500">Warning: This action is irreversible</p>
+        </FormWrapper>
+      )}
 
     </>
   )

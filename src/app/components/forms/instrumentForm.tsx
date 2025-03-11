@@ -11,6 +11,8 @@ import InstrumentSearchForm from "./instrumentSearchForm";
 import { RentStatus } from "@prisma/client";
 import Button from "../button/button";
 import { useSession } from "next-auth/react";
+import FormWrapper from "../notification/formWrapper";
+
 // server actions
 import { addInstrument } from "@/actions/actions";
 type School = {
@@ -29,6 +31,17 @@ export default function InstrumentForm({
   const ref = useRef<HTMLFormElement>(null)
   const selectOption = useAppSelector(state => state.searchOptions.type)
   const session = useSession();
+
+  const handleAddInstrument = async (formData: FormData) => {
+    ref.current?.reset();
+    try {
+      const response = await addInstrument(formData, session.data?.user?.id as string);
+      return { success: response.success, message: response.message };
+    } catch (error) {
+      console.log(error);
+      return { success: false, message: "Error adding instrument" };
+    }
+  }
   return (
     <div className="flex flex-col bg-white rounded-lg items-center w-full h-screen md:h-auto mt-2">
       <h1 className="bg-blue-500 rounded-t-lg w-full self-center text-white text-center">
@@ -39,12 +52,15 @@ export default function InstrumentForm({
       </section>
 
       {selectOption === "Add Instrument" && (
-        <form
-          ref={ref}
+        <FormWrapper
+          formRef={ref}
           className="flex flex-col justify-center items-center w-2/3 gap-4 mt-20 sm:w-2/3 md:w-full md:mt-2"
-          action={async formData => {
-            ref.current?.reset();
-            await addInstrument(formData, session.data?.user?.id as string);
+          action={handleAddInstrument}
+          submitButton={{
+            name: "Add Instrument",
+            type: "submit",
+            danger: false,
+            pendingName: "Adding Instrument",
           }}
         >
           <Input
@@ -102,11 +118,7 @@ export default function InstrumentForm({
               </SelectItem>
             ))}
           </Select>
-
-
-
-          <Button danger={false} type="submit" name="Add Instrument" />
-        </form>
+        </FormWrapper>
       )}
     </div>
   );

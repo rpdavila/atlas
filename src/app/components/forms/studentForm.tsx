@@ -8,6 +8,7 @@ import { useAppSelector, useAppDispatch } from "@/lib/ReduxSSR/hooks";
 //component imports
 import { Input, Select, SelectItem } from "@heroui/react";
 import Button from "../button/button";
+import FormWrapper from "../notification/formWrapper";
 //hooks imports
 import StudentSearchForm from "./studentSearchForm";
 //sesison import
@@ -41,7 +42,18 @@ export default function StudentForm({
   if (session.status === "unauthenticated") {
     permanentRedirect("/signIn");
   }
-
+  const handleAddStudent = async (formData: FormData) => {
+    ref.current?.reset();
+    try {
+      const response = await addStudent(formData, session.data?.user?.id as string);
+      const students = await getDropDownList(session.data?.user?.id as string);
+      dispatch(setDropDownList(students))
+      return { success: response.success, message: response.message };
+    } catch (error) {
+      console.log(error);
+      return { success: false, message: "Error adding student" };
+    }
+  }
   return (
     <div className="flex flex-col bg-white rounded-lg items-center mt-2 w-full h-screen md:h-auto">
       <h1 className="bg-blue-500 rounded-t-lg w-full self-center text-white text-center">
@@ -53,14 +65,15 @@ export default function StudentForm({
         </section>
       )}
       {selectOption === "Add Student" && (
-        <form
+        <FormWrapper
           className="flex flex-col justify-center items-center w-2/3 gap-4 mt-20 sm:w-2/3 md:w-full md:mt-2"
-          ref={ref}
-          action={async formData => {
-            ref.current?.reset();
-            await addStudent(formData, session.data?.user?.id as string);
-            const students = await getDropDownList(session.data?.user?.id as string);
-            dispatch(setDropDownList(students))
+          formRef={ref}
+          action={handleAddStudent}
+          submitButton={{
+            name: "Add Student",
+            type: "submit",
+            danger: false,
+            pendingName: "Adding Student...",
           }}
         >
           <Input
@@ -108,12 +121,7 @@ export default function StudentForm({
               </SelectItem>
             ))}
           </Select>
-
-          <Button
-            type="submit"
-            name="Add Student"
-          />
-        </form>
+        </FormWrapper>
       )}
     </div>
   );

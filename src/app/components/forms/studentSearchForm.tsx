@@ -4,6 +4,7 @@ import { Input } from "@heroui/react";
 //redux imports
 import { useAppDispatch, useAppSelector } from "@/lib/ReduxSSR/hooks";
 import { setSearch } from "@/lib/ReduxSSR/features/searchOptionsSlice";
+
 export default function StudentSearchForm() {
   const dispatch = useAppDispatch()
   const selectOption = useAppSelector((state) => state.searchOptions.type);

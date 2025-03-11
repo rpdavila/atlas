@@ -63,12 +63,13 @@ const columns = [
 export default function StudentCardList({
   studentSearchResult
 }: CardListProps) {
-  const router = useRouter();
+  //const router = useRouter();
   const schoolName = useAppSelector(state => state.searchOptions.school)
   const filterStudentsBySchool = studentSearchResult.filter(student => student.school?.name === schoolName)
 
+  //TODO: handle student profile
   const handleStudent = (id: string,) => {
-    router.push(`/dashboard/studentInfo/${id}`)
+    //redirect to student profile
   }
   return (
     <Table
@@ -88,8 +89,8 @@ export default function StudentCardList({
             <TableCell>{items.studentIdNumber}</TableCell>
             <TableCell>{items.school?.name}</TableCell>
             <TableCell>{items.instrumentAssignment ? items.instrumentAssignment.instrument.classification : `${null}`}</TableCell>
-            <TableCell>{items.instrumentAssignment ? items.instrumentAssignment?.instrument.school.name : `${null}`}</TableCell>
-            <TableCell>{items.instrumentAssignment ? items.instrumentAssignment?.instrument.serialNumber : `${null}`}</TableCell>
+            <TableCell>{items.instrumentAssignment ? items.instrumentAssignment.instrument.school.name : `${null}`}</TableCell>
+            <TableCell>{items.instrumentAssignment ? items.instrumentAssignment.instrument.serialNumber : `${null}`}</TableCell>
           </TableRow>
         ))}
       </TableBody>

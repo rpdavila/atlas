@@ -8,7 +8,7 @@ import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { signIn, signOut } from "../auth";
 import { Profile, User, Instrument, School, District, RentStatus } from "@/app/types/formTypes";
-import { IoPrismSharp } from "react-icons/io5";
+
 
 export const handleSignIn = async (provider?: (string & {}) | undefined, options?: FormData | ({
   redirectTo?: string;
@@ -24,7 +24,20 @@ export const handleSignOut = async (options?: {
   await signOut(options);
 }
 // user Profile Actions
-export const createProfile = async (formData: FormData, userId: string) => {
+export const createProfile = async (formData: FormData, userId: string): Promise<{
+  success: boolean, message: string, profileData: {
+    user: {
+      email: string | null;
+    };
+    district: {
+      name: string;
+    } | null;
+    schools: {
+      id: string;
+      name: string;
+    }[];
+  }
+}> => {
   const schoolNames = formData.get("school/s") as string;
   const districtName = formData.get("district") as string;
   let role = formData.get("role") as string;
@@ -39,7 +52,7 @@ export const createProfile = async (formData: FormData, userId: string) => {
   let schoolIds: Array<Omit<School, "name" | "districtId" | "district" | "instruments" | "profile" | "profileId" | "students" | "instrumentAssignments">> | null = null
   try {
 
-    await prisma.$transaction(async (tx) => {
+    const response = await prisma.$transaction(async (tx) => {
       //find district
       console.log("Searching if District exists")
       districtId = await tx.district.findFirst({
@@ -190,10 +203,12 @@ export const createProfile = async (formData: FormData, userId: string) => {
         }
       });
       revalidatePath("/userProfile")
-      return profileData
+      return { profileData: profileData, success: true, message: "Profile successfully created" }
     })
+    return response;
   } catch (error) {
-    console.error(error)
+    console.error(error);
+    return { success: false, message: "Failed to create profile", profileData: { user: { email: null }, district: null, schools: [] } };
   }
 }
 
@@ -408,8 +423,10 @@ export const addStudent = async (formData: FormData, userId: string,) => {
 
       revalidatePath("/searchStudent");
     })
+    return { success: true, message: "Student successfully added" };
   } catch (error) {
     console.error(error);
+    return { success: false, message: "Failed to add student" };
   }
 }
 
@@ -517,8 +534,10 @@ export async function addInstrument(formData: FormData, userId: string) {
 
       revalidatePath("/searchInstrument")
     })
+    return { success: true, message: "Instrument successfully added" }
   } catch (error) {
     console.error(error)
+    return { success: false, message: "Failed to add instrument" }
   }
 }
 
@@ -560,8 +579,10 @@ export async function assignStudentToInstrument(formData: FormData, instrumentId
       })
       revalidatePath("/searchInstrument")
     })
+    return { success: true, message: "Instrument successfully assigned" }
   } catch (error) {
     console.error(error)
+    return { success: false, message: "Failed to assign instrument" }
   }
 }
 
@@ -597,14 +618,13 @@ export async function unassignStudentFromInstrument(instrumentId: string, studen
       })
 
       revalidatePath("/searchInstrument");
+      return { success: true, message: "Instrument successfully unassigned" }
     })
   } catch (error) {
-    if (error) {
-      console.error('Error unassigning instrument', error);
-      // Handle the error, e.g., notify the user or log the issue
-    } else {
-      throw error; // Re-throw if it's not a known error
-    }
+    console.error('Error unassigning instrument', error);
+    // Handle the error, e.g., notify the user or log the issue
+    return { success: false, message: "Failed in unassigneing instrument" }
+
   }
 }
 
@@ -665,9 +685,9 @@ export async function getInstrumentsByDistrict(userId: string) {
   return instruments?.instruments
 }
 
-export async function deleteAccount(userId: string) {
+export async function deleteAccount(userId: string): Promise<{ success: boolean, message: string }> {
   try {
-    await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx) => {
       // get profile
       const userProfile = await tx.profile.findUnique({
         where: {
@@ -718,11 +738,12 @@ export async function deleteAccount(userId: string) {
           id: userId
         }
       })
-      return { success: true, message: "Account deleted" }
+      return { success: true, message: "Account successfully deleted" }
     })
+    return result;
   } catch (error) {
     console.error('Error deleting user:', error);
-    return { success: false, message: "Error deleting account" }
+    return { success: false, message: error instanceof Error ? error.message : "Failed to delete account" }
   }
 }
 

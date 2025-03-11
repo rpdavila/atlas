@@ -1,5 +1,4 @@
 "use clinet";
-import { useFormStatus } from "react-dom";
 import { Spinner } from "@heroui/react";
 
 type ButtonProps = {
@@ -11,7 +10,9 @@ type ButtonProps = {
   disabledColor?: boolean;
   icon?: React.JSX.Element;
   danger?: boolean;
-  signIn?: boolean
+  signIn?: boolean;
+  isPending?: boolean;
+  pendingName?: string;
 };
 
 export default function Button({
@@ -21,25 +22,26 @@ export default function Button({
   onClick,
   icon,
   danger,
-  signIn
+  signIn,
+  isPending,
+  pendingName
 }: ButtonProps): React.JSX.Element {
   const buttonClass = `bg-blue-500 hover:bg-blue-700 text-white p-2 mt-${marginTop} w-full sm:w-full rounded-lg`;
   const greyColor = `bg-gray-300 text-black p-2 mt-${marginTop} w-full rounded-lg`;
   const dangerColor = `bg-red-500 hover:bg-red-700 text-white p-2 mt-${marginTop} w-full sm:w-full rounded-lg`;
-  const { pending } = useFormStatus();
   return (
     <button
-      className={pending ? greyColor : danger ? dangerColor : buttonClass}
+      className={isPending ? greyColor : danger ? dangerColor : buttonClass}
       type={type}
       onClick={onClick}
-      disabled={pending}
+      disabled={isPending}
     >
       <div className="flex flex-row justify-center items-center gap-2 w-auto self-center">
-        {pending && <Spinner size="sm" color="primary" />}
         {icon && icon}
-        {!pending && name}
+        {isPending && <Spinner size="sm" color="primary" />}
+        {isPending && pendingName}
+        {!isPending && name}
       </div>
     </button>
-
   );
 }

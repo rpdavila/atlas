@@ -1,5 +1,5 @@
 // next
-import { permanentRedirect, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 // session
 import { auth } from "@/auth";
 // prisma
@@ -11,7 +11,7 @@ import ProfileData from "@/app/components/profile/profileData";
 export default async function Profile() {
   const session = await auth();
   if (!session?.user) {
-    permanentRedirect("/signIn")
+    redirect("/signIn")
   }
   //get profile data
   const profile = await prisma.user.findUnique({
