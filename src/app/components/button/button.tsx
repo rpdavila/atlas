@@ -38,7 +38,7 @@ export default function Button({
     >
       <div className="flex flex-row justify-center items-center gap-2 w-auto self-center">
         {icon && icon}
-        {isPending && <Spinner size="sm" color="primary" />}
+        {isPending && <Spinner data-testid="spinner" size="sm" color="primary" />}
         {isPending && pendingName}
         {!isPending && name}
       </div>
