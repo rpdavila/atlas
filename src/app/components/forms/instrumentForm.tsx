@@ -9,7 +9,6 @@ import { useAppSelector } from "@/lib/ReduxSSR/hooks";
 import { Input, Select, SelectItem } from "@heroui/react";
 import InstrumentSearchForm from "./instrumentSearchForm";
 import { RentStatus } from "@prisma/client";
-import Button from "../button/button";
 import { useSession } from "next-auth/react";
 import FormWrapper from "../notification/formWrapper";
 
@@ -43,7 +42,7 @@ export default function InstrumentForm({
     }
   }
   return (
-    <div className="flex flex-col bg-white rounded-lg items-center w-full h-screen md:h-auto mt-2">
+    <div className="flex flex-col bg-white rounded-lg items-center w-full h-full md:h-auto mt-2">
       <h1 className="bg-blue-500 rounded-t-lg w-full self-center text-white text-center">
         {formTitle}
       </h1>

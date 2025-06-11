@@ -30,7 +30,7 @@ export default function RootLayout({
         <NextAuthProvider>
           <Providers>
             <Header />
-            <main className="flex flex-col justify-center flex-1 px-4 sm:px-6 lg:px-8 text-center bg-slate-700">
+            <main className="flex flex-col justify-center flex-1 px-4 sm:px-6 lg:px-8 text-center bg-slate-700 h-full">
 
               {children}
               <Toaster
