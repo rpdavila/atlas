@@ -34,7 +34,7 @@ export default function SideBar() {
         return <InstrumentForm formTitle="Add Instrument" schools={schoolList} />
     }
   }
-  
+
   useEffect(() => {
     async function getSchools() {
       const schools = await getSchoolsByUserId(session.data?.user?.id || "");
@@ -46,7 +46,7 @@ export default function SideBar() {
   }, [session.data?.user?.id, dispatch])
 
   return (
-    <aside className="hidden sm:flex flex-col items-center m-2 rounded-lg w-full">
+    <aside className="hidden sm:flex flex-col items-center m-2 rounded-lg w-full h-auto pb-8">
       <SelectSearchOptions>
         {getFormComponent(selectOption)}
       </SelectSearchOptions>
