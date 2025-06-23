@@ -67,8 +67,8 @@ export default function InstrumentCard({ instrument, studentDropDownList }: Card
     fetchData()
   }, [dispatch, session.data?.user?.id])
   return (
-    <section className="flex flex-col items-center w-full justify-evenly m-2 bg-white sm:flex-row sm:w-full rounded-lg">
-      <div className="flex flex-col w-full sm:w-1/3  items-start m-6 justify-between ">
+    <section className="flex flex-col items-center w-full m-2 bg-white sm:flex-row sm:w-full rounded-lg mb-4">
+      <div className="flex flex-col items-start sm:w-1/3 m-6 justify-center ">
         <p>
           <strong>Instrument type: </strong>
           {instrument?.classification}
@@ -148,6 +148,5 @@ export default function InstrumentCard({ instrument, studentDropDownList }: Card
         </section>
       )}
     </section>
-
   );
 }

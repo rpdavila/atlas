@@ -1,4 +1,6 @@
 "use client";
+//react import
+import { useMemo } from "react";
 //redux imports
 import { useAppSelector } from "@/lib/ReduxSSR/hooks";
 import { RootState } from "@/lib/ReduxSSR/store";
@@ -40,25 +42,33 @@ export default function SearchInstrument(
   // grab searchfield
   const searchField = useAppSelector(
     (state: RootState) => state.searchOptions.search
-  );
+  ); 
 
+  // if no instruments are passed, return empty array
+  const instrumentSearchResults = useMemo(() => {
+    if (!displayInstruments || !searchField.trim()) {
+      return displayInstruments || []
+    }
 
-  let instrumentSearchResults: InstrumentList = [];
+    const searchTerm = searchField.toLowerCase();
 
-  if (!!displayInstruments) {
-
-    instrumentSearchResults = displayInstruments.filter((instrument: Instrument) => {
+    return displayInstruments.filter((instrument: Instrument) => {
+      if (!instrument) return false;
       return (
-        instrument?.classification?.includes(searchField) ||
-        instrument?.brand?.includes(searchField) ||
-        instrument?.serialNumber?.includes(searchField) ||
-        instrument?.rentStatus?.includes(searchField)
+        instrument?.classification?.toLowerCase().includes(searchTerm) ||
+        instrument?.brand?.toLowerCase().includes(searchTerm) ||
+        instrument?.serialNumber?.toLowerCase().includes(searchTerm) ||
+        instrument?.rentStatus?.toLowerCase() === searchTerm ||
+        instrument?.school?.name?.toLowerCase().includes(searchTerm) ||
+        instrument?.instrumentAssignment?.student?.firstName?.toLowerCase().includes(searchTerm) ||
+        instrument?.instrumentAssignment?.student?.lastName?.toLowerCase().includes(searchTerm) ||
+        instrument?.instrumentAssignment?.student?.studentIdNumber?.toLowerCase().includes(searchTerm)
       );
-    });
-  }
+    }); 
+  }, [displayInstruments, searchField]);  
 
   return (
-    <section className={`flex flex-col basis-3/4 items-center gap-2 sm:ml-0`}>
+    <section className={`flex flex-col mt-2 m-8 basis-3/4 items-center gap-2 sm:ml-0 sm:min-h-screen`}>
       <section className="w-full md:hidden">
         <InstrumentSearchForm />
       </section>

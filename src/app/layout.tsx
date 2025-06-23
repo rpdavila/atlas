@@ -30,35 +30,33 @@ export default function RootLayout({
         <NextAuthProvider>
           <Providers>
             <Header />
-            <main className="flex flex-col justify-between min-h-screen px-4 sm:px-6 lg:px-8 text-center bg-slate-700">
-              <div className="flex-grow">
-                {children}
-                <Toaster
-                  position="top-center"
-                  reverseOrder={false}
-                  gutter={8}
-                  containerClassName=""
-                  containerStyle={{}}
-                  toastOptions={{
-                    className: "",
-                    duration: 5000,
-                    style: {
-                      background: "#363636",
-                      color: "#fff",
-                    },
-                    success: {
-                      className: "border-1-4 border-green-500",
-                      duration: 3000,
-                      style: { background: "green" },
-                    },
-                    error: {
-                      className: "border-1-4 border-red-500",
-                      duration: 3000,
-                      style: { background: "red" },
-                    }
-                  }}
-                />
-              </div>
+            <main className="flex flex-col justify-between h-full px-4 sm:px-6 lg:px-8 text-center bg-slate-700">
+              {children}
+              <Toaster
+                position="top-center"
+                reverseOrder={false}
+                gutter={8}
+                containerClassName=""
+                containerStyle={{}}
+                toastOptions={{
+                  className: "",
+                  duration: 5000,
+                  style: {
+                    background: "#363636",
+                    color: "#fff",
+                  },
+                  success: {
+                    className: "border-1-4 border-green-500",
+                    duration: 3000,
+                    style: { background: "green" },
+                  },
+                  error: {
+                    className: "border-1-4 border-red-500",
+                    duration: 3000,
+                    style: { background: "red" },
+                  }
+                }}
+              />
               <footer className="flex items-center justify-center w-full h-24 border-t mt-8">
                 <Link href="/" target="_blank" rel="noopener noreferrer">
                   Powered by Crescendo Cloud

@@ -11,11 +11,11 @@ export default async function DashboardLayout({
     permanentRedirect("/signIn");
   }
   return (
-    <section className="container mx-auto h-auto min-h-screen bg-slate-700 w-full grid grid-cols-1 sm:grid-cols-12 gap-4">
-      <section className="hidden sm:block sm:col-span-3">
+    <section className="flex justify-center h-screen bg-slate-700 gap-4">
+      <section className="hidden sm:block basis-1/4">
         <SideBar />
       </section>
-      <section className="col-span-1 sm:col-span-9 p-2">
+      <section className="flex flex-col items-stretch mt-1 h-full w-full">
         {children}
       </section>
     </section>

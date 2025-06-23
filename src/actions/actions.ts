@@ -543,6 +543,7 @@ export async function addInstrument(formData: FormData, userId: string) {
 
 export async function assignStudentToInstrument(formData: FormData, instrumentId: string) {
   const studentId = formData.get("student") as string;
+
   try {
     await prisma.$transaction(async (tx) => {
       // get school Id
@@ -616,14 +617,13 @@ export async function unassignStudentFromInstrument(instrumentId: string, studen
           rentStatus: RentStatus.Available
         }
       })
-
       revalidatePath("/searchInstrument");
-      return { success: true, message: "Instrument successfully unassigned" }
     })
+    return { success: true, message: "Instrument successfully unassigned" }
   } catch (error) {
     console.error('Error unassigning instrument', error);
     // Handle the error, e.g., notify the user or log the issue
-    return { success: false, message: "Failed in unassigneing instrument" }
+    return { success: false, message: "Failed in unassigning instrument" }
 
   }
 }

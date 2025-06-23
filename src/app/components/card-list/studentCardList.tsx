@@ -74,7 +74,7 @@ export default function StudentCardList({
   return (
     <Table
       aria-label="Students"
-      className={`${filterStudentsBySchool.length > 8 ? "h-full" : "h-screen"} w-full`}>
+      className="h-full">
       <TableHeader columns={columns}>
         {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
       </TableHeader>
