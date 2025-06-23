@@ -116,6 +116,7 @@ export default function DistrictTable({
       {emailSent && <p className="text-white text-center bg-green-800">Email Sent</p>}
       <Table
         aria-label="District Instruments Table"
+        className="hidden sm:table"
       >
         <TableHeader columns={columns}>
           {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}

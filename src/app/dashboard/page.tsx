@@ -17,7 +17,7 @@ export default async function DashBoardMainPage() {
   }
 
   return (
-    <section className="flex flex-col m-2 rounded-lg basis-3/4 h-full">
+    <section className="flex flex-col m-2 rounded-lg basis-3/4 h-screen">
       <UserDetail />
     </section>
   );

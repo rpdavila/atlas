@@ -46,7 +46,7 @@ export default function SideBar() {
   }, [session.data?.user?.id, dispatch])
 
   return (
-    <aside className="hidden sm:flex flex-col items-center m-2 rounded-lg w-full h-full pb-8">
+    <aside className="hidden sm:flex flex-col items-center m-2 rounded-lg w-full pb-8">
       <SelectSearchOptions>
         {getFormComponent(selectOption)}
       </SelectSearchOptions>

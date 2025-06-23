@@ -48,6 +48,7 @@ export default function Header() {
     if (value === "Search Instrument") router.push("/dashboard/searchInstrument");
     if (value === "Add Student") router.push("/dashboard/studentForm");
     if (value === "Add Instrument") router.push("/dashboard/instrumentForm");
+    if (value === "Search District") router.push("/dashboard/districtInstruments");
   }
   useEffect(() => {
     if (pathName === "/dashboard") {

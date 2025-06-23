@@ -13,7 +13,7 @@ export default function SchoolSelectForm({ schools }: { schools: { id: string, n
   }
   return (
     <form
-      className="bg-slate-50 w-full rounded-lg m-2 p-2"
+      className="bg-slate-50 rounded-lg m-2 p-2"
     >
       {schools
         ? (<RadioGroup

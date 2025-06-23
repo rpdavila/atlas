@@ -1,5 +1,7 @@
 import { RentStatus } from "@prisma/client";
 import DistrictTable from "../table/instrumentTable";
+import DistrictCard from "../cards/districtCard";
+
 type DistrictInstrument = {
   school: {
     name: string;
@@ -20,9 +22,10 @@ export default function DistrictInstrumentCardList({
 
   if (districtInstrumentSearchResults.length) {
     return (
-      <DistrictTable districtInstrumentSearchResults={districtInstrumentSearchResults} />
+      <>
+        <DistrictTable districtInstrumentSearchResults={districtInstrumentSearchResults} />
+        <DistrictCard districtInstrumentSearchResults={districtInstrumentSearchResults}/>
+      </>
     )
   }
-
-
 }

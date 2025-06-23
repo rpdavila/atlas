@@ -55,7 +55,7 @@ export default function StudentForm({
     }
   }
   return (
-    <div className="flex flex-col bg-white rounded-lg items-center mt-2 w-full h-screen md:h-auto">
+    <div className="flex flex-col bg-white rounded-lg items-center mt-2 w-full h-full p-2 md:h-auto">
       <h1 className="bg-blue-500 rounded-t-lg w-full self-center text-white text-center">
         {formTitle}
       </h1>
