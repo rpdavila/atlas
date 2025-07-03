@@ -1,5 +1,5 @@
 import { Card, CardBody } from "@heroui/react";
-import { RentStatus } from "@/app/types/formTypes";
+import { RentStatus } from "@prisma/client";
 
 type Student = {
   school: {
