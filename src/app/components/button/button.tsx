@@ -1,16 +1,13 @@
-"use clinet";
+"use client";
 import { Spinner } from "@heroui/react";
 
 type ButtonProps = {
   name: string;
-  marginTop?: string;
+  marginTop?: '1' | '2' | '4' | '8'; // restrict to valid values;
   type: "submit" | "reset" | "button";
-  disabled?: boolean;
   onClick?: () => void;
-  disabledColor?: boolean;
   icon?: React.JSX.Element;
   danger?: boolean;
-  signIn?: boolean;
   isPending?: boolean;
   pendingName?: string;
 };
@@ -22,13 +19,22 @@ export default function Button({
   onClick,
   icon,
   danger,
-  signIn,
   isPending,
-  pendingName
+  pendingName,
 }: ButtonProps): React.JSX.Element {
-  const buttonClass = `bg-blue-500 hover:bg-blue-700 text-white p-2 mt-${marginTop} w-full sm:w-full rounded-lg`;
-  const greyColor = `bg-gray-300 text-black p-2 mt-${marginTop} w-full rounded-lg`;
-  const dangerColor = `bg-red-500 hover:bg-red-700 text-white p-2 mt-${marginTop} w-full sm:w-full rounded-lg`;
+  const getMarginClass = (margin?: string) => {
+    const marginMap: Record<string, string> = {
+      '1': 'mt-1',
+      '2': 'mt-2',
+      '4': 'mt-4',
+      '8': 'mt-8',
+    };
+    return margin? marginMap[margin] || '':  '';
+  }
+  const marginClass = getMarginClass(marginTop);
+  const buttonClass = `bg-blue-500 hover:bg-blue-700 text-white p-2 ${marginClass} w-full sm:w-full rounded-lg`;
+  const greyColor = `bg-gray-300 text-black p-2 ${marginClass} w-full rounded-lg`;
+  const dangerColor = `bg-red-500 hover:bg-red-700 text-white p-2 ${marginClass} w-full sm:w-full rounded-lg`;
   return (
     <button
       className={isPending ? greyColor : danger ? dangerColor : buttonClass}

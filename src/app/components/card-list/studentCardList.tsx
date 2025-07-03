@@ -1,11 +1,9 @@
 
+import { useMemo } from "react";
 import { Table, TableBody, TableRow, TableCell, TableColumn, TableHeader } from "@heroui/react";
-
 import { useAppSelector } from "@/lib/ReduxSSR/hooks";
-
-import { useRouter } from "next/navigation";
-
 import { RentStatus } from "@prisma/client";
+import StudentCard from "../cards/studentCard";
 
 type Student = {
   school: {
@@ -63,37 +61,41 @@ const columns = [
 export default function StudentCardList({
   studentSearchResult
 }: CardListProps) {
-  //const router = useRouter();
   const schoolName = useAppSelector(state => state.searchOptions.school)
-  const filterStudentsBySchool = studentSearchResult.filter(student => student.school?.name === schoolName)
+  const filterStudentBySchool = useMemo(() => {
+    return studentSearchResult.filter(student => student.school?.name === schoolName)
+  }, [studentSearchResult, schoolName])
 
-  //TODO: handle student profile
-  const handleStudent = (id: string,) => {
-    //redirect to student profile
-  }
   return (
-    <Table
-      aria-label="Students"
-      className="h-full">
-      <TableHeader columns={columns}>
-        {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
-      </TableHeader>
-      <TableBody>
-        {filterStudentsBySchool.map((items: Student) => (
-          <TableRow
-            className="hover:cursor-pointer hover:bg-slate-400 rounded-lg"
-            key={items.id}
-            onClick={() => handleStudent(items.id)}
-          >
-            <TableCell>{items.firstName} {items.lastName}</TableCell>
-            <TableCell>{items.studentIdNumber}</TableCell>
-            <TableCell>{items.school?.name}</TableCell>
-            <TableCell>{items.instrumentAssignment ? items.instrumentAssignment.instrument.classification : `${null}`}</TableCell>
-            <TableCell>{items.instrumentAssignment ? items.instrumentAssignment.instrument.school.name : `${null}`}</TableCell>
-            <TableCell>{items.instrumentAssignment ? items.instrumentAssignment.instrument.serialNumber : `${null}`}</TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table >
+    <>
+      <Table
+        aria-label="Students"
+        className="hidden md:h-full">
+        <TableHeader columns={columns}>
+          {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
+        </TableHeader>
+        <TableBody>
+          {filterStudentBySchool.map((item: Student) => (
+            <TableRow
+              className="hover:cursor-pointer hover:bg-slate-400 rounded-lg"
+              key={item.id}
+            >
+              <TableCell>{item.firstName} {item.lastName}</TableCell>
+              <TableCell>{item.studentIdNumber}</TableCell>
+              <TableCell>{item.school?.name}</TableCell>
+              <TableCell>{item.instrumentAssignment ? item.instrumentAssignment.instrument.classification : "Not Assigned"}</TableCell>
+              <TableCell>{item.instrumentAssignment ? item.instrumentAssignment.instrument.school.name : "Not Assigned"}</TableCell>
+              <TableCell>{item.instrumentAssignment ? item.instrumentAssignment.instrument.serialNumber : "Not Assigned"}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table >
+
+
+      {filterStudentBySchool.map((student) => {
+        return <StudentCard key={student.id} student={student} />
+      })}
+    </>
+
   );
 }

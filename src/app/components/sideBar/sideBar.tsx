@@ -16,7 +16,7 @@ import { useSession } from "next-auth/react";
 export default function SideBar() {
   const session = useSession();
   const dispatch = useAppDispatch();
-  const selectOption = useAppSelector((state) => state.searchOptions.type);
+  const selectedSearchType = useAppSelector((state) => state.searchOptions.type);
   const schoolList = useAppSelector((state) => state.userInfo.schools);
 
   function getFormComponent(selectOption: string) {
@@ -32,26 +32,35 @@ export default function SideBar() {
 
       case "Add Instrument":
         return <InstrumentForm formTitle="Add Instrument" schools={schoolList} />
+      default:
+        console.warn(`Unknown selectOption: ${selectOption}`);
+        return <div>Invalid selection</div>; // or throw error
     }
   }
 
   useEffect(() => {
-    async function getSchools() {
-      const schools = await getSchoolsByUserId(session.data?.user?.id || "");
-      return schools
-    }
-    getSchools().then((schools) => {
-      dispatch(setSchools({ schools: schools }));
-    });
+    const userId = session.data?.user?.id;
+    if (!userId) return;
+
+    const fetchSchools = async () => {
+      try {
+        const schools = await getSchoolsByUserId(userId);
+        dispatch(setSchools({ schools }));
+      } catch (error) {
+        console.error('Failed to fetch schools:', error);
+      }
+    };
+
+    fetchSchools();
   }, [session.data?.user?.id, dispatch])
 
   return (
-    <aside className="hidden sm:flex flex-col items-center m-2 rounded-lg w-full pb-8">
+    <aside className="flex flex-col items-center m-2 rounded-lg w-full gap-2">
       <SelectSearchOptions>
-        {getFormComponent(selectOption)}
+        {getFormComponent(selectedSearchType)}
       </SelectSearchOptions>
-      {selectOption === "Search Instrument" && <SchoolSelectForm schools={schoolList} />}
-      {selectOption === "Search Student" && <SchoolSelectForm schools={schoolList} />}
+      {selectedSearchType === "Search Instrument" && <SchoolSelectForm schools={schoolList} />}
+      {selectedSearchType === "Search Student" && <SchoolSelectForm schools={schoolList} />}
     </aside>
   );
 }

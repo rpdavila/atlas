@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Card, CardBody } from "@heroui/react";
 import { RentStatus } from "@prisma/client";
 import { useAppSelector } from "@/lib/ReduxSSR/hooks";
@@ -17,15 +18,17 @@ type DistrictInstruments = Array<DistrictInstrument>
 export default function DistrictCard({ districtInstrumentSearchResults }: { districtInstrumentSearchResults: DistrictInstruments }) {
   // Get the schools that the user is associated with from the Redux store
   // This is used to filter out instruments that are not associated with the user's schools
-  const excludeSchools = useAppSelector(state => state.userInfo.schools).map((school: { name: string; }) => school.name)
-  // Filter out schools that are in the excludeSchools array
-  // This is to avoid showing instruments from schools that the user is not associated with
-  const filteredSchools = districtInstrumentSearchResults.filter(school =>
-    !excludeSchools.includes(school?.school.name as string)
-  )
+  const userSchools = useAppSelector(state => state.userInfo.schools);
 
-  if (!districtInstrumentSearchResults) {
-    return <p>No instruments found</p>;
+  const filteredSchools = useMemo(() =>
+    districtInstrumentSearchResults.filter(school =>
+      !userSchools.some(userSchool => userSchool.name === school?.school.name)
+    ),
+    [districtInstrumentSearchResults, userSchools]
+  );
+
+  if (filteredSchools.length === 0) {
+    return <p>No instruments available from other schools</p>;
   }
 
   return (

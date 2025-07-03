@@ -12,30 +12,31 @@ import {
 
 import storage from './storage' // defaults to localStorage for web
 
+
 import rootReducer from "./features/rootReducer";
 
 const persistConfig = {
-  key: "root",
+  key: process.env.CONFIG_STORE_KEY || 'default_key', // Fallback to 'default_key' if CONFIG_STORE_KEY is undefined
   version: 1,
   storage
-};
+}
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-export const makeStore = () => {
-  return configureStore({
-    reducer: persistedReducer,
-    devTools: process.env.NODE_ENV !== "production",
-    middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware({
-        serializableCheck: {
-          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-        },
-      }),
-  });  
-};  
+  export const makeStore = () => {
+    return configureStore({
+      reducer: persistedReducer,
+      devTools: process.env.NODE_ENV !== "production",
+      middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+          serializableCheck: {
+            ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+          },
+        }),
+    });
+  };
 
-export type AppStore = ReturnType<typeof makeStore>
+  export type AppStore = ReturnType<typeof makeStore>
 export type RootState = ReturnType<AppStore['getState']>;
-export type AppDispatch = AppStore['dispatch']
+  export type AppDispatch = AppStore['dispatch']
 

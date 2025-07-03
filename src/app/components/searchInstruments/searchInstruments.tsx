@@ -1,6 +1,8 @@
 "use client";
 //react import
 import { useMemo, useEffect } from "react";
+// next import
+import { redirect } from "next/navigation";
 //redux imports
 import { useAppSelector, useAppDispatch } from "@/lib/ReduxSSR/hooks";
 import { RootState } from "@/lib/ReduxSSR/store";
@@ -11,10 +13,11 @@ import { RentStatus } from "@prisma/client";
 import InstrumentCardList from "@/app/components/card-list/instrumentCardList";
 import InstrumentSearchForm from "../forms/instrumentSearchForm";
 import SchoolSelectForm from "../forms/schoolSelectForm";
-// sesiso
+// session
 import { useSession } from "next-auth/react";
 // server actions
 import { getSchoolsByUserId } from "@/actions/actions";
+
 
 type Instrument = {
   id: string;
@@ -61,25 +64,40 @@ export default function SearchInstrument(
 
     const searchTerm = searchField.toLowerCase();
 
+    // TODO: Implement a more efficient search algorithm or create a normalized search index
     return displayInstruments.filter((instrument: Instrument) => {
       if (!instrument) return false;
-      return (
-        instrument?.classification?.toLowerCase().includes(searchTerm) ||
-        instrument?.brand?.toLowerCase().includes(searchTerm) ||
-        instrument?.serialNumber?.toLowerCase().includes(searchTerm) ||
-        instrument?.rentStatus?.toLowerCase() === searchTerm ||
-        instrument?.school?.name?.toLowerCase().includes(searchTerm) ||
-        instrument?.instrumentAssignment?.student?.firstName?.toLowerCase().includes(searchTerm) ||
-        instrument?.instrumentAssignment?.student?.lastName?.toLowerCase().includes(searchTerm) ||
-        instrument?.instrumentAssignment?.student?.studentIdNumber?.toLowerCase().includes(searchTerm)
+
+      const searchableFields = [
+        instrument.classification,
+        instrument.brand,
+        instrument.serialNumber,
+        instrument.rentStatus,
+        instrument.school?.name,
+        instrument.instrumentAssignment?.student?.firstName,
+        instrument.instrumentAssignment?.student?.lastName,
+        instrument.instrumentAssignment?.student?.studentIdNumber
+      ];
+
+      return searchableFields.some(field =>
+        field?.toLowerCase().includes(searchTerm)
       );
     });
   }, [displayInstruments, searchField]);
 
+
   useEffect(() => {
     async function getSchools() {
-      const schools = await getSchoolsByUserId(session.data?.user?.id || "");
-      return schools
+      const userId = session.data?.user?.id
+      if (!userId) redirect("/signIn")
+      try {
+        const schools = await getSchoolsByUserId(userId);
+        return schools
+      } catch (error) {
+        console.warn("User not authenticated", error)
+
+      }
+
     }
     getSchools().then((schools) => {
       dispatch(setSchools({ schools: schools }));
@@ -87,12 +105,14 @@ export default function SearchInstrument(
   }, [session.data?.user?.id, dispatch])
 
   return (
-    <section className={`flex flex-col mt-2 m-8 basis-3/4 items-center gap-2 sm:ml-0 sm:min-h-screen`}>
-      <section className="w-full md:hidden">
+    <section className="flex flex-col gap-2 sm:ml-0 sm:min-h-screen">
+      <section className="flex flex-col gap-2 w-full md:hidden">
         <InstrumentSearchForm />
         <SchoolSelectForm schools={schoolList} />
       </section>
-      <InstrumentCardList instrumentSearchResults={instrumentSearchResults} />
+      <section className="w-full md:mt-2">
+        <InstrumentCardList instrumentSearchResults={instrumentSearchResults} />
+      </section>
     </section>
   );
 }

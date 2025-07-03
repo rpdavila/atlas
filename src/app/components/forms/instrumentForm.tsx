@@ -8,7 +8,7 @@ import { useAppSelector } from "@/lib/ReduxSSR/hooks";
 //compOnent imports
 import { Input, Select, SelectItem } from "@heroui/react";
 import InstrumentSearchForm from "./instrumentSearchForm";
-import { RentStatus } from "@prisma/client";
+import { RentStatus } from "@/app/types/formTypes";
 import { useSession } from "next-auth/react";
 import FormWrapper from "../notification/formWrapper";
 
@@ -30,14 +30,17 @@ export default function InstrumentForm({
   const ref = useRef<HTMLFormElement>(null)
   const selectOption = useAppSelector(state => state.searchOptions.type)
   const session = useSession();
-
+  const rentStatusOptions = Object.keys(RentStatus)
   const handleAddInstrument = async (formData: FormData) => {
     ref.current?.reset();
+    if (!session.data?.user?.id) {
+      return { success: false, message: "User not authenticated" };
+    }
     try {
-      const response = await addInstrument(formData, session.data?.user?.id as string);
+      const response = await addInstrument(formData, session.data.user.id);
       return { success: response.success, message: response.message };
     } catch (error) {
-      console.log(error);
+      console.warn("Error adding Instrument", error);
       return { success: false, message: "Error adding instrument" };
     }
   }
@@ -70,6 +73,7 @@ export default function InstrumentForm({
             placeholder="Enter Instrument Type"
             isClearable
             className="w-full mt-2"
+            required
           />
           <Input
             name="brand"
@@ -79,6 +83,7 @@ export default function InstrumentForm({
             placeholder="Instrument Brand"
             isClearable
             className="w-full"
+            required
           />
           <Input
             name="serialNumber"
@@ -88,6 +93,7 @@ export default function InstrumentForm({
             placeholder="Enter Serial Number"
             isClearable
             className="w-full"
+            required
           />
           <Select
             name="rentStatus"
@@ -95,24 +101,26 @@ export default function InstrumentForm({
             labelPlacement="outside"
             placeholder="Instrument Rental Status"
             variant="bordered"
+            required
           >
-            {Object.keys(RentStatus).map((key) => (
+            {rentStatusOptions.map((key) => (
               <SelectItem key={key}>{key}</SelectItem>
             ))}
 
           </Select>
 
           <Select
-            name="schools"
+            name="schoolId"
             label="Schools"
             labelPlacement="outside"
             placeholder="Schools"
             items={schools}
             selectionMode="single"
             variant="bordered"
+            required
           >
             {schools?.map((school) => (
-              <SelectItem key={school.name} textValue={school.name}>
+              <SelectItem key={school.id} textValue={school.name}>
                 {school.name}
               </SelectItem>
             ))}

@@ -11,21 +11,27 @@ type DistrictInstrument = {
   brand: string;
   serialNumber: string;
   rentStatus: RentStatus;
-} | undefined
+}
 
-type DistrictInstruments = Array<DistrictInstrument>
+type DistrictInstruments = DistrictInstrument[];
 export default function DistrictInstrumentCardList({
   districtInstrumentSearchResults
 }: {
   districtInstrumentSearchResults: DistrictInstruments
 }) {
 
-  if (districtInstrumentSearchResults.length) {
+  if (!districtInstrumentSearchResults.length) {
     return (
-      <>
-        <DistrictTable districtInstrumentSearchResults={districtInstrumentSearchResults} />
-        <DistrictCard districtInstrumentSearchResults={districtInstrumentSearchResults}/>
-      </>
+      <div className="text-center text-gray-500">
+        <p>No instruments found</p>
+        <p className="text-sm">Try adjusting your search criteria </p>
+      </div>
     )
   }
+  return (
+    <>
+      <DistrictTable districtInstrumentSearchResults={districtInstrumentSearchResults} />
+      <DistrictCard districtInstrumentSearchResults={districtInstrumentSearchResults} />
+    </>
+  )
 }

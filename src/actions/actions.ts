@@ -7,7 +7,8 @@ import prisma from "@/lib/prisma";
 //nextauth imports
 import { revalidatePath } from "next/cache";
 import { signIn, signOut } from "../auth";
-import { Profile, User, Instrument, School, District, RentStatus } from "@/app/types/formTypes";
+import { Profile, User, Instrument, School, District } from "@/app/types/formTypes";
+import { RentStatus } from "@prisma/client";
 
 
 export const handleSignIn = async (provider?: (string & {}) | undefined, options?: FormData | ({
@@ -369,7 +370,6 @@ export const addStudent = async (formData: FormData, userId: string,) => {
 
   try {
     await prisma.$transaction(async (tx) => {
-      // First, get the profile associated with the user
       const userProfile = await tx.profile.findUnique({
         where: {
           userId: userId
@@ -391,6 +391,9 @@ export const addStudent = async (formData: FormData, userId: string,) => {
         throw new Error("Profile not found");
       }
 
+      if (!userProfile.schools?.length) {
+        throw new Error("School not found for user");
+      }
       const student = await tx.student.create({
         data: {
           firstName: firstName,
@@ -398,7 +401,7 @@ export const addStudent = async (formData: FormData, userId: string,) => {
           studentIdNumber: studentIdNumber,
           school: {
             connect: {
-              id: userProfile.schools[0]?.id
+              id: userProfile.schools[0].id
             }
           }
         },
@@ -407,10 +410,9 @@ export const addStudent = async (formData: FormData, userId: string,) => {
         }
       });
 
-      // Now update the profile using the correct profile ID
       await tx.profile.update({
         where: {
-          id: userProfile.id  // Use the actual profile ID
+          id: userProfile.id
         },
         data: {
           students: {
@@ -420,7 +422,6 @@ export const addStudent = async (formData: FormData, userId: string,) => {
           }
         }
       });
-
       revalidatePath("/searchStudent");
     })
     return { success: true, message: "Student successfully added" };
@@ -431,42 +432,52 @@ export const addStudent = async (formData: FormData, userId: string,) => {
 }
 
 // Instrument Actions
-export async function getInstrumentsByUserId(userId: string) {
-  const instruments = await prisma.profile.findUnique({
-    where: {
-      userId: userId
-    },
-    select: {
-      instruments: {
-        select: {
-          id: true,
-          classification: true,
-          brand: true,
-          serialNumber: true,
-          rentStatus: true,
-          instrumentAssignment: {
-            select: {
-              id: true,
-              student: {
-                select: {
-                  firstName: true,
-                  lastName: true,
-                  studentIdNumber: true,
-                  id: true
+export async function getInstrumentsByUserId(userId: string): Promise<any[] | { success: boolean; message: string }> {
+  try {
+    const instruments = await prisma.profile.findUnique({
+      where: {
+        userId: userId
+      },
+      select: {
+        instruments: {
+          select: {
+            id: true,
+            classification: true,
+            brand: true,
+            serialNumber: true,
+            rentStatus: true,
+            instrumentAssignment: {
+              select: {
+                id: true,
+                student: {
+                  select: {
+                    firstName: true,
+                    lastName: true,
+                    studentIdNumber: true,
+                    id: true
+                  }
                 }
               }
-            }
-          },
-          school: {
-            select: {
-              name: true
+            },
+            school: {
+              select: {
+                name: true
+              }
             }
           }
         }
       }
+    });
+    if (!instruments?.instruments || instruments.instruments.length === 0) {
+      return { success: false, message: "No instruments found for this user" }
     }
-  });
-  return instruments?.instruments
+    return instruments.instruments
+
+  } catch (error) {
+    console.error("Failed to get instruments", error)
+    return { success: false, message: "Failed to get instruments" }
+  }
+
 }
 
 export async function addInstrument(formData: FormData, userId: string) {
@@ -474,31 +485,37 @@ export async function addInstrument(formData: FormData, userId: string) {
   const brand = formData.get("brand") as string;
   const serialNumber = formData.get("serialNumber") as string;
   const rentStatus = formData.get("rentStatus") as RentStatus;
-  const schoolName = formData.get("schools") as string;
+  const schoolId = formData.get("schoolId") as string;
+  console.log("Form Data is: ", classification, brand, serialNumber, rentStatus, schoolId)
+  if (!classification || !brand || !serialNumber || !rentStatus || !schoolId) {
+    return { success: false, message: "Missing required Fields" }
+  }
   try {
+
     await prisma.$transaction(async (tx) => {
-      const schoolAndDistrict = await tx.profile.findUnique({
-        where: {
-          userId: userId
-        },
+      const userProfile = await tx.profile.findUnique({
+        where: { userId },
         select: {
           schools: {
-            where: {
-              name: schoolName
-            },
-            select: {
-              id: true
-            }
+            where: { id: schoolId },
+            select: { id: true }
           },
           district: {
-            select: {
-              id: true
-            }
-          }
+            select: { id: true }
+          },
+          id: true
         },
       })
+      console.log("User Profile is: ", userProfile?.schools, userProfile?.district)
+      if (!userProfile?.schools?.length) {
+        throw new Error("School not found for user")
+      }
 
-      const instrumentId = await tx.instrument.create({
+      if (!userProfile.district?.id) {
+        throw new Error("District not Found for user")
+      }
+
+      await tx.instrument.create({
         data: {
           classification: classification,
           brand: brand,
@@ -506,12 +523,17 @@ export async function addInstrument(formData: FormData, userId: string) {
           rentStatus: rentStatus,
           school: {
             connect: {
-              id: schoolAndDistrict?.schools[0].id
+              id: userProfile.schools[0].id
             }
           },
           district: {
             connect: {
-              id: schoolAndDistrict?.district?.id
+              id: userProfile.district.id
+            }
+          },
+          Profile: {
+            connect: {
+              id: userProfile.id
             }
           }
         },
@@ -519,25 +541,15 @@ export async function addInstrument(formData: FormData, userId: string) {
           id: true
         }
       })
-      await tx.profile.update({
-        where: {
-          userId: userId
-        },
-        data: {
-          instruments: {
-            connect: {
-              id: instrumentId.id
-            }
-          }
-        }
-      })
-
       revalidatePath("/searchInstrument")
     })
-    return { success: true, message: "Instrument successfully added" }
+    return { success: true, message: `Instrumentsuccessfully added` }
   } catch (error) {
-    console.error(error)
-    return { success: false, message: "Failed to add instrument" }
+    console.error("Failed to add instrument", error)
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : "Failed to add instrument"
+    }
   }
 }
 
@@ -546,7 +558,6 @@ export async function assignStudentToInstrument(formData: FormData, instrumentId
 
   try {
     await prisma.$transaction(async (tx) => {
-      // get school Id
       const schoolId = await tx.instrument.findUnique({
         where: {
           id: instrumentId
@@ -556,7 +567,6 @@ export async function assignStudentToInstrument(formData: FormData, instrumentId
         }
       })
 
-      // create assignment and return assignment ID
       const instrumentAssignment = await tx.instrumentAssignment.create({
         data: {
           instrumentId: instrumentId,
@@ -600,15 +610,15 @@ export async function unassignStudentFromInstrument(instrumentId: string, studen
       if (!assignment) {
         throw new Error("Instrument assignment not found.")
       }
+      // amazonq-ignore-next-line
 
-      // delete record
       await tx.instrumentAssignment.delete({
         where: {
           id: assignment.id
         },
       });
+      // amazonq-ignore-next-line
 
-      //update instrument record
       await tx.instrument.update({
         where: {
           id: instrumentId
@@ -621,133 +631,106 @@ export async function unassignStudentFromInstrument(instrumentId: string, studen
     })
     return { success: true, message: "Instrument successfully unassigned" }
   } catch (error) {
-    console.error('Error unassigning instrument', error);
-    // Handle the error, e.g., notify the user or log the issue
+    console.error({
+      message: 'Error unassigning instrument',
+      function: "unassignStudentFromInstrument",
+      instrumentId,
+      studentId,
+      error: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+      errorType: error instanceof Error ? error.constructor.name : typeof error
+    });
     return { success: false, message: "Failed in unassigning instrument" }
-
   }
 }
 
 export async function getDropDownList(userId: string) {
-  const students = await prisma.profile.findUnique({
-    where: {
-      userId: userId
-    },
-    select: {
-      students: {
-        where: {
-          instrumentAssignment: null,
-        },
-        select: {
-          id: true,
-          firstName: true,
-          lastName: true,
-          studentIdNumber: true,
-          school: true
+  if (!userId) {
+    return { success: false, message: "User not found" }
+  }
+  try {
+    const profile = await prisma.profile.findUnique({
+      where: {
+        userId: userId
+      },
+      select: {
+        students: {
+          where: {
+            instrumentAssignment: null,
+          },
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            studentIdNumber: true,
+            school: true
+          }
         }
       }
+    });
+    if (!profile) {
+      return { success: false, message: "Profile not found" }
     }
-  })
-  return students?.students
+    return profile.students
+  } catch (error) {
+    console.error("Failed to get list of Students", error)
+    return { success: false, message: "Failed to get list of students" }
+  }
 }
 
 export async function getInstrumentsByDistrict(userId: string) {
-  const districtId = await prisma.profile.findUnique({
-    where: {
-      userId: userId
-    },
+  const result = await prisma.profile.findUnique({
+    where: { userId },
     select: {
-      districtId: true
-    }
-  })
-
-  const instruments = await prisma.district.findUnique({
-    where: {
-      id: districtId?.districtId as string
-    },
-    select: {
-      instruments: {
+      district: {
         select: {
-          brand: true,
-          classification: true,
-          id: true,
-          rentStatus: true,
-          serialNumber: true,
-          school: {
+          instruments: {
             select: {
-              name: true
+              brand: true,
+              classification: true,
+              id: true,
+              rentStatus: true,
+              serialNumber: true,
+              school: {
+                select: { name: true }
+              }
             }
           }
         }
       }
     }
-  });
-  return instruments?.instruments
+  })
+  return result?.district?.instruments
 }
 
 export async function deleteAccount(userId: string): Promise<{ success: boolean, message: string }> {
   try {
-    const result = await prisma.$transaction(async (tx) => {
-      // get profile
-      const userProfile = await tx.profile.findUnique({
-        where: {
-          userId: userId
-        },
-      })
-
-      if (userProfile) {
-        // update all instruments to remove profile reference
-        await tx.instrument.updateMany({
-          where: {
-            profileId: userProfile.id
-          },
-          data: {
-            profileId: null
-          }
-        })
-        // update all students
-        await tx.student.updateMany({
-          where: {
-            profileId: userProfile.id
-          },
-          data: {
-            profileId: null
-          }
-        })
-      }
-      await tx.profile.delete({
-        where: {
-          userId: userId
-        }
-      })
-
-      await tx.session.deleteMany({
-        where: { userId: userId }
-      })
-
-      await tx.authenticator.deleteMany({
-        where: { userId: userId }
-      })
-
-      await tx.account.deleteMany({
-        where: { userId: userId }
-      })
-
-      await tx.user.delete({
-        where: {
-          id: userId
-        }
-      })
-      return { success: true, message: "Account successfully deleted" }
-    })
-    return result;
+    await prisma.$transaction(async (tx) => {
+      await Promise.all([
+        tx.session.deleteMany({ where: { userId } }),
+        tx.authenticator.deleteMany({ where: { userId } }),
+        tx.account.deleteMany({ where: { userId } }),
+        tx.instrument.updateMany({
+          where: { profileId: userId },
+          data: { profileId: null }
+        }),
+        tx.student.updateMany({
+          where: { profileId: userId },
+          data: { profileId: null }
+        }),
+        // delete profile and user
+        tx.profile.delete({ where: { userId } }),
+        tx.user.delete({ where: { id: userId } })
+      ]);
+    });
+    return { success: true, message: "Account deleted successfully" }
   } catch (error) {
     console.error('Error deleting user:', error);
-    return { success: false, message: error instanceof Error ? error.message : "Failed to delete account" }
+    return { success: false, message: "Failed to delete account" }
   }
 }
 
-export async function getTeacherEmailByInstument(instrumentId: string, school: string) {
+export async function getTeacherEmailByInstrument(instrumentId: string, school: string) {
   try {
     const userId = await prisma.profile.findFirst({
       where: {
@@ -770,7 +753,6 @@ export async function getTeacherEmailByInstument(instrumentId: string, school: s
     const teacherData = await prisma.user.findFirst({
       where: {
         id: userId?.userId,
-
       },
       select: {
         email: true,
@@ -779,56 +761,65 @@ export async function getTeacherEmailByInstument(instrumentId: string, school: s
     })
 
     return { teacherName: teacherData?.name, teacherEmail: teacherData?.email }
-  } catch (e) {
-    console.log(e)
+  } catch (error) {
+    console.log("Error retrieving teacher email", error)
   }
 }
 
 export async function getAvailableInstrumentCount(userId: string) {
-  const schoolId = await prisma.profile.findUnique({
-    where: {
-      userId: userId
-    },
-    select: {
-      schools: {
-        select: {
-          id: true
+  try {
+    const schoolId = await prisma.profile.findUnique({
+      where: {
+        userId: userId
+      },
+      select: {
+        schools: {
+          select: {
+            id: true
+          }
         }
       }
-    }
-  })
+    })
 
-  const availableInstruments = await prisma.instrument.count({
-    where: {
-      schoolId: {
-        // check multiple schools
-        in: schoolId?.schools.map(school => school.id)
+    const availableInstruments = await prisma.instrument.count({
+      where: {
+        schoolId: {
+          in: schoolId?.schools.map(school => school.id)
+        },
+        rentStatus: "Available"
       },
-      rentStatus: "Available"
-    },
-  })
-  return availableInstruments
+    })
+    return availableInstruments
+  } catch (error) {
+    console.error("Error retrieving number of inetruments", error)
+    return { success: false, message: "Failed to retrieve number of available instrument" }
+  }
 }
 
 export async function getAvailableInstrumentCountByDistrict(userId: string) {
-  const districtId = await prisma.profile.findUnique({
-    where: {
-      userId: userId
-    },
-    select: {
-      district: {
-        select: {
-          id: true
+  try {
+    const districtId = await prisma.profile.findUnique({
+      where: {
+        userId: userId
+      },
+      select: {
+        district: {
+          select: {
+            id: true
+          }
         }
       }
-    }
-  })
+    })
 
-  const availableInstruments = await prisma.instrument.count({
-    where: {
-      districtId: districtId?.district?.id,
-      rentStatus: "Available"
-    }
-  })
-  return availableInstruments
+    const availableInstruments = await prisma.instrument.count({
+      where: {
+        districtId: districtId?.district?.id,
+        rentStatus: "Available"
+      }
+    })
+    return availableInstruments
+  } catch (error) {
+    console.error("Error retrieving number of instruments", error)
+    return { success: false, message: "Failed to retrieve number of available instruments" }
+  }
 }

@@ -2,7 +2,7 @@
 // react imports
 import { useState } from "react";
 // type imports
-import { getTeacherEmailByInstument } from "@/actions/actions";
+import { getTeacherEmailByInstrument } from "@/actions/actions";
 import { RentStatus } from "@prisma/client";
 import { useAppSelector } from "@/lib/ReduxSSR/hooks";
 //auth
@@ -71,7 +71,7 @@ export default function DistrictTable({
     instrumentSerialNumber: string
   ) => {
     try {
-      const teacherData = await getTeacherEmailByInstument(instrumentId, school)
+      const teacherData = await getTeacherEmailByInstrument(instrumentId, school)
       if (!teacherData || !teacherData.teacherEmail) {
         console.error("Teacher email not found")
         return

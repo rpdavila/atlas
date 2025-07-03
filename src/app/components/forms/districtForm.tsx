@@ -21,8 +21,8 @@ export default function DistrictForm() {
   const router = useRouter()
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value: boolean = e.target.checked
-    setDistrictSearch(value)
+    const value = e.target.checked
+    dispatch(setDistrictSearch(value))
     if (value) {
       router.push("/dashboard/districtInstruments")
     } else {
@@ -32,13 +32,24 @@ export default function DistrictForm() {
 
   useEffect(() => {
     async function getDistrict() {
-      const data = await getDistrictFromUserId(session.data?.user?.id as string)
-      return data
+      const userId = session.data?.user?.id;
+      if (!userId) return;
+      try {
+        const data = await getDistrictFromUserId(userId)
+        return data
+      } catch (error) {
+        console.error(error)
+        return null
+      }
+
     }
     if (!districtName) {
       getDistrict()
-        .then(data => dispatch(setDistrict({ name: data?.profile?.district?.name as string })))
-
+        .then(data => {
+          if (data?.profile?.district?.name) {
+            dispatch(setDistrict({ name: data.profile.district.name }))
+          }
+        })
     }
   }, [dispatch, districtName, session.data?.user?.id])
 

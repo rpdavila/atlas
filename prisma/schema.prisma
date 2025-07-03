@@ -88,7 +88,7 @@ model Instrument {
   // relations
   school               School                @relation(fields: [schoolId], references: [id])
   district             District              @relation(fields: [districtId], references: [id])
-  Profile              Profile?              @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  Profile              Profile?              @relation(fields: [profileId], references: [id], onDelete: SetNull)
   profileId            String?               @db.ObjectId
 }
 

@@ -12,12 +12,18 @@ import { useSession } from "next-auth/react";
 // redux
 import { useAppDispatch } from "@/lib/ReduxSSR/hooks";
 import { setDistrict, setSchools } from "@/lib/ReduxSSR/features/userSlice";
+import { redirect } from "next/navigation";
 
 
 export default function ProfileForm() {
   const ref = useRef<HTMLFormElement>(null);
   const session = useSession();
   const dispatch = useAppDispatch();
+
+  if (session.status === "unauthenticated") {
+    redirect("/signIn");
+  }
+
   const handleCreateProfile = async (formData: FormData) => {
     ref.current?.reset();
     try {

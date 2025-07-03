@@ -1,6 +1,6 @@
 "use client";
 //react imports
-import { useState, useActionState, useTransition } from "react";
+import { useActionState, useTransition, useMemo } from "react";
 //auth imports
 import { useSession } from "next-auth/react";
 //type imports
@@ -8,23 +8,18 @@ import { RentStatus } from "@prisma/client";
 
 //component imports
 import InstrumentCard from "@/app/components/cards/instrumentCard"
-import { form, Select, SelectItem, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react"
+import { Select, SelectItem, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react"
 import Button from "../button/button"
 
 // redux
 import { useAppDispatch } from "@/lib/ReduxSSR/hooks";
 import { useAppSelector } from "@/lib/ReduxSSR/hooks";
-import { setDropDownList, studentListSlice } from "@/lib/ReduxSSR/features/studentListSlice";
+import { setDropDownList } from "@/lib/ReduxSSR/features/studentListSlice";
 
 //server actions
 import { getDropDownList, unassignStudentFromInstrument } from "@/actions/actions";
 import { assignStudentToInstrument } from "@/actions/actions";
 import { toast } from "react-hot-toast";
-
-type Student = {
-  id: string;
-  rented: boolean;
-}
 
 type Instrument = {
   id: string;
@@ -51,20 +46,13 @@ type InstrumentList = Instrument[];
 type InstrumentCardListProps = {
   instrumentSearchResults: InstrumentList;
 }
-
-type InstrumentState = {
-  instrumentId: string;
-  rentStatus: RentStatus;
-  studentId: string
-}
 export default function InstrumentCardList({
   instrumentSearchResults
-
 }: InstrumentCardListProps) {
   const session = useSession();
   const dispatch = useAppDispatch();
-  const dropDownList = useAppSelector(state => state.students.dropDownList) ?? []
-  const schoolName = useAppSelector(state => state.searchOptions.school) ?? []
+  const dropDownList = useAppSelector(state => state.students.dropDownList)
+  const schoolName = useAppSelector(state => state.searchOptions.school)
   const columns = [
     { key: "classification", label: "Instrument Type" },
     { key: "brand", label: "Brand" },
@@ -72,117 +60,112 @@ export default function InstrumentCardList({
     { key: "rentStatus", label: "Status" },
     { key: "school", label: "School" },
     { key: "student", label: "Assign Student" },
-    { key: "actions", label: "Actions" }
   ]
 
   // filter the data based on parameters
-  const filteredSChools = instrumentSearchResults.filter(school => school?.school.name === schoolName)
-  const filteredDropDownList = dropDownList.filter(student => student?.school?.name === schoolName)
+
+  const filteredSchools = useMemo(() => {
+    return instrumentSearchResults.filter(school => school?.school.name === schoolName)
+  }, [instrumentSearchResults, schoolName]);
+  const filteredDropDownList = useMemo(() => {
+    const safeDropDownList = dropDownList ?? []
+    return safeDropDownList.filter(student => student?.school?.name === schoolName)
+  }, [dropDownList, schoolName]);
+  // Use table view for larger screens, card view for mobile
   const [isPending, startTransition] = useTransition()
 
-  const [instrument, setInstrument] = useState({
-    instrumentId: "",
-    rentStatus: "Available" as RentStatus,
-    studentId: ""
-  });
-
   const [state, formAction] = useActionState(async (prevState: any, formData: FormData) => {
-    const result = await handelAssignandUnassignInstrument(formData)
-    if (result.success) {
-      toast.success(result.message)
-    } else {
-      toast.error(result.message)
+    const instrumentId = formData.get("instrumentId") as string;
+    const studentId = formData.get("studentId") as string;
+    const rentStatus = formData.get("rentStatus") as RentStatus;
+
+    try {
+      let response;
+      if (rentStatus === "Rented") {
+        response = await unassignStudentFromInstrument(instrumentId, studentId);
+      } else {
+        response = await assignStudentToInstrument(formData, instrumentId);
+      }
+
+      const updatedDropDownList = await getDropDownList(session.data?.user?.id as string)
+      dispatch(setDropDownList(updatedDropDownList))
+
+      if (response.success) {
+        toast.success(response.message);
+      } else {
+        toast.error(response.message);
+      }
+    } catch (error) {
+      console.error("Error:", error)
+      toast.error("Error processing request")
     }
   }, null)
 
-  const handelAssignandUnassignInstrument = async (formData: FormData) => {
-    try {
-      if (instrument.rentStatus === "Rented") {
-        const response = await unassignStudentFromInstrument(instrument.instrumentId, instrument.studentId);
-        const updatedDropDownList = await getDropDownList(session.data?.user?.id as string);
-        // Update the dropdown list
-        dispatch(setDropDownList(updatedDropDownList));
-        return { success: response.success, message: response?.message }
-
-      } else {
-        // Assign student to instrument          
-        const response = await assignStudentToInstrument(formData, instrument.instrumentId);
-        // Update the dropdown list
-        const updatedDropDownList = await getDropDownList(session.data?.user?.id as string);
-        dispatch(setDropDownList(updatedDropDownList));
-        return { success: response.success, message: response.message }
-      }
-    } catch (error) {
-      console.error("Error assigning or unassigning instrument:", error);
-      return { success: false, message: "Error processing request" };
-    }
-  }
-
-
   // Use table view for larger screens, card view for mobile
   return (
-    <section className="h-full w-full">
+    <article className="h-full w-full">
       {/* Table view for larger screens */}
-      <form
-        className="hidden md:flex justify-center"
-        action={(formData) => {
-          startTransition(() => formAction(formData))
-        }}
-      >
+      <section className="hidden md:flex md:justify-center">
         <Table aria-label="Instruments" className="w-full">
           <TableHeader columns={columns}>
             {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
           </TableHeader>
           <TableBody>
-            {filteredSChools.map((item: Instrument) => (
-              <TableRow key={item?.id} className="hover:bg-slate-100" onClick={() => setInstrument({ instrumentId: item?.id as string, rentStatus: item?.rentStatus as RentStatus, studentId: item?.instrumentAssignment?.student.id as string })}>
+            {filteredSchools.map((item: Instrument) => (
+              <TableRow
+                key={item?.id as string} className="hover:bg-slate-100"
+              >
                 <TableCell>{item?.classification}</TableCell>
                 <TableCell>{item?.brand}</TableCell>
                 <TableCell>{item?.serialNumber}</TableCell>
                 <TableCell>{item?.rentStatus}</TableCell>
                 <TableCell>{item?.school?.name}</TableCell>
                 <TableCell>
-                  {item?.rentStatus === "Rented" ? `${item?.instrumentAssignment?.student.firstName} ${item?.instrumentAssignment?.student.lastName}` :
-                    <Select
-                      name={"student"}
-                      aria-label="Assign Student"
-                      placeholder="Assign Student"
-                      className="max-w-lg"
-                    >
-                      {filteredDropDownList.map((student) => {
-                        return (
+                  {item?.rentStatus === "Rented" ? (
+                    <form action={(formData) => startTransition(() => formAction(formData))}>
+                      <input type="hidden" name="instrumentId" value={item?.id} />
+                      <input type="hidden" name="rentStatus" value={item?.rentStatus} />
+                      <input type="hidden" name="studentId" value={item?.instrumentAssignment?.student.id} />
+                      <Button name={`Unassign ${item.instrumentAssignment?.student.firstName} ${item.instrumentAssignment?.student.lastName}`} type="submit" danger={true} isPending={isPending} />
+                    </form>
+                  ) : (
+                    <form action={(formData) => startTransition(() => formAction(formData))} className="flex gap-2">
+                      <input type="hidden" name="instrumentId" value={item?.id} />
+                      <input type="hidden" name="rentStatus" value="Available" />
+                      <Select name="student" placeholder="Select Student" isRequired className="min-w-48">
+                        {filteredDropDownList.map((student) => (
                           <SelectItem
-                            key={student?.id as string}
+                            key={student?.id}
                             textValue={`${student?.firstName} ${student?.lastName}`}
                           >
                             {student?.firstName} {student?.lastName}
                           </SelectItem>
-                        );
-                      })}
-                    </Select>
-                  }
-                </TableCell>
-                <TableCell>
-                  {item?.rentStatus === "Rented"
-                    ? <Button name="Unassign Student" pendingName="Unassigning Student" type="submit" danger={true} isPending={isPending} />
-                    : <Button name="Assign Student" pendingName="Assigning Student" type="submit" isPending={isPending} />}
+                        ))}
+                      </Select>
+                      <Button name="Assign" type="submit" isPending={isPending} />
+                    </form>
+                  )}
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
-      </form>
+      </section>
 
       {/* Card view for mobile */}
-      <div className="md:hidden">
-        {filteredSChools.map((items: Instrument) => (
-          <InstrumentCard
-            key={items?.id}
-            instrument={items}
-            studentDropDownList={filteredDropDownList}
-          />
-        ))}
-      </div>
-    </section>
+      <section className="flex flex-col gap-2 md:hidden ">
+        {filteredSchools.length === 0 ? (
+          <div className="text-center text-gray-500 py-8">No instruments found for selected school</div>
+        ) : (
+          filteredSchools.map((item: Instrument) => (
+            <InstrumentCard
+              key={item?.id}
+              instrument={item}
+              studentDropDownList={filteredDropDownList}
+            />
+          ))
+        )}
+      </section>
+    </article>
   )
 }

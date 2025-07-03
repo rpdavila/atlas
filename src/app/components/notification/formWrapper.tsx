@@ -50,7 +50,6 @@ export default function FormWrapper({
       <Button
         type={submitButton.type}
         name={submitButton.name}
-        disabled={submitButton.disabled || isPending}
         danger={submitButton.danger}
         isPending={submitButton.disabled || isPending}
         pendingName={submitButton.pendingName}

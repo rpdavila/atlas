@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { useActionState, useTransition } from "react";
 
 //component imports
 import Button from "../button/button";
@@ -11,9 +11,13 @@ import { useSession } from "next-auth/react";
 //redux 
 import { useAppDispatch } from "@/lib/ReduxSSR/hooks";
 import { setDropDownList } from "@/lib/ReduxSSR/features/studentListSlice";
+import { Card, CardBody } from "@heroui/react";
 
 //type 
 import { RentStatus } from "@prisma/client";
+
+// hot toast import
+import { toast } from "react-hot-toast";
 
 type Student = {
   id: string;
@@ -59,94 +63,78 @@ type CardProps = {
 export default function InstrumentCard({ instrument, studentDropDownList }: CardProps) {
   const session = useSession()
   const dispatch = useAppDispatch();
-  useEffect(() => {
-    const fetchData = async () => {
-      const students = await getDropDownList(session.data?.user?.id as string)
-      dispatch(setDropDownList(students))
-    }
-    fetchData()
-  }, [dispatch, session.data?.user?.id])
-  return (
-    <section className="flex flex-col items-center w-full m-2 bg-white sm:flex-row sm:w-full rounded-lg mb-4">
-      <div className="flex flex-col items-start sm:w-1/3 m-6 justify-center ">
-        <p>
-          <strong>Instrument type: </strong>
-          {instrument?.classification}
-        </p>
-        <p>
-          <strong>Brand: </strong>
-          {instrument?.brand}
-        </p>
-        <p>
-          <strong>Serial Number: </strong>
-          {instrument?.serialNumber}
-        </p>
-        <p>
-          <strong>Rent Status: </strong>
-          {instrument?.rentStatus}
-        </p>
-        <p>
-          <strong>School: </strong>
-          {instrument?.school?.name}
-        </p>
-      </div>
-      {instrument?.instrumentAssignment ? (
-        <div className="flex flex-col items-start justify-center m-6">
-          <strong>
-            <h1>Assigned to: </h1>
-          </strong>
-          <p>
-            <strong>First Name:</strong>
-            {instrument.instrumentAssignment.student.firstName}
-          </p>
-          <p>
-            <strong>Last Name: </strong>
-            {instrument.instrumentAssignment.student.lastName}
-          </p>
-          <p>
-            <strong>Student Id Number: </strong>
-            {instrument.instrumentAssignment.student.studentIdNumber}
-          </p>
-          <form action={async () => {
-            await unassignStudentFromInstrument(instrument.id, instrument.instrumentAssignment?.student.id as string)
-            const students = await getDropDownList(session.data?.user?.id as string)
-            dispatch(setDropDownList(students))
-          }}>
-            <Button type="submit" name="Unassign Student" marginTop="0" />
-          </form>
-        </div>
+  const [isPending, startTransition] = useTransition()
+  const [state, formAction] = useActionState(async (prevState: any, formData: FormData) => {
+    const instrumentId = formData.get("instrumentId") as string;
+    const studentId = formData.get("studentId") as string;
+    const rentStatus = formData.get("rentStatus") as RentStatus;
 
-      ) : (
-        <section className="flex bassis-1/2">
-          <form
-            className="w-full"
-            action={async (formData: FormData) => {
-              await assignStudentToInstrument(formData, instrument?.id as string)
-              const students = await getDropDownList(session.data?.user?.id as string)
-              dispatch(setDropDownList(students))
-            }}
-          >
-            <Select
-              name="student"
-              label="Assign Student"
-              placeholder="Assign Student"
-              className="max-w-lg"
-            >
-              {studentDropDownList.map((student) => {
-                return (
-                  <SelectItem
-                    key={student?.id as string}
-                    textValue={`${student?.firstName} ${student?.lastName}`}
-                  >
-                    {student?.firstName} {student?.lastName}
-                  </SelectItem>
-                );
-              })}
-            </Select>
-            <Button type="submit" name="Assign Student" />
-          </form>
-        </section>
-      )}
+    try {
+      let response;
+      if (rentStatus === "Rented") {
+        response = await unassignStudentFromInstrument(instrumentId, studentId);
+      } else {
+        response = await assignStudentToInstrument(formData, instrumentId);
+      }
+
+      const updatedDropDownList = await getDropDownList(session.data?.user?.id as string)
+      dispatch(setDropDownList(updatedDropDownList))
+
+      if (response.success) {
+        toast.success(response.message);
+      } else {
+        toast.error(response.message);
+      }
+    } catch (error) {
+      console.error("Error:", error)
+      toast.error("Error processing request")
+    }
+  }, null)
+
+  const instrumentDetails = (
+    <section className="flex flex-col items-start mb-4">
+      <h1 className="text-2xl text-center w-full">{instrument?.classification}</h1>
+      <p>Brand: {instrument?.brand}</p>
+      <p>SN: {instrument?.serialNumber}</p>
+      <p>RentStatus: {instrument?.rentStatus}</p>
     </section>
   );
+  return (
+    <>
+      <Card>
+        <CardBody>
+          {instrument?.rentStatus === "Rented"
+            ? (
+              <form
+                action={(formData: FormData) => startTransition(() => formAction(formData))}>
+                <input type="hidden" name="instrumentId" value={instrument?.id} />
+                <input type="hidden" name="rentStatus" value={instrument?.rentStatus} />
+                <input type="hidden" name="studentId" value={instrument?.instrumentAssignment?.student.id} />
+                {instrumentDetails}
+                <Button name={`Unassign ${instrument.instrumentAssignment?.student.firstName} ${instrument.instrumentAssignment?.student.lastName}`} type="submit" danger={true} isPending={isPending} />
+              </form>
+            )
+            : (
+              <form
+                action={(formData: FormData) => startTransition(() => formAction(formData))}>
+                <input type="hidden" name="instrumentId" value={instrument?.id} />
+                <input type="hidden" name="rentStatus" value="Available" />
+                {instrumentDetails}
+                <Select name="student" placeholder="Select Student" isRequired className="min-w-48">
+                  {studentDropDownList.map((student) => (
+                    <SelectItem
+                      key={student?.id}
+                      textValue={`${student?.firstName} ${student?.lastName}`}
+                    >
+                      {student?.firstName} {student?.lastName}
+                    </SelectItem>
+                  ))}
+                </Select>
+                <Button name="Assign" type="submit" isPending={isPending} />
+              </form>
+            )}
+        </CardBody>
+      </Card>
+    </>
+  )
 }
