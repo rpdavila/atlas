@@ -1,22 +1,15 @@
 "use client";
 //react import
-import { useMemo, useEffect } from "react";
-// next import
-import { redirect } from "next/navigation";
+import { useMemo } from "react";
 //redux imports
-import { useAppSelector, useAppDispatch } from "@/lib/ReduxSSR/hooks";
+import { useAppSelector } from "@/lib/ReduxSSR/hooks";
 import { RootState } from "@/lib/ReduxSSR/store";
-import { setSchools } from "@/lib/ReduxSSR/features/userSlice";
 // types
 import { RentStatus } from "@prisma/client";
 //component imports
 import InstrumentCardList from "@/app/components/card-list/instrumentCardList";
 import InstrumentSearchForm from "../forms/instrumentSearchForm";
 import SchoolSelectForm from "../forms/schoolSelectForm";
-// session
-import { useSession } from "next-auth/react";
-// server actions
-import { getSchoolsByUserId } from "@/actions/actions";
 
 
 type Instrument = {
@@ -43,20 +36,16 @@ type InstrumentList = Instrument[]
 
 export default function SearchInstrument(
   {
-    displayInstruments
+    displayInstruments,
+    schools
   }: {
     displayInstruments: InstrumentList;
+    schools: { id: string; name: string; }[];
   }) {
-  const session = useSession()
-  const dispatch = useAppDispatch();
-  // grab searchfield
   const searchField = useAppSelector(
     (state: RootState) => state.searchOptions.search
   );
-  const schoolList = useAppSelector((state: RootState) => state.userInfo.schools);
 
-
-  // if no instruments are passed, return empty array
   const instrumentSearchResults = useMemo(() => {
     if (!displayInstruments || !searchField.trim()) {
       return displayInstruments || []
@@ -64,7 +53,6 @@ export default function SearchInstrument(
 
     const searchTerm = searchField.toLowerCase();
 
-    // TODO: Implement a more efficient search algorithm or create a normalized search index
     return displayInstruments.filter((instrument: Instrument) => {
       if (!instrument) return false;
 
@@ -85,30 +73,11 @@ export default function SearchInstrument(
     });
   }, [displayInstruments, searchField]);
 
-
-  useEffect(() => {
-    async function getSchools() {
-      const userId = session.data?.user?.id
-      if (!userId) redirect("/signIn")
-      try {
-        const schools = await getSchoolsByUserId(userId);
-        return schools
-      } catch (error) {
-        console.warn("User not authenticated", error)
-
-      }
-
-    }
-    getSchools().then((schools) => {
-      dispatch(setSchools({ schools: schools }));
-    });
-  }, [session.data?.user?.id, dispatch])
-
   return (
     <section className="flex flex-col gap-2 sm:ml-0 sm:min-h-screen">
       <section className="flex flex-col gap-2 w-full md:hidden">
         <InstrumentSearchForm />
-        <SchoolSelectForm schools={schoolList} />
+        <SchoolSelectForm schools={schools} />
       </section>
       <section className="w-full md:mt-2">
         <InstrumentCardList instrumentSearchResults={instrumentSearchResults} />

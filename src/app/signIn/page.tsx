@@ -8,8 +8,8 @@ export default function SignIn() {
   const ref = useRef<HTMLFormElement>(null);
 
   return (
-    <div className="flex w-screen h-screen items-center justify-center">
-      <article className="flex justify-center items-center w-1/4 sm:w-1/3 h-56 gap-2 bg-slate-50 rounded-lg mt-5">
+    <div className="flex h-screen items-center justify-center">
+      <article className="flex justify-center items-center w-full bg-slate-50 rounded-lg m-5 sm:w-1/3 h-56 gap-2 ">
         <section className="w-fit h-fit bg-white p-2 border-small rounded-md border-black">
           <form
             ref={ref}

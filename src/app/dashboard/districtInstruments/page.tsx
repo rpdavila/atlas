@@ -19,7 +19,9 @@ export default async function DistrictInstruments() {
   if (districtData?.length) {
     const displayInstruments = districtData;
     return (
-      <SearchDistrictInstruments displayInstruments={displayInstruments} />
+      <Suspense fallback={<Loading />}>
+        <SearchDistrictInstruments displayInstruments={displayInstruments} />
+      </Suspense>
     )
   } else {
     return <div className="text-center">No instruments found for your district</div>

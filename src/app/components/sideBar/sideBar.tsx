@@ -18,7 +18,7 @@ export default function SideBar() {
   const dispatch = useAppDispatch();
   const selectedSearchType = useAppSelector((state) => state.searchOptions.type);
   const schoolList = useAppSelector((state) => state.userInfo.schools);
-
+  
   function getFormComponent(selectOption: string) {
     switch (selectOption) {
       case "Search Student":
@@ -33,8 +33,7 @@ export default function SideBar() {
       case "Add Instrument":
         return <InstrumentForm formTitle="Add Instrument" schools={schoolList} />
       default:
-        console.warn(`Unknown selectOption: ${selectOption}`);
-        return <div>Invalid selection</div>; // or throw error
+        return null
     }
   }
 
@@ -50,7 +49,6 @@ export default function SideBar() {
         console.error('Failed to fetch schools:', error);
       }
     };
-
     fetchSchools();
   }, [session.data?.user?.id, dispatch])
 
