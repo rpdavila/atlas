@@ -70,7 +70,7 @@ export default function StudentCardList({
     <>
       <Table
         aria-label="Students"
-        className="hidden md:h-full">
+        className="hidden md:block w-full">
         <TableHeader columns={columns}>
           {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
         </TableHeader>
@@ -92,9 +92,11 @@ export default function StudentCardList({
       </Table >
 
 
-      {filterStudentBySchool.map((student) => {
-        return <StudentCard key={student.id} student={student} />
-      })}
+      <div className="md:hidden w-full space-y-4">
+        {filterStudentBySchool.map((student) => {
+          return <StudentCard key={student.id} student={student} />
+        })}
+      </div>
     </>
 
   );

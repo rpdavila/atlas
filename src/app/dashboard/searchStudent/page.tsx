@@ -28,8 +28,8 @@ export default async function StudentPage() {
     )
   } else {
     return (
-      <div className="flex justify-center h-screen text-slate-50 w-full">
-        <h1 className="flex self-center text-8xl"> No students found</h1>
+      <div className="flex justify-center items-center min-h-[60vh] w-full">
+        <h1 className="text-2xl md:text-4xl text-slate-200 font-semibold">No students found</h1>
       </div>
     )
   }

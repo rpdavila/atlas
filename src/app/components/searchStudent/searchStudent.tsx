@@ -60,7 +60,7 @@ export default function SearchStudents({
   }
 
   return (
-    <section className={`flex flex-col basis-3/4 w-full ${studentSearchResults.length > 4 ? "h-full" : "h-screen"} items-center p-1 gap-1`}>
+    <section className="flex flex-col w-full min-h-screen items-center p-4 gap-4">
       <section className="w-full md:hidden">
         <StudentSearchForm />
       </section>
