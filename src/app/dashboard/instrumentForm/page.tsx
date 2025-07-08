@@ -10,12 +10,12 @@ export default async function InstrumentFormPageMobile() {
   // Check if the session is unauthenticated
   // If so, redirect to the sign-in page
   // This is a server-side check, so we can use `redirect` directly
-  if (!session?.user) {
+  if (!session?.user?.id) {
     redirect("/signIn");
   }
 
   // Fetch the schools associated with the user
-  const schools = await getSchoolsByUserId(session.user.id as string);
+  const schools = await getSchoolsByUserId(session.user.id);
   return (
     <div className="flex justify-center items-center h-full sm:hidden">
       <InstrumentForm formTitle="Add Instrument" schools={schools} />
