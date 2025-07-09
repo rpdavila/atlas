@@ -18,7 +18,7 @@ export default function SideBar() {
   const dispatch = useAppDispatch();
   const selectedSearchType = useAppSelector((state) => state.searchOptions.type);
   const schoolList = useAppSelector((state) => state.userInfo.schools);
-  
+
   function getFormComponent(selectOption: string) {
     switch (selectOption) {
       case "Search Student":
@@ -49,6 +49,7 @@ export default function SideBar() {
         console.error('Failed to fetch schools:', error);
       }
     };
+
     fetchSchools();
   }, [session.data?.user?.id, dispatch])
 

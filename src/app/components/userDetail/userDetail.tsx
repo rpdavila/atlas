@@ -17,7 +17,7 @@ export default async function UserDetail() {
   const districtCount = typeof instrumentCountDistrict === 'number' ? instrumentCountDistrict : 0;
 
   return (
-    <section className="flex flex-col p-4 justify-evenly items-center text-2xl bg-white rounded-lg sm:basis-3/4 sm:flex- sm:flex-wrap">
+    <section className="flex flex-col justify-evenly items-center text-2xl bg-white rounded-lg basis-3/4 sm:flex- sm:flex-wrap">
       <h1>
         Hello, {session.user.name}
       </h1>

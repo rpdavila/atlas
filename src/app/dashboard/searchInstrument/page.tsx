@@ -1,17 +1,22 @@
-// react imports
 import { Suspense } from "react";
 // auth import 
 import { auth } from "@/auth"
-//component imports
-import SearchInstrument from "@/app/components/searchInstruments/searchInstruments"
+// component import
 import Loading from "@/app/components/loading/loading";
-// actions imports
-import { permanentRedirect } from "next/navigation";
+import ServerSideComponent from "@/app/components/searchInstruments/serverSideComponent";
+// next import
+import { redirect } from "next/navigation";
 
 export default async function SearchInstrumentPage() {
   const session = await auth()
   if (!session?.user) {
-    permanentRedirect("signIn")
+    redirect("/signIn")
   };
-  return <SearchInstrument />
-} 
+
+  return (
+    <Suspense fallback={<Loading />}>
+      <ServerSideComponent />
+    </Suspense>
+  )
+
+}

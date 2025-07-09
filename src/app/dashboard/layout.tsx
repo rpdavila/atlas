@@ -11,7 +11,7 @@ export default async function DashboardLayout({
     permanentRedirect("/signIn");
   }
   return (
-    <article className="flex md:flex-col lg:flex-row lg:justify-center min-h-screen overflow-hidden bg-slate-700 gap-4">
+    <article className="flex md:flex-col lg:flex-row justify-center min-h-screen overflow-hidden bg-slate-700 gap-4">
       <section className="hidden md:flex lg:basis-1/4">
         <SideBar />
       </section>

@@ -1,7 +1,6 @@
 "use client";
-// react imports
-import { useMemo, useEffect, useState } from "react";
 //types
+
 import { RootState } from "@/lib/ReduxSSR/store";
 //redux imports
 import { useAppSelector } from "@/lib/ReduxSSR/hooks"
@@ -30,61 +29,37 @@ type DistrictInstrument = {
 type DistrictInstruments = DistrictInstrument[]
 
 
-export default function SearchDistrictInstruments() {
-  const session = useSession();
-  const searchField = useAppSelector((state: RootState) => state.searchOptions.search)
-  const [displayInstruments, setDisplayInstruments] = useState<DistrictInstruments | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+export default function SearchDistrictInstruments(
+  {
+    displayInstruments
+  }:
+    {
+      displayInstruments: DistrictInstruments
+    }) {
 
-  if (!session.data?.user?.id) {
-    redirect("/signIn");
-  }
-  const instrumentSearchResults = useMemo(() => {
-    if (!displayInstruments || !searchField.trim()) {
-      return displayInstruments || [];
-    }
+  // grab search field from redux
+  const searchField = useAppSelector((state: RootState) => state.searchOptions.search);
 
+  // get user search params
+  const instrumentSearchResults: DistrictInstruments = displayInstruments?.filter((instrument: DistrictInstrument | undefined) => {
+    if (!instrument || !searchField.trim()) return !!instrument;
+    // convert search term to lowercase for case-insensitive comparison
+    // and check if it matches any of the instrument's fields
     const searchTerm = searchField.toLowerCase();
-    return displayInstruments.filter((instrument) => {
-      return (
-        instrument.classification.toLowerCase().includes(searchTerm) ||
-        instrument.brand.toLowerCase().includes(searchTerm) ||
-        instrument.serialNumber.toLowerCase().includes(searchTerm) ||
-        instrument.school.name.toLowerCase().includes(searchTerm)
-      )
-    });
-  }, [displayInstruments, searchField]);
-
-  useEffect(() => {
-    const getDistrictInstruments = async () => {
-      setLoading(true);
-      try {
-        if (!session.data.user?.id) return;
-        const districtData = await getInstrumentsByDistrict(session.data.user.id)
-        if (districtData?.length) {
-          setDisplayInstruments(districtData);
-        }
-        setLoading(false);
-
-      } catch (error) {
-        setLoading(false);
-        console.error("Error fetching district instruments:", error);
-      }
-    }
-    getDistrictInstruments();
-
-  }, [session.data?.user?.id]);
+    // check if instrument matches search term in any of the fields
+    return (
+      instrument.classification.toLowerCase().includes(searchTerm) ||
+      instrument.brand.toLowerCase().includes(searchTerm) ||
+      instrument.serialNumber.toLowerCase().includes(searchTerm) ||
+      instrument.school.name.toLowerCase().includes(searchTerm)
+    )
+  })
   return (
     <section className={`flex flex-col basis-3/4 w-full items-center p-2 gap-2 h-svh`}>
       <section className="w-full md:hidden">
         <InstrumentSearchForm />
       </section>
-      {loading ? (
-        <Loading />
-      ) : (
-        <DistrictInstrumentCardList districtInstrumentSearchResults={instrumentSearchResults} />
-      )}
-
+      <DistrictInstrumentCardList districtInstrumentSearchResults={instrumentSearchResults} />
     </section>
   )
 }
