@@ -74,7 +74,7 @@ export default function Services() {
           isPressable
         >
 
-          <Image src="/images/interface.jpeg" alt="User Interface" width={500} height={400} className="rounded-md" />
+          <Image src="/images/Interface.jpeg" alt="User Interface" width={500} height={400} className="rounded-md" />
           <CardFooter className="flex flex-col justify-between before:bg-white/5 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
             <h3 className="mt-4 text-lg font-semibold text-white">User-Friendly Interface</h3>
             <p className="text-white">Enjoy a centralized dashboard with mobile access for managing inventories on the go.</p>
