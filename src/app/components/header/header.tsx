@@ -137,7 +137,7 @@ export default function Header() {
             <NavbarItem className="hidden sm:flex">
               <Button
                 className="hover:bg-sky-700 hover:text-white" color="primary" variant="flat"
-                onPress={() => signIn('google', { callbackUrl: '/dashboard' })}
+                onPress={() => signIn('google', { redirectTo: '/dashboard' })}
               >
                 Sign In
               </Button>
