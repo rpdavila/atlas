@@ -14,7 +14,7 @@ export default function Services() {
           onPress={() => router.push('/assignmentAndTracking')} // Redirect to the desired page
 
         >
-          <Image src="images/instrument_assignment_and_tracking.jpeg" alt="Instrument Assignment" width={500} height={400} className="object-cover" />
+          <Image src="/images/instrument_assignment_and_tracking.jpeg" alt="Instrument Assignment" width={500} height={400} className="object-cover" />
           <CardFooter className="flex flex-col justify-between before:bg-white/5 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
             <h3 className="mt-4 text-lg text-white font-semibold">Instrument Assignment & Tracking</h3>
             <p className='text-white'>Easily assign instruments to students and track their status and condition.</p>
