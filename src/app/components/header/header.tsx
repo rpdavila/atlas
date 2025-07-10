@@ -125,7 +125,7 @@ export default function Header() {
             <NavbarItem>
               <Button
                 className="hover:bg-sky-700 hover:text-white" color="primary" variant="flat"
-                onPress={() => signOut({ callbackUrl: '/' })}
+                onPress={() => signOut({ redirectTo: '/' })}
               >
                 Sign Out
               </Button>
