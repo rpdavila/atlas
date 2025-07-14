@@ -118,10 +118,19 @@ export default function DistrictTable({
         aria-label="District Instruments Table"
         className="hidden sm:table"
       >
-        <TableHeader columns={columns}>
-          {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
+        <TableHeader
+          columns={columns}
+          className="bg-slate-700 text-white font-semibold text-sm"
+        >
+          {(column) =>
+            <TableColumn
+              key={column.key}
+            >
+              {column.label}
+            </TableColumn>}
         </TableHeader>
-        <TableBody >
+        <TableBody
+          className="bg-slate-700">
           {filteredSchools.map((item) => (
             <TableRow
               className="hover:cursor-pointer hover:bg-slate-400 rounded-lg"

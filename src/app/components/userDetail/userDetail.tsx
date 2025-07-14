@@ -17,15 +17,30 @@ export default async function UserDetail() {
   const districtCount = typeof instrumentCountDistrict === 'number' ? instrumentCountDistrict : 0;
 
   return (
-    <section className="flex flex-col justify-evenly items-center text-2xl bg-white rounded-lg basis-3/4 sm:flex- sm:flex-wrap">
-      <h1>
-        Hello, {session.user.name}
-      </h1>
-      <section className="flex flex-col gap-4">
-        <p className="underline-offset-6 underline text-4xl">Number of instruments</p>
-        <p>Number of instruments available school wide: {schoolCount}</p>
-        <p>Number of instruments available district wide: {districtCount - schoolCount}</p>
-      </section>
+    <section className="flex flex-col justify-center items-center min-h-[60vh] bg-slate-800 rounded-lg p-8 shadow-lg border border-slate-600">
+      <div className="text-center space-y-8">
+        <h1 className="text-3xl md:text-4xl font-bold text-slate-100 mb-8">
+          Hello, {session.user.name}
+        </h1>
+        
+        <div className="bg-slate-700 rounded-lg p-6 space-y-6">
+          <h2 className="text-2xl font-semibold text-slate-200 border-b border-slate-600 pb-3">
+            Instrument Overview
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="bg-slate-600 rounded-lg p-4 text-center">
+              <dt className="text-sm font-medium text-slate-300 mb-2">School Wide Available</dt>
+              <dd className="text-3xl font-bold text-slate-100">{schoolCount}</dd>
+            </div>
+            
+            <div className="bg-slate-600 rounded-lg p-4 text-center">
+              <dt className="text-sm font-medium text-slate-300 mb-2">District Wide Available</dt>
+              <dd className="text-3xl font-bold text-slate-100">{districtCount - schoolCount}</dd>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }

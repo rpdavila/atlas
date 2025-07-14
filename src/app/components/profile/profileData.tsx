@@ -56,40 +56,39 @@ export default function ProfileData({ profile }: { profile: ProfileData }) {
   }
   return (
     <>
-      <table className="bg-slate-50 rounded-lg">
-        <tbody>
-          <tr className="border-b-small border-slate-700 rounded-lg">
-            <td>Name</td>
-            <td>{session?.data?.user?.name}</td>
-          </tr>
-          <tr className="border-b-small border-slate-700 rounded-lg">
-            <td>Email</td>
-            <td>{session?.data?.user?.email ? session.data?.user.email : "No Data"}</td>
-          </tr>
-          <tr className="border-b-small border-slate-700 rounded-lg">
-            <td>Role</td>
-            <td>{profile?.profile?.role
-              ? profile.profile.role : "No Data"}</td>
-          </tr>
-          <tr className="border-b-small border-slate-700 rounded-lg">
-            <td>School(s)</td>
-            {profile?.profile?.schools
-              ? profile?.profile?.schools.map((school, index) => {
-                return (
-                  <td key={`${index}-${school.name}`} className="border-b-small border-slate-700">
-                    {school.name}
-                  </td>
-                )
-              })
-              : (<td>{"No Data"}</td>)}
-
-          </tr>
-          <tr className="border-b-small border-slate-700 rounded-lg">
-            <td>District</td>
-            <td>{profile?.profile?.district ? profile?.profile?.district.name : "No Data"}</td>
-          </tr>
-        </tbody>
-      </table>
+      <div className="bg-slate-100 rounded-lg p-6 border border-slate-300 shadow-lg">
+        <h2 className="text-xl font-semibold text-slate-600 mb-4 border-b border-slate-600 pb-2">Profile Information</h2>
+        <dl className="space-y-4">
+          <div className="flex justify-between py-2 border-b border-slate-600">
+            <dt className="font-medium text-slate-600">Name:</dt>
+            <dd className="text-slate-600">{session?.data?.user?.name}</dd>
+          </div>
+          <div className="flex justify-between py-2 border-b border-slate-600">
+            <dt className="font-medium text-slate-600">Email:</dt>
+            <dd className="text-slate-600">{session?.data?.user?.email || "No Data"}</dd>
+          </div>
+          <div className="flex justify-between py-2 border-b border-slate-600">
+            <dt className="font-medium text-slate-600">Role:</dt>
+            <dd className="text-slate-600">{profile?.profile?.role || "No Data"}</dd>
+          </div>
+          <div className="flex justify-between py-2 border-b border-slate-600">
+            <dt className="font-medium text-slate-600">School(s):</dt>
+            <dd className="text-slate-600">
+              {profile?.profile?.schools?.length ? (
+                <ul className="space-y-1">
+                  {profile.profile.schools.map((school, index) => (
+                    <li key={`${index}-${school.name}`}>{school.name}</li>
+                  ))}
+                </ul>
+              ) : "No Data"}
+            </dd>
+          </div>
+          <div className="flex justify-between py-2">
+            <dt className="font-medium text-slate-600">District:</dt>
+            <dd className="text-slate-600">{profile?.profile?.district?.name || "No Data"}</dd>
+          </div>
+        </dl>
+      </div>
 
 
       {profile?.profile?.role && (
@@ -104,7 +103,7 @@ export default function ProfileData({ profile }: { profile: ProfileData }) {
           }}
           className="mt-4"
         >
-          <p className="text-red-500">Warning: This action is irreversible</p>
+          <p className="text-red-400 bg-red-900/20 p-3 rounded border border-red-700 mb-2">Warning: This action is irreversible</p>
         </FormWrapper>
       )}
 

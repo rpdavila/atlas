@@ -35,7 +35,7 @@ export default async function Profile() {
   })
 
   return (
-    <section className="flex flex-col basis-3/4 gap-2 m-2">
+    <section className="flex flex-col w-full gap-6 p-6 bg-slate-800 rounded-lg border border-slate-600 shadow-lg">
       {/* pass in the profile data from below as a prop */}
       {profile && <ProfileData profile={profile} />}
       {!profile?.profile?.role && <ProfileForm />}

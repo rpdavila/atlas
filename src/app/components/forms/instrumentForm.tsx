@@ -45,13 +45,9 @@ export default function InstrumentForm({
     }
   }
   return (
-    <div className="flex flex-col bg-white rounded-lg items-center w-full h-full md:h-auto mt-2 p-2">
-      <h1 className="bg-blue-500 rounded-t-lg w-full self-center text-white text-center">
-        {formTitle}
-      </h1>
-      <section className="w-full">
-        <InstrumentSearchForm />
-      </section>
+    <div className="flex flex-col bg-slate-100 rounded-lg items-center w-full h-full md:h-auto mt-2 p-2">     
+      
+      <InstrumentSearchForm />      
 
       {selectOption === "Add Instrument" && (
         <FormWrapper

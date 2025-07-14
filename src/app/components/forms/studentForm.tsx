@@ -55,15 +55,10 @@ export default function StudentForm({
     }
   }
   return (
-    <div className="flex flex-col bg-white rounded-lg items-center mt-2 w-full h-full p-2 md:h-auto">
-      <h1 className="bg-blue-500 rounded-t-lg w-full self-center text-white text-center">
-        {formTitle}
-      </h1>
-      {selectOption === "Search Student" && (
-        <section>
-          <StudentSearchForm />
-        </section>
-      )}
+    <div className="flex flex-col bg-white rounded-lg items-center mt-2 w-full h-full p-2 md:h-auto">     
+      
+      <StudentSearchForm />
+    
       {selectOption === "Add Student" && (
         <FormWrapper
           className="flex flex-col justify-center items-center w-2/3 gap-4 mt-20 sm:w-2/3 md:w-full md:mt-2"

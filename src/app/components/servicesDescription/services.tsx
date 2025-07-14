@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 export default function Services() {
   const router = useRouter()
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 w-full max-w-6xl">
+    <div className="flex flex-row flex-wrap items-stretch gap-6 mt-8 w-full justify-center">
       <div className="flex justify-center p-2">
         <Card
           className="shadow-lg w-full max-w-sm shadow-black"

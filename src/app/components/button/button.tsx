@@ -32,9 +32,9 @@ export default function Button({
     return margin? marginMap[margin] || '':  '';
   }
   const marginClass = getMarginClass(marginTop);
-  const buttonClass = `bg-blue-500 hover:bg-blue-700 text-white p-2 ${marginClass} w-full sm:w-full rounded-lg`;
-  const greyColor = `bg-gray-300 text-black p-2 ${marginClass} w-full rounded-lg`;
-  const dangerColor = `bg-red-500 hover:bg-red-700 text-white p-2 ${marginClass} w-full sm:w-full rounded-lg`;
+  const buttonClass = `bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 ${marginClass} w-full rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg`;
+  const greyColor = `bg-slate-400 text-slate-700 font-medium py-3 px-4 ${marginClass} w-full rounded-lg cursor-not-allowed`;
+  const dangerColor = `bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-4 ${marginClass} w-full rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg`;
   return (
     <button
       className={isPending ? greyColor : danger ? dangerColor : buttonClass}

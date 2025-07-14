@@ -14,7 +14,7 @@ export default function StudentSearchForm() {
     dispatch(setSearch(e.target.value));
   };
   return (
-    <section>
+    <>
       {selectOption === "Search Student" && (
         <Input
           name="search"
@@ -23,9 +23,8 @@ export default function StudentSearchForm() {
           onChange={handleChange}
           isClearable
           onClear={() => dispatch(setSearch(""))}
-          className="sm:mt-2 h-auto"
         />
       )}
-    </section>
+    </>
   );
 }

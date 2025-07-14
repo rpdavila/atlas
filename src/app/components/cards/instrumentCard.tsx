@@ -91,48 +91,67 @@ export default function InstrumentCard({ instrument, studentDropDownList }: Card
     }
   }, null)
 
-  const instrumentDetails = (
-    <section className="flex flex-col items-start mb-4">
-      <h1 className="text-2xl text-center w-full">{instrument?.classification}</h1>
-      <p>Brand: {instrument?.brand}</p>
-      <p>SN: {instrument?.serialNumber}</p>
-      <p>RentStatus: {instrument?.rentStatus}</p>
-    </section>
-  );
+
   return (
     <>
-      <Card>
-        <CardBody>
-          {instrument?.rentStatus === "Rented"
-            ? (
-              <form
-                action={(formData: FormData) => startTransition(() => formAction(formData))}>
-                <input type="hidden" name="instrumentId" value={instrument?.id} />
-                <input type="hidden" name="rentStatus" value={instrument?.rentStatus} />
-                <input type="hidden" name="studentId" value={instrument?.instrumentAssignment?.student.id} />
-                {instrumentDetails}
-                <Button name={`Unassign ${instrument.instrumentAssignment?.student.firstName} ${instrument.instrumentAssignment?.student.lastName}`} type="submit" danger={true} isPending={isPending} />
-              </form>
-            )
-            : (
-              <form
-                action={(formData: FormData) => startTransition(() => formAction(formData))}>
-                <input type="hidden" name="instrumentId" value={instrument?.id} />
-                <input type="hidden" name="rentStatus" value="Available" />
-                {instrumentDetails}
-                <Select name="student" placeholder="Select Student" isRequired className="min-w-48">
-                  {studentDropDownList.map((student) => (
-                    <SelectItem
-                      key={student?.id}
-                      textValue={`${student?.firstName} ${student?.lastName}`}
-                    >
-                      {student?.firstName} {student?.lastName}
-                    </SelectItem>
-                  ))}
-                </Select>
-                <Button name="Assign" type="submit" isPending={isPending} />
-              </form>
-            )}
+      <Card className="w-full shadow-md hover:shadow-lg transition-shadow bg-slate-800 border border-slate-600">
+        <CardBody className="p-4">
+          <div className="space-y-3">
+            <div className="border-b pb-2">
+              <h3 className="text-lg font-semibold text-slate-100">
+                {instrument?.classification}
+              </h3>
+            </div>
+
+            <dl className="space-y-2">
+              <div className="flex justify-between">
+                <dt className="text-sm font-medium text-slate-300">Brand:</dt>
+                <dd className="text-sm text-slate-100">{instrument?.brand}</dd>
+              </div>
+
+              <div className="flex justify-between">
+                <dt className="text-sm font-medium text-slate-300">Serial Number:</dt>
+                <dd className="text-sm text-slate-100 font-mono">{instrument?.serialNumber}</dd>
+              </div>
+
+              <div className="flex justify-between">
+                <dt className="text-sm font-medium text-slate-300">Status:</dt>
+                <dd className="text-sm text-slate-100">{instrument?.rentStatus}</dd>
+              </div>
+
+              <div className="flex justify-between">
+                <dt className="text-sm font-medium text-slate-300">School:</dt>
+                <dd className="text-sm text-slate-100">{instrument?.school?.name}</dd>
+              </div>
+            </dl>
+
+            <div className="pt-3 border-t">
+              {instrument?.rentStatus === "Rented" ? (
+                <form action={(formData: FormData) => startTransition(() => formAction(formData))}>
+                  <input type="hidden" name="instrumentId" value={instrument?.id} />
+                  <input type="hidden" name="rentStatus" value={instrument?.rentStatus} />
+                  <input type="hidden" name="studentId" value={instrument?.instrumentAssignment?.student.id} />
+                  <Button name={`Unassign ${instrument.instrumentAssignment?.student.firstName} ${instrument.instrumentAssignment?.student.lastName}`} type="submit" danger={true} isPending={isPending} />
+                </form>
+              ) : (
+                <form action={(formData: FormData) => startTransition(() => formAction(formData))} className="space-y-3">
+                  <input type="hidden" name="instrumentId" value={instrument?.id} />
+                  <input type="hidden" name="rentStatus" value="Available" />
+                  <Select name="student" placeholder="Select Student" isRequired className="w-full">
+                    {studentDropDownList.map((student) => (
+                      <SelectItem
+                        key={student?.id}
+                        textValue={`${student?.firstName} ${student?.lastName}`}
+                      >
+                        {student?.firstName} {student?.lastName}
+                      </SelectItem>
+                    ))}
+                  </Select>
+                  <Button name="Assign" type="submit" isPending={isPending} />
+                </form>
+              )}
+            </div>
+          </div>
         </CardBody>
       </Card>
     </>

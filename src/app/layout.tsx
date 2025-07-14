@@ -33,7 +33,7 @@ export default function RootLayout({
         <NextAuthProvider>
           <Providers>
             <Header />
-            <main className="flex flex-col justify-between h-full px-4 sm:px-6 lg:px-8 text-center bg-slate-700">
+            <main className="flex flex-col justify-between h-full px-4 sm:px-6 lg:px-8 text-center bg-slate-700 min-h-screen">
               {children}
               <Toaster
                 position="top-center"

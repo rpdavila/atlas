@@ -17,8 +17,6 @@ export default function InstrumentSearchForm() {
       {selectOption === "Search Instrument" && (
         <Input
           name="search"
-          label="Search"
-          labelPlacement="inside"
           value={searchResult}
           placeholder="Search Instrument"
           onChange={handleChange}

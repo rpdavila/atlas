@@ -16,8 +16,10 @@ export default function NoProfile() {
     return () => clearInterval(interval)
   }, [count])
   return (
-    <section className="flex items-center basis-3/4">
-      <span className="flex justify-center items-center bg-slate-50 w-full h-1/2 rounded-lg"> Redirecting you to set up your profile in {count} seconds</span>
+    <section className="flex items-center justify-center min-h-[60vh] w-full">
+      <div className="bg-slate-800 border border-slate-600 rounded-lg p-8 shadow-lg text-center">
+        <p className="text-slate-100 text-lg">Redirecting you to set up your profile in <span className="font-bold text-blue-400">{count}</span> seconds</p>
+      </div>
     </section>
   )
 }

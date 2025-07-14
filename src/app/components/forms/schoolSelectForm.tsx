@@ -14,13 +14,13 @@ export default function SchoolSelectForm({ schools }: { schools: { id: string, n
   return (
     <>
       <form
-        className="bg-slate-50 rounded-lg w-full p-2"
+        className="bg-slate-100 rounded-lg w-full p-4 border border-slate-600"
       >
         {schools
           ? (<RadioGroup
             name="school"
             label="Select a school"
-            className="text-medium "
+            className="text-slate-600"
             onChange={handleChange}
             defaultValue={`${selectedSchool}`}
           >
@@ -28,12 +28,13 @@ export default function SchoolSelectForm({ schools }: { schools: { id: string, n
               <Radio
                 key={school.id}
                 value={school.name}
+                className="text-slate-600"
               >
                 {school.name}
               </Radio>
             ))}
           </RadioGroup>
-          ) : <p>No schools found</p>}
+          ) : <p className="text-slate-200">No schools found</p>}
       </form>
     </>
   )

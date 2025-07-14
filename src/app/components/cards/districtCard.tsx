@@ -28,20 +28,44 @@ export default function DistrictCard({ districtInstrumentSearchResults }: { dist
   );
 
   if (filteredSchools.length === 0) {
-    return <p>No instruments available from other schools</p>;
+    return <p className="text-slate-200 text-center py-8">No instruments available from other schools</p>;
   }
 
   return (
     // Map through the districtInstrumentSearchResults and create a card for each instrument
     <>
       {filteredSchools.map((instrument) => (
-        <Card key={instrument?.id} className="m-2 sm:hidden">
-          <CardBody>
-            <h3 className="text-lg font-semibold">{instrument?.classification}</h3>
-            <p>Brand: {instrument?.brand}</p>
-            <p>Serial Number: {instrument?.serialNumber}</p>
-            <p>School: {instrument?.school.name}</p>
-            <p>Status: {instrument?.rentStatus}</p>
+        <Card key={instrument?.id} className="sm:hidden w-full shadow-md hover:shadow-lg transition-shadow bg-slate-800 border border-slate-600">
+          <CardBody className="p-4">
+            <div className="space-y-3">
+              <div className="border-b pb-2">
+                <h3 className="text-lg font-semibold text-slate-100">
+                  {instrument?.classification}
+                </h3>
+              </div>
+
+              <dl className="space-y-2">
+                <div className="flex justify-between">
+                  <dt className="text-sm font-medium text-slate-300">Brand:</dt>
+                  <dd className="text-sm text-slate-100">{instrument?.brand}</dd>
+                </div>
+
+                <div className="flex justify-between">
+                  <dt className="text-sm font-medium text-slate-300">Serial Number:</dt>
+                  <dd className="text-sm text-slate-100 font-mono">{instrument?.serialNumber}</dd>
+                </div>
+
+                <div className="flex justify-between">
+                  <dt className="text-sm font-medium text-slate-300">School:</dt>
+                  <dd className="text-sm text-slate-100">{instrument?.school.name}</dd>
+                </div>
+
+                <div className="flex justify-between">
+                  <dt className="text-sm font-medium text-slate-300">Status:</dt>
+                  <dd className="text-sm text-slate-100">{instrument?.rentStatus}</dd>
+                </div>
+              </dl>
+            </div>
           </CardBody>
         </Card>
       ))}

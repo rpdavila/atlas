@@ -25,8 +25,6 @@ export default function SelectSearchOptions({ children }: SearchOptionProps) {
     (state: RootState) => state.searchOptions.type
   );
 
-
-
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;
     dispatch(setType(value));
@@ -35,18 +33,24 @@ export default function SelectSearchOptions({ children }: SearchOptionProps) {
     if (value === "Search District") router.push("/dashboard/districtInstruments");
   }
 
-
   return (
     <>
       <div className="hidden sm:flex w-full">
         <Select
           label="Tools"
-          className="max-w-screen-xl"
+          className="w-full"
           onChange={handleChange}
+          classNames={{
+            trigger: "bg-slate-100 hover:border-slate-600",
+            label: "text-slate-600 hover:text-slate-600",
+            value: "text-slate-100",
+            popoverContent: "bg-slate-700 border-slate-600"
+          }}
         >
           {tools.map((tool) => (
             <SelectItem
               key={tool.key}
+              className="text-slate-100 hover:bg-slate-600"
             >
               {tool.label}
             </SelectItem>
