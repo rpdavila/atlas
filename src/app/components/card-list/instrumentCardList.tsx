@@ -1,6 +1,6 @@
 "use client";
 //react imports
-import { useActionState, useTransition, useMemo } from "react";
+import { useActionState, useTransition, useMemo, useEffect } from "react";
 //auth imports
 import { useSession } from "next-auth/react";
 //type imports
@@ -101,6 +101,21 @@ export default function InstrumentCardList({
       toast.error("Error processing request")
     }
   }, null)
+
+  useEffect(() => {
+    try {
+      const fetchDropDownList = async () => {
+        const userId = session.data?.user?.id;
+        const dropDownList = await getDropDownList(userId as string);
+        dispatch(setDropDownList(dropDownList));
+      }
+
+      fetchDropDownList();
+
+    } catch (error) {
+      console.error("Error fetching Drop Down List:", error);
+    }
+  }, [session.data?.user?.id]);
 
   // Use table view for larger screens, card view for mobile
   return (
