@@ -1,6 +1,5 @@
 "use client"
 import { useState } from "react"
-import Button from "@/app/components/button/button"
 import { deleteAccount } from "@/actions/actions"
 
 import { signOut, useSession, } from "next-auth/react"
@@ -103,7 +102,7 @@ export default function ProfileData({ profile }: { profile: ProfileData }) {
           }}
           className="mt-4"
         >
-          <p className="text-red-400 bg-red-900/20 p-3 rounded border border-red-700 mb-2">Warning: This action is irreversible</p>
+          <p className="text-red-700 bg-red-900/10 p-3 rounded border border-red-700 mb-2">Warning: This action is irreversible</p>
         </FormWrapper>
       )}
 
