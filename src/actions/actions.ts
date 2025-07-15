@@ -685,6 +685,9 @@ export async function getInstrumentsByDistrict(userId: string) {
       district: {
         select: {
           instruments: {
+            where: {
+              rentStatus: "Available",
+            },
             select: {
               brand: true,
               classification: true,
