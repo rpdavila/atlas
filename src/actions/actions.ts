@@ -1,13 +1,11 @@
 "use server"
-//react imports
-import { cache } from "react";
 //db imports
 import prisma from "@/lib/prisma";
 
 //nextauth imports
 import { revalidatePath } from "next/cache";
 import { signIn, signOut } from "../auth";
-import { Profile, User, Instrument, School, District } from "@/app/types/formTypes";
+import { School, District } from "@/app/types/formTypes";
 import { RentStatus } from "@prisma/client";
 
 
