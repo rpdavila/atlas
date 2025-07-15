@@ -100,7 +100,7 @@ export default function Header() {
             )
           }
         </NavbarContent>
-        <NavbarContent className={session?.user ? "md:hidden" : "hidden"} justify="center">
+        <NavbarContent className={session?.user ? "sm:hidden" : "hidden"} justify="center">
           <NavbarItem>
             <Dropdown>
               <DropdownTrigger>
