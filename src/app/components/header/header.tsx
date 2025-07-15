@@ -57,7 +57,7 @@ export default function Header() {
   }, [dispatch, pathName])
   return (
     <header className="bg-slate-900 border-b border-slate-700 w-full">
-      <Navbar onMenuOpenChange={setIsMenuOpen} className="bg-slate-900">
+      <Navbar onMenuOpenChange={setIsMenuOpen} className="bg-slate-100">
         <NavbarContent>
           <NavbarMenuToggle
             aria-label={isMenuOpen ? "close menu" : "open menu"}
@@ -104,7 +104,7 @@ export default function Header() {
           <NavbarItem>
             <Dropdown>
               <DropdownTrigger>
-                <Button variant="bordered" className="text-slate-300">Tools</Button>
+                <Button variant="bordered" className="text-slate-600">Tools</Button>
               </DropdownTrigger>
               <DropdownMenu
                 onAction={handleChange}

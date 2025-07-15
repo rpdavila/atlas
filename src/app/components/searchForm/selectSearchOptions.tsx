@@ -1,6 +1,5 @@
 "use client";
-//react imports
-import React, { useState, useEffect } from "react";
+//next import
 import { usePathname, useRouter } from "next/navigation";
 
 // redux imports
@@ -44,13 +43,12 @@ export default function SelectSearchOptions({ children }: SearchOptionProps) {
             trigger: "bg-slate-100 hover:border-slate-600",
             label: "text-slate-600 hover:text-slate-600",
             value: "text-slate-100",
-            popoverContent: "bg-slate-700 border-slate-600"
+            popoverContent: "bg-slate-100 border-slate-300",
           }}
         >
           {tools.map((tool) => (
             <SelectItem
               key={tool.key}
-              className="text-slate-100 hover:bg-slate-600"
             >
               {tool.label}
             </SelectItem>

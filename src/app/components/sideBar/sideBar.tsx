@@ -54,7 +54,7 @@ export default function SideBar() {
   }, [session.data?.user?.id, dispatch])
 
   return (
-    <aside className="flex flex-col items-center p-4 rounded-lg w-full gap-4 bg-slate-800 border border-slate-600 shadow-lg">
+    <aside className="flex flex-col items-center p-4 rounded-lg w-full gap-4">
       <SelectSearchOptions>
         {getFormComponent(selectedSearchType)}
       </SelectSearchOptions>
