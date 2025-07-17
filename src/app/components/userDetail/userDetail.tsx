@@ -29,12 +29,12 @@ export default async function UserDetail() {
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-slate-600 rounded-lg p-4 text-center">
+            <div className="bg-slate-400 rounded-lg p-4 text-center">
               <dt className="text-sm font-medium text-slate-300 mb-2">School Wide Available</dt>
               <dd className="text-3xl font-bold text-slate-300">{schoolCount}</dd>
             </div>
             
-            <div className="bg-slate-600 rounded-lg p-4 text-center">
+            <div className="bg-slate-400 rounded-lg p-4 text-center">
               <dt className="text-sm font-medium text-slate-300 mb-2">District Wide Available</dt>
               <dd className="text-3xl font-bold text-slate-300">{districtCount - schoolCount}</dd>
             </div>
