@@ -1,6 +1,6 @@
 "use client"
 // react imports
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect} from "react";
 //redux imports
 import { useAppSelector } from "@/lib/ReduxSSR/hooks";
 import { RootState } from "@/lib/ReduxSSR/store";
@@ -12,6 +12,7 @@ import { useSession } from "next-auth/react";
 import StudentCardList from "../../components/card-list/studentCardList";
 import StudentSearchForm from "../forms/studentSearchForm";
 import Loading from "../loading/loading";
+import SchoolSelectForm from "../forms/schoolSelectForm";
 // actions imports`
 import { getStudentsByUserId } from "@/actions/actions";
 
@@ -48,6 +49,8 @@ export default function SearchStudents() {
   const searchField: string = useAppSelector(
     (state: RootState) => state.searchOptions.search
   );
+
+  const schoolList = useAppSelector((state: RootState) => state.userInfo.schools);
 
   const [displayStudents, setDisplayStudents] = useState<Students | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -88,8 +91,9 @@ export default function SearchStudents() {
       )
         : (
           <section className="flex flex-col w-full min-h-screen items-center p-4 gap-4">
-            <section className="w-full md:hidden">
+            <section className="flex flex-col w-full gap-2  md:hidden">
               <StudentSearchForm />
+              <SchoolSelectForm schools={schoolList} />
             </section>
             <StudentCardList studentSearchResult={studentSearchResults} />
           </section>

@@ -1,15 +1,12 @@
 "use server"
-//react imports
-import { cache } from "react";
 //db imports
 import prisma from "@/lib/prisma";
 
 //nextauth imports
 import { revalidatePath } from "next/cache";
 import { signIn, signOut } from "../auth";
-import { Profile, User, Instrument, School, District } from "@/app/types/formTypes";
+import { School, District } from "@/app/types/formTypes";
 import { RentStatus } from "@prisma/client";
-
 
 export const handleSignIn = async (provider?: (string & {}) | undefined, options?: FormData | ({
   redirectTo?: string;
@@ -422,8 +419,9 @@ export const addStudent = async (formData: FormData, userId: string,) => {
           }
         }
       });
-      revalidatePath("/searchStudent");
+      revalidatePath("/dashboard/searchStudent");
     })
+
     return { success: true, message: "Student successfully added" };
   } catch (error) {
     console.error(error);
@@ -541,7 +539,7 @@ export async function addInstrument(formData: FormData, userId: string) {
           id: true
         }
       })
-      revalidatePath("/searchInstrument")
+      revalidatePath("/dashboard/searchInstrument")
     })
     return { success: true, message: `Instrumentsuccessfully added` }
   } catch (error) {
@@ -588,8 +586,9 @@ export async function assignStudentToInstrument(formData: FormData, instrumentId
           rentStatus: RentStatus.Rented
         }
       })
-      revalidatePath("/searchInstrument")
+      revalidatePath("/dashboard/searchInstrument")
     })
+
     return { success: true, message: "Instrument successfully assigned" }
   } catch (error) {
     console.error(error)
@@ -627,7 +626,7 @@ export async function unassignStudentFromInstrument(instrumentId: string, studen
           rentStatus: RentStatus.Available
         }
       })
-      revalidatePath("/searchInstrument");
+      revalidatePath("/dashboard/searchInstrument");
     })
     return { success: true, message: "Instrument successfully unassigned" }
   } catch (error) {
@@ -824,5 +823,48 @@ export async function getAvailableInstrumentCountByDistrict(userId: string) {
   } catch (error) {
     console.error("Error retrieving number of instruments", error)
     return { success: false, message: "Failed to retrieve number of available instruments" }
+  }
+}
+
+export async function removeStudentFromCourse(formData: FormData) {
+  const studentId = formData.get("studentId") as string;
+
+  if (!studentId) {
+    return { success: false, message: "Student ID is required" };
+  }
+
+  try {
+    await prisma.$transaction(async (tx) => {
+      // Check if student has an instrument assignment
+      const assignment = await tx.instrumentAssignment.findFirst({
+        where: { studentId }
+      });
+
+      // If there's an assignment, delete it first and update instrument status
+      if (assignment) {
+        await tx.instrumentAssignment.delete({
+          where: { id: assignment.id }
+        });
+
+        // Update instrument status to Available
+        await tx.instrument.update({
+          where: { id: assignment.instrumentId },
+          data: { rentStatus: RentStatus.Available }
+        });
+      }
+
+      // Delete the student
+      await tx.student.delete({
+        where: { id: studentId }
+      });
+      revalidatePath("/searchStudent");
+    });
+    return { success: true, message: "Student deleted successfully" };
+  } catch (error) {
+    console.error("Error deleting student", error);
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : "Failed to delete student"
+    };
   }
 }

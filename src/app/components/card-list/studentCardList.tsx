@@ -4,6 +4,9 @@ import { Table, TableBody, TableRow, TableCell, TableColumn, TableHeader } from 
 import { useAppSelector } from "@/lib/ReduxSSR/hooks";
 import { RentStatus } from "@prisma/client";
 import StudentCard from "../cards/studentCard";
+import FormWrapper from "../notification/formWrapper";
+import { removeStudentFromCourse } from "@/actions/actions";
+
 
 type Student = {
   school: {
@@ -56,6 +59,10 @@ const columns = [
   {
     key: "InstrumentSerialNumber",
     label: "Instrument Serial Number"
+  },
+  {
+    key: "removeFromCourse",
+    label: "Remove From Course"
   }
 ]
 export default function StudentCardList({
@@ -86,6 +93,21 @@ export default function StudentCardList({
               <TableCell>{item.instrumentAssignment ? item.instrumentAssignment.instrument.classification : "Not Assigned"}</TableCell>
               <TableCell>{item.instrumentAssignment ? item.instrumentAssignment.instrument.school.name : "Not Assigned"}</TableCell>
               <TableCell>{item.instrumentAssignment ? item.instrumentAssignment.instrument.serialNumber : "Not Assigned"}</TableCell>
+              <TableCell>
+                <FormWrapper
+                  action={(formData: FormData) => removeStudentFromCourse(formData)}
+                  submitButton={{
+                    name: "Remove Student",
+                    type: "submit",
+                    danger: true,
+                    pendingName: "Removing Student"
+                  }}
+                >
+                  <input type="hidden" name="studentId" value={item.id} />
+                  <input type="hidden" name="instrumentId" value={item.instrumentAssignment ? item.instrumentAssignment.instrument.id : ""} />
+                </FormWrapper>
+
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

@@ -34,7 +34,7 @@ export default function FormWrapper({
     if (result.success) {
       toast.success(result.message)
     } else {
-      toast.error(result.message)
+      toast.error(result?.message)
     }
   }, null)
 

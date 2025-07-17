@@ -12,7 +12,7 @@
   "dependencies": {
     "@auth/prisma-adapter": "^2.4.2",
     "@heroui/react": "^2.7.10",
-    "@prisma/client": "^6.9.0",
+    "@prisma/client": "^6.12.0",
     "@reduxjs/toolkit": "^2.2.3",
     "@types/redux-logger": "^3.0.10",
     "framer-motion": "^12.16.0",
@@ -40,7 +40,7 @@
     "eslint-config-next": "^15.3.3",
     "eslint-plugin-security": "^3.0.1",
     "postcss": "^8.4.39",
-    "prisma": "^6.9.0",
+    "prisma": "^6.12.0",
     "tailwindcss": "^3.4.17",
     "ts-node": "^10.9.2",
     "tsx": "^4.20.0",
