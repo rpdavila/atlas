@@ -83,13 +83,12 @@ export default function InstrumentCardList({
       let response;
       if (rentStatus === "Rented") {
         response = await unassignStudentFromInstrument(instrumentId, studentId);
-        const updatedDropDownList = await getDropDownList(session.data?.user?.id as string)
-        dispatch(setDropDownList(updatedDropDownList))
       } else {
         response = await assignStudentToInstrument(formData, instrumentId);
-        const updatedDropDownList = await getDropDownList(session.data?.user?.id as string)
-        dispatch(setDropDownList(updatedDropDownList))
       }
+
+      const updatedDropDownList = await getDropDownList(session.data?.user?.id as string)
+      dispatch(setDropDownList(updatedDropDownList))
 
       if (response.success) {
         toast.success(response.message);
