@@ -18,11 +18,11 @@ export default async function AsyncServerCompnent() {
 
   if (Array.isArray(instrumentData)) {
     return <SearchInstrument displayInstruments={instrumentData} />;
-  } else {
-    return (
-      <div className="flex justify-center h-screen text-slate-50 w-full">
-        <h1 className="flex self-center text-8xl"> No instruments found</h1>
-      </div>
-    )
-  }
+  } 
+  return (
+    <div className="flex justify-center h-screen text-slate-50 w-full">
+      <h1 className="flex self-center text-8xl"> No instruments found</h1>
+    </div>
+  )  
+  
 }

@@ -12,14 +12,19 @@ import { permanentRedirect } from "next/navigation";
 
 export default async function StudentPage() {
   const session = await auth();
-
+  
+  
   if (!session?.user) {
     permanentRedirect("/signIn")
   };
 
+  const students = await getStudentsByUserId(session.user.id as string)
+  if (!students) {
+    return <div>No students found</div>
+  }
   return (
     <Suspense fallback={<Loading />}>
-      <SearchStudent />
+      <SearchStudent displayStudents={students} />
     </Suspense>
   )
 }

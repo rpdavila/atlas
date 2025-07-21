@@ -419,7 +419,7 @@ export const addStudent = async (formData: FormData, userId: string,) => {
           }
         }
       });
-      revalidatePath("/dashboard/searchStudent");
+      revalidatePath("/searchStudent");
     })
 
     return { success: true, message: "Student successfully added" };
@@ -470,7 +470,6 @@ export async function getInstrumentsByUserId(userId: string): Promise<any[] | { 
       return { success: false, message: "No instruments found for this user" }
     }
     return instruments.instruments
-
   } catch (error) {
     console.error("Failed to get instruments", error)
     return { success: false, message: "Failed to get instruments" }
@@ -849,7 +848,9 @@ export async function removeStudentFromCourse(formData: FormData) {
         // Update instrument status to Available
         await tx.instrument.update({
           where: { id: assignment.instrumentId },
-          data: { rentStatus: RentStatus.Available }
+          data: {
+            rentStatus: RentStatus.Available
+          }
         });
       }
 

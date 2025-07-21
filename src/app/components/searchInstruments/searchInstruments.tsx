@@ -37,7 +37,7 @@ type Instrument = {
   school: {
     name: string;
   };
-} | undefined
+}
 
 type InstrumentList = Instrument[]
 
@@ -94,9 +94,7 @@ export default function SearchInstrument(
         return schools
       } catch (error) {
         console.warn("User not authenticated", error)
-
       }
-
     }
     getSchools().then((schools) => {
       dispatch(setSchools({ schools: schools }));

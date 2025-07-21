@@ -73,6 +73,7 @@ export default function StudentCardList({
     return studentSearchResult.filter(student => student.school?.name === schoolName)
   }, [studentSearchResult, schoolName])
 
+
   return (
     <>
       <Table
