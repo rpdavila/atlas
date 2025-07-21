@@ -65,6 +65,7 @@ export default function StudentDropDownList({ studentDropDownList }: ComponentPr
       label="Assign Student"
       placeholder="Assign Student"
       className="max-w-lg"
+      isRequired
     >
       {studentDropDownList.map((student) => {
         return (

@@ -18,6 +18,7 @@ import { RentStatus } from "@prisma/client";
 
 // hot toast import
 import { toast } from "react-hot-toast";
+import StudentDropDownList from "../studentDropDownList/studentDropDownList";
 
 type Student = {
   id: string;
@@ -137,16 +138,7 @@ export default function InstrumentCard({ instrument, studentDropDownList }: Card
                 <form action={(formData: FormData) => startTransition(() => formAction(formData))} className="space-y-3">
                   <input type="hidden" name="instrumentId" value={instrument?.id} />
                   <input type="hidden" name="rentStatus" value="Available" />
-                  <Select name="student" placeholder="Select Student" isRequired className="w-full">
-                    {studentDropDownList.map((student) => (
-                      <SelectItem
-                        key={student?.id}
-                        textValue={`${student?.firstName} ${student?.lastName}`}
-                      >
-                        {student?.firstName} {student?.lastName}
-                      </SelectItem>
-                    ))}
-                  </Select>
+                  <StudentDropDownList studentDropDownList={studentDropDownList} />
                   <Button name="Assign" type="submit" isPending={isPending} />
                 </form>
               )}
