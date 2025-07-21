@@ -62,7 +62,6 @@ export default function StudentDropDownList({ studentDropDownList }: ComponentPr
 
     <Select
       name="student"
-      label="Assign Student"
       placeholder="Assign Student"
       className="max-w-lg"
       isRequired
