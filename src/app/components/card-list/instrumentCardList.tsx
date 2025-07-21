@@ -20,6 +20,7 @@ import { setDropDownList } from "@/lib/ReduxSSR/features/studentListSlice";
 import { getDropDownList, unassignStudentFromInstrument } from "@/actions/actions";
 import { assignStudentToInstrument } from "@/actions/actions";
 import { toast } from "react-hot-toast";
+import StudentDropDownList from "../studentDropDownList/studentDropDownList";
 
 type Instrument = {
   id: string;
@@ -132,16 +133,7 @@ export default function InstrumentCardList({
                     <form action={(formData) => startTransition(() => formAction(formData))} className="flex gap-2">
                       <input type="hidden" name="instrumentId" value={item?.id} />
                       <input type="hidden" name="rentStatus" value="Available" />
-                      <Select name="student" placeholder="Select Student" isRequired className="min-w-48">
-                        {filteredDropDownList.map((student) => (
-                          <SelectItem
-                            key={student?.id}
-                            textValue={`${student?.firstName} ${student?.lastName}`}
-                          >
-                            {student?.firstName} {student?.lastName}
-                          </SelectItem>
-                        ))}
-                      </Select>
+                      <StudentDropDownList studentDropDownList={filteredDropDownList} />
                       <Button name="Assign" type="submit" isPending={isPending} />
                     </form>
                   )}
