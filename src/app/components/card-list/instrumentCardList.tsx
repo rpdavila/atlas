@@ -103,6 +103,9 @@ export default function InstrumentCardList({
     }
   }, null)
 
+  const handleRemoveStudent = () => {
+    alert("Please add logic in action.ts file")
+  }
   if (!filteredSchools.length) {
     return (
       <>
@@ -147,7 +150,7 @@ export default function InstrumentCardList({
                   )}
                 </TableCell>
                 <TableCell>
-                  <Button name="Remove Instrument" type="submit" danger={true}/>
+                  <Button name="Remove Instrument" type="button" danger={true} onClick={() => handleRemoveStudent()}/>
                 </TableCell>
               </TableRow>
             ))}

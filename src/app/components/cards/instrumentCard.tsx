@@ -107,7 +107,7 @@ export default function InstrumentCard({ instrument, studentDropDownList }: Card
             <dl className="space-y-2">
               <div className="flex justify-between">
                 <dt className="text-sm font-medium text-slate-600">Brand:</dt>
-                <dd className="text-sm text-slate-100">{instrument?.brand}</dd>
+                <dd className="text-sm text-slate-600">{instrument?.brand}</dd>
               </div>
 
               <div className="flex justify-between">
