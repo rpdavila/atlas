@@ -8,7 +8,7 @@ import { RentStatus } from "@prisma/client";
 
 //component imports
 import InstrumentCard from "@/app/components/cards/instrumentCard"
-import { Select, SelectItem, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react"
+import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react"
 import Button from "../button/button"
 
 // redux

@@ -11,7 +11,7 @@ import ProfileData from "@/app/components/profile/profileData";
 export default async function Profile() {
   const session = await auth();
   if (!session?.user) {
-    redirect("/signIn")
+    redirect("/")
   }
   //get profile data
   const profile = await prisma.user.findUnique({

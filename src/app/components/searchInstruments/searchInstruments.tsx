@@ -88,7 +88,7 @@ export default function SearchInstrument(
   useEffect(() => {
     async function getSchools() {
       const userId = session.data?.user?.id
-      if (!userId) redirect("/signIn")
+      if (!userId) redirect("/")
       try {
         const schools = await getSchoolsByUserId(userId);
         return schools

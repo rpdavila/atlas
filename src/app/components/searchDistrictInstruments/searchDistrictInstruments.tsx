@@ -7,13 +7,6 @@ import { useAppSelector } from "@/lib/ReduxSSR/hooks"
 import InstrumentSearchForm from "../forms/instrumentSearchForm";
 import DistrictInstrumentCardList from "../card-list/districtInstrumentCardList";
 import { RentStatus } from "@prisma/client";
-// action imports
-import { getInstrumentsByDistrict } from "@/actions/actions";
-// auth imports
-import { useSession } from "next-auth/react";
-// next imports
-import { redirect } from "next/navigation";
-import Loading from "../loading/loading";
 
 type DistrictInstrument = {
   school: {

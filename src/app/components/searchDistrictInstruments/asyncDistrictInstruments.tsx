@@ -4,7 +4,7 @@ import SearchDistrictInstruments from "@/app/components/searchDistrictInstrument
 import { redirect } from "next/navigation";
 export default async function AsyncDistrictInstruments() {
   const session = await auth()
-  if (!session?.user?.id) redirect("/signIn");
+  if (!session?.user?.id) redirect("/");
   const districtData = await getInstrumentsByDistrict(session?.user?.id)
   if (districtData?.length) {
     const displayInstruments = districtData;

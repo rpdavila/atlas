@@ -1,5 +1,7 @@
 import { Card, CardBody } from "@heroui/react";
 import { RentStatus } from "@prisma/client";
+import FormWrapper from "../notification/formWrapper";
+import { removeStudentFromCourse } from "@/actions/actions";
 
 type Student = {
   school: {
@@ -61,6 +63,17 @@ export default function StudentCard({ student }: { student: Student }) {
                 </div>
               </>
             )}
+            <FormWrapper
+              action={(formData: FormData) => removeStudentFromCourse(formData)}
+              submitButton={{
+                name: "Remove Student",
+                type: "submit",
+                danger: true,
+                pendingName: "Removing Student"
+              }}
+            >
+             <input type="hidden" value={student.id}/>
+            </FormWrapper>
           </dl>
         </div>
       </CardBody>

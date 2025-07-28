@@ -11,7 +11,7 @@ export default async function InstrumentFormPageMobile() {
   // If so, redirect to the sign-in page
   // This is a server-side check, so we can use `redirect` directly
   if (!session?.user) {
-    redirect("/signIn");
+    redirect("/");
   }
 
   // Fetch the schools associated with the user

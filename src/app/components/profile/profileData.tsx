@@ -5,9 +5,6 @@ import { deleteAccount } from "@/actions/actions"
 import { signOut, useSession, } from "next-auth/react"
 import FormWrapper from "../notification/formWrapper"
 
-
-
-
 type ProfileData = {
   profile: {
     role: string;

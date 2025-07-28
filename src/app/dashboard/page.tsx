@@ -8,7 +8,7 @@ export default async function DashBoardMainPage() {
 
   const session = await auth();
   if (!session?.user) {
-    permanentRedirect("/signIn")
+    permanentRedirect("/")
   }
 
   const profile = await getUserProfile(session.user.id as string)

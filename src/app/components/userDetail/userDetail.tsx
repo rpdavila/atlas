@@ -6,7 +6,7 @@ export default async function UserDetail() {
   const session = await auth();
 
   if (!session?.user) {
-    redirect("/signIn");
+    redirect("/");
   }
 
   const instrumentCountSchoolWide = await getAvailableInstrumentCount(session.user.id as string)

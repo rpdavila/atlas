@@ -5,7 +5,7 @@ export default async function InstrumentTransfers() {
   const session = await auth();
   
   if (!session?.user) {
-    permanentRedirect("/signIn");
+    permanentRedirect("/");
   }
 
   return (

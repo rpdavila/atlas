@@ -8,7 +8,7 @@ export default async function DashboardLayout({
 }) {
   const session = await auth();
   if (!session?.user) {
-    permanentRedirect("/signIn");
+    permanentRedirect("/");
   }
   return (
     <article className="flex md:flex-col lg:flex-row min-h-screen overflow-hidden bg-slate-700 gap-4">

@@ -15,7 +15,7 @@ export default async function UserProfile() {
   const session = await auth();
   
   if (!session?.user) {
-    permanentRedirect("/signIn");
+    permanentRedirect("/");
   }
 
   return (

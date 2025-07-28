@@ -21,7 +21,7 @@ export default function ProfileForm() {
   const dispatch = useAppDispatch();
 
   if (session.status === "unauthenticated") {
-    redirect("/signIn");
+    redirect("/");
   }
 
   const handleCreateProfile = async (formData: FormData) => {

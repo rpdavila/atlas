@@ -40,7 +40,7 @@ export default function StudentForm({
   const dispatch = useAppDispatch();
 
   if (session.status === "unauthenticated") {
-    permanentRedirect("/signIn");
+    permanentRedirect("/");
   }
   const handleAddStudent = async (formData: FormData) => {
     ref.current?.reset();

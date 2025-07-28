@@ -15,7 +15,7 @@ export default async function StudentPage() {
   
   
   if (!session?.user) {
-    permanentRedirect("/signIn")
+    permanentRedirect("/")
   };
 
   const students = await getStudentsByUserId(session.user.id as string)
