@@ -72,7 +72,7 @@ export default function StudentCard({ student }: { student: Student }) {
                 pendingName: "Removing Student"
               }}
             >
-             <input type="hidden" value={student.id}/>
+             <input name="studentId" type="hidden" value={student.id}/>
             </FormWrapper>
           </dl>
         </div>

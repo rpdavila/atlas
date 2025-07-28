@@ -73,7 +73,13 @@ export default function StudentCardList({
     return studentSearchResult.filter(student => student.school?.name === schoolName)
   }, [studentSearchResult, schoolName])
 
-
+  if (!filterStudentBySchool.length) {
+    return (
+      <>
+       <h1 className="text-xl text-slate-200">No Students</h1>
+      </>
+    )
+  }
   return (
     <>
       <Table

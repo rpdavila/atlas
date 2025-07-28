@@ -134,7 +134,7 @@ export default function Header() {
 
         ) : (
           <NavbarContent justify="end">
-            <NavbarItem className="hidden sm:flex">
+            <NavbarItem className="flex">
               <Button
                 className="hover:bg-sky-700 hover:text-white" color="primary" variant="flat"
                 onPress={() => signIn('google', { redirectTo: '/dashboard' })}
@@ -173,12 +173,6 @@ export default function Header() {
                   </NavbarMenuItem>
                 )
               })}
-              <Link
-                color="danger"
-                href="/signIn"
-              >
-                Sign In
-              </Link>
             </>
           )}
         </NavbarMenu>

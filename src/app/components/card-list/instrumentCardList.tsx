@@ -61,6 +61,7 @@ export default function InstrumentCardList({
     { key: "rentStatus", label: "Status" },
     { key: "school", label: "School" },
     { key: "student", label: "Assign Student" },
+    { key: "Remove Instrument", label: "Remove Instrument"}
   ]
 
   // filter the data based on parameters
@@ -102,6 +103,13 @@ export default function InstrumentCardList({
     }
   }, null)
 
+  if (!filteredSchools.length) {
+    return (
+      <>
+       <h1 className="text-xl text-slate-200">No Instruments</h1>
+      </>
+    )
+  }
   // Use table view for larger screens, card view for mobile
   return (
     <article className="h-full w-full">
@@ -137,6 +145,9 @@ export default function InstrumentCardList({
                       <Button name="Assign" type="submit" isPending={isPending} />
                     </form>
                   )}
+                </TableCell>
+                <TableCell>
+                  <Button name="Remove Instrument" type="submit" danger={true}/>
                 </TableCell>
               </TableRow>
             ))}
