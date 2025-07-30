@@ -75,9 +75,9 @@ export default function StudentCardList({
 
   if (!filterStudentBySchool.length) {
     return (
-      <>
-       <h1 className="text-xl text-slate-200">No Students</h1>
-      </>
+      <div className="flex justify-center h-screen text-slate-50 w-full">
+        <h1 className="flex self-center text-2xl"> No students found</h1>
+      </div>
     )
   }
   return (

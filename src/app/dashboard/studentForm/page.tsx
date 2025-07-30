@@ -17,8 +17,8 @@ export default async function InstrumentFormPageMobile() {
   // Fetch the schools associated with the user
   const schools = await getSchoolsByUserId(session.user.id as string);
   return (
-    <div className="flex justify-center items-center sm:hidden">
+    <article className="flex justify-center items-center sm:hidden">
       <StudentForm formTitle="Add Student" schools={schools} />
-    </div>
+    </article>
   );
 }

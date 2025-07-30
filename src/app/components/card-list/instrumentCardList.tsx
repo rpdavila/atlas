@@ -10,6 +10,7 @@ import { RentStatus } from "@prisma/client";
 import InstrumentCard from "@/app/components/cards/instrumentCard"
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react"
 import Button from "../button/button"
+import FormWrapper from "../notification/formWrapper";
 
 // redux
 import { useAppDispatch } from "@/lib/ReduxSSR/hooks";
@@ -18,7 +19,7 @@ import { setDropDownList } from "@/lib/ReduxSSR/features/studentListSlice";
 
 //server actions
 import { getDropDownList, unassignStudentFromInstrument } from "@/actions/actions";
-import { assignStudentToInstrument } from "@/actions/actions";
+import { assignStudentToInstrument, removeInstrument } from "@/actions/actions";
 import { toast } from "react-hot-toast";
 import StudentDropDownList from "../studentDropDownList/studentDropDownList";
 
@@ -102,10 +103,7 @@ export default function InstrumentCardList({
       toast.error("Error processing request")
     }
   }, null)
-
-  const handleRemoveStudent = () => {
-    alert("Please add logic in action.ts file")
-  }
+  
   if (!filteredSchools.length) {
     return (
       <>
@@ -125,7 +123,7 @@ export default function InstrumentCardList({
           <TableBody>
             {filteredSchools.map((item: Instrument) => (
               <TableRow
-                key={item?.id as string} className="hover:bg-slate-100"
+                key={item?.id} className="hover:bg-slate-100"
               >
                 <TableCell>{item?.classification}</TableCell>
                 <TableCell>{item?.brand}</TableCell>
@@ -149,8 +147,18 @@ export default function InstrumentCardList({
                     </form>
                   )}
                 </TableCell>
-                <TableCell>
-                  <Button name="Remove Instrument" type="button" danger={true} onClick={() => handleRemoveStudent()}/>
+                <TableCell>                                    
+                  <FormWrapper
+                    action={async (formData: FormData) => removeInstrument(formData)}
+                    submitButton={{
+                    name: "Remove Instrument",
+                    danger: true,
+                    pendingName: "Removing Student",
+                    type: "submit"
+                    }}
+                  >
+                    <input name="instrumentId" type="hidden" value={item?.id}/>
+                  </FormWrapper>
                 </TableCell>
               </TableRow>
             ))}

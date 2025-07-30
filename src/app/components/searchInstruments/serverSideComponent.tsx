@@ -21,7 +21,7 @@ export default async function AsyncServerCompnent() {
   } 
   return (
     <div className="flex justify-center h-screen text-slate-50 w-full">
-      <h1 className="flex self-center text-8xl"> No instruments found</h1>
+      <h1 className="flex self-center text-2xl"> No instruments found</h1>
     </div>
   )  
   

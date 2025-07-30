@@ -3,9 +3,9 @@ import { useActionState, useTransition } from "react";
 
 //component imports
 import Button from "../button/button";
-import { Select, SelectItem } from "@heroui/react";
+import FormWrapper from "../notification/formWrapper";
 // server actions
-import { assignStudentToInstrument, getDropDownList, unassignStudentFromInstrument } from "@/actions/actions";
+import { assignStudentToInstrument, getDropDownList, unassignStudentFromInstrument, removeInstrument } from "@/actions/actions";
 // auth
 import { useSession } from "next-auth/react";
 //redux 
@@ -142,6 +142,19 @@ export default function InstrumentCard({ instrument, studentDropDownList }: Card
                   <Button name="Assign" type="submit" isPending={isPending} />
                 </form>
               )}
+            </div>
+            <div className="pt-3 border-t">
+              <FormWrapper
+                action={async (formData: FormData) => removeInstrument(formData)}
+                submitButton={{
+                name: "Remove Instrument",
+                danger: true,
+                pendingName: "Removing Student",
+                type: "submit"
+                }}
+              >
+                <input name="instrumentId" type="hidden" value={instrument?.id}/>
+              </FormWrapper>
             </div>
           </div>
         </CardBody>

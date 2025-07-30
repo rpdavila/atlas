@@ -869,3 +869,37 @@ export async function removeStudentFromCourse(formData: FormData) {
     };
   }
 }
+
+export async function removeInstrument(formData: FormData) {
+  const instrumentId = formData.get("instrumentId") as string;
+  
+  
+  try {
+    await prisma.$transaction(async (tx) => {
+      const response = await tx.instrumentAssignment.findUnique({
+        where:  {
+          instrumentId: instrumentId
+        }
+      }) 
+
+      if (response?.id) {
+        throw new Error("Instrument is assigned to a student cannot remove")
+      }
+
+      await tx.instrument.delete({
+        where: {
+          id: instrumentId
+        }
+      })
+      
+      revalidatePath("/searchInstrument")        
+    })
+    return {success: true, message: "Instrument removed"}
+  } catch (error) {
+    console.log(error)
+    return {
+      success: false, 
+      message: error instanceof Error? error.message: "Failed to delete instrument"
+    }
+ }  
+}
