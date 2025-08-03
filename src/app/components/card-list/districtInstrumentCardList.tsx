@@ -30,8 +30,8 @@ export default function DistrictInstrumentCardList({
   }
   return (
     <>
-      <DistrictTable districtInstrumentSearchResults={districtInstrumentSearchResults} />
-      <DistrictCard districtInstrumentSearchResults={districtInstrumentSearchResults} />
+      <DistrictTable districtInstrumentSearchResults={districtInstrumentSearchResults} data-cy="district-table" />
+      <DistrictCard districtInstrumentSearchResults={districtInstrumentSearchResults} data-cy="district-card" />
     </>
   )
 }

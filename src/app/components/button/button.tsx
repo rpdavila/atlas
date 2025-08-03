@@ -41,10 +41,11 @@ export default function Button({
       type={type}
       onClick={onClick}
       disabled={isPending}
+      data-cy={type}
     >
       <div className="flex flex-row justify-center items-center gap-2 w-auto self-center">
         {icon && icon}
-        {isPending && <Spinner data-testid="spinner" size="sm" color="primary" />}
+        {isPending && <Spinner data-cy="spinner" size="sm" color="primary" />}
         {isPending && pendingName}
         {!isPending && name}
       </div>
