@@ -104,26 +104,27 @@ export default function InstrumentCardList({
     }
   }, null)
   
-  if (!filteredSchools.length) {
-    return (
-      <>
-       <h1 className="text-xl text-slate-200">No Instruments</h1>
-      </>
-    )
-  }
+  // if (!filteredSchools.length) {
+  //   return (
+  //     <>
+  //      <h1 className="text-xl text-slate-200">No instruments found</h1>
+  //     </>
+  //   )
+  // }
   // Use table view for larger screens, card view for mobile
   return (
     <article className="h-full w-full">
       {/* Table view for larger screens */}
       <section className="hidden md:flex md:justify-center">
-        <Table aria-label="Instruments" className="w-full">
-          <TableHeader columns={columns}>
+        <Table aria-label="Instruments" className="w-full" data-cy="Table">
+          <TableHeader columns={columns} data-cy="TableHeader">
             {(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
           </TableHeader>
-          <TableBody>
+          <TableBody data-cy="TableBody">
             {filteredSchools.map((item: Instrument) => (
               <TableRow
                 key={item?.id} className="hover:bg-slate-100"
+                data-cy="table-row"
               >
                 <TableCell>{item?.classification}</TableCell>
                 <TableCell>{item?.brand}</TableCell>
@@ -169,7 +170,7 @@ export default function InstrumentCardList({
       {/* Card view for mobile */}
       <section className="flex flex-col gap-2 md:hidden ">
         {filteredSchools.length === 0 ? (
-          <div className="text-center text-gray-500 py-8">No instruments found for selected school</div>
+          <div className="sm:hidden text-center text-gray-500 py-8">No instruments found for selected school</div>
         ) : (
           filteredSchools.map((item: Instrument) => (
             <InstrumentCard

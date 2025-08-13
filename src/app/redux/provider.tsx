@@ -14,7 +14,7 @@ export function Providers(
   }: {
     children: React.ReactNode,
   }) {
-  const storeRef = useRef<AppStore>();
+  const storeRef = useRef<AppStore>(null);
   const router = useRouter();
   if (!storeRef.current) {
     // Create the store instance the first time it renders

@@ -95,7 +95,10 @@ export default function InstrumentCard({ instrument, studentDropDownList }: Card
 
   return (
     <>
-      <Card className="w-full shadow-md hover:shadow-lg transition-shadow bg-slate-100 border border-slate-600">
+      <Card 
+        className="w-full shadow-md hover:shadow-lg transition-shadow bg-slate-100 border border-slate-600"
+        data-cy="instrument-card"
+        >
         <CardBody className="p-4">
           <div className="space-y-3">
             <div className="border-b pb-2">

@@ -136,6 +136,7 @@ export default function Header() {
           <NavbarContent justify="end">
             <NavbarItem className="flex">
               <Button
+                data-cy="sign-in"
                 className="hover:bg-sky-700 hover:text-white" color="primary" variant="flat"
                 onPress={() => signIn('google', { redirectTo: '/dashboard' })}
               >
