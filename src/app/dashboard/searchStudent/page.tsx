@@ -13,7 +13,6 @@ import { permanentRedirect } from "next/navigation";
 export default async function StudentPage() {
   const session = await auth();
   
-  
   if (!session?.user) {
     permanentRedirect("/")
   };

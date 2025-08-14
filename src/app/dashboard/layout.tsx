@@ -1,15 +1,9 @@
 import SideBar from "../components/sideBar/sideBar";
-import { auth } from "@/auth";
-import { permanentRedirect } from "next/navigation";
 export default async function DashboardLayout({
   children, // will be a page or nested layout
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth();
-  if (!session?.user) {
-    permanentRedirect("/");
-  }
   return (
     <article className="flex md:flex-col lg:flex-row min-h-screen overflow-hidden bg-slate-700 gap-4">
       <section className="hidden md:flex lg:basis-1/4">

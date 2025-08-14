@@ -11,7 +11,7 @@ import AsyncDistrictInstruments from "@/app/components/searchDistrictInstruments
 export default async function DistrictInstruments() {
   const session = await auth()
   //redirect to signIn page if user is not signed in
-  if (!session?.user) redirect("signIn")
+  if (!session?.user) redirect("/")
 
   return (
     <Suspense fallback={<Loading />}>
