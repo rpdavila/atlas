@@ -1,7 +1,7 @@
 import { EmailTemplate } from '@/app/components/email-template/emailTemplate';
 import { NextRequest } from 'next/server';
+import React from 'react';
 import { Resend } from 'resend';
-
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: NextRequest) {
@@ -17,14 +17,12 @@ export async function POST(request: NextRequest) {
       from: `rafael.pietri@gmail.com`,
       to: [`rpietridavila@gmail.com`],
       subject: 'Available Instrument for transfer',
-      react: EmailTemplate(
-        {
-          receivingTeacherName: recievingTeacherName,
-          instrumentType: instrumentType,
-          serialNumber: instrumentSerialNumber,
-          senderName: sendingteacherEmail
-        }
-      ),
+      react: React.createElement(EmailTemplate, {
+        receivingTeacherName: recievingTeacherName,
+        instrumentType: instrumentType,
+        serialNumber: instrumentSerialNumber,
+        senderName: sendingteacherEmail
+      }),
     });
 
     if (error) {
