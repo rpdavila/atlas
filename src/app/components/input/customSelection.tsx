@@ -24,7 +24,7 @@ export default function Select({
         </label>
         <select
           id="select"
-          className="shadow border rounded w-60 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          className="shadow border rounded-sm w-60 py-2 px-3 text-gray-700 leading-tight focus:outline-hidden focus:shadow-outline"
           name={category}
           onChange={onChange}
         >

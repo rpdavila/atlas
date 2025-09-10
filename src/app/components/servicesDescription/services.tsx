@@ -15,7 +15,7 @@ export default function Services() {
 
         >
           <Image src="/images/instrument_assignment_and_tracking.jpeg" alt="Instrument Assignment" width={500} height={400} className="object-cover" />
-          <CardFooter className="flex flex-col justify-between before:bg-white/5 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
+          <CardFooter className="flex flex-col justify-between before:bg-white/5 border-white/20 border overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%-8px)] shadow-small ml-1 z-10">
             <h3 className="mt-4 text-lg text-white font-semibold">Instrument Assignment & Tracking</h3>
             <p className='text-white'>Easily assign instruments to students and track their status and condition.</p>
           </CardFooter>
@@ -30,7 +30,7 @@ export default function Services() {
           onPress={() => router.push('/viewingAndManagingInventory')}
         >
           <Image src="/images/inventory_management.jpeg" alt="Inventory Management" width={500} height={400} className="object-cover" />
-          <CardFooter className="flex flex-col justify-between before:bg-white/5 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
+          <CardFooter className="flex flex-col justify-between before:bg-white/5 border-white/20 border overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%-8px)] shadow-small ml-1 z-10">
             <h3 className="mt-4 text-lg text-white font-semibold">Inventory Management</h3>
             <p className="text-white">Manage classroom and view district-wide inventories with ease.</p>
           </CardFooter>
@@ -45,7 +45,7 @@ export default function Services() {
           isPressable
         >
           <Image src="/images/resourcesharing_and_collaboration.jpeg" alt="Resource Sharing" width={500} height={400} className="object-cover" />
-          <CardFooter className="flex flex-col justify-between before:bg-white/5 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
+          <CardFooter className="flex flex-col justify-between before:bg-white/5 border-white/20 border overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%-8px)] shadow-small ml-1 z-10">
             <h3 className="mt-4 text-lg text-white font-semibold">Resource Sharing & Collaboration</h3>
             <p className="text-white">Facilitate resource sharing across schools and districts.</p>
           </CardFooter>
@@ -60,7 +60,7 @@ export default function Services() {
         >
 
           <Image src="/images/analytics.jpeg" alt="Reporting and Analytics" width={500} height={400} className="object-cover" />
-          <CardFooter className="flex flex-col justify-between before:bg-white/5 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
+          <CardFooter className="flex flex-col justify-between before:bg-white/5 border-white/20 border overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%-8px)] shadow-small ml-1 z-10">
             <h3 className="mt-4 text-lg font-semibold text-white">Reporting & Analytics</h3>
             <p className="text-white">Generate detailed reports and analytics to make data-driven decisions.</p>
           </CardFooter>
@@ -74,7 +74,7 @@ export default function Services() {
           isPressable
         >
           <Image src="/images/Interface.jpeg" alt="User Interface" width={500} height={400} className="rounded-md" />
-          <CardFooter className="flex flex-col justify-between before:bg-white/5 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
+          <CardFooter className="flex flex-col justify-between before:bg-white/5 border-white/20 border overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%-8px)] shadow-small ml-1 z-10">
             <h3 className="mt-4 text-lg font-semibold text-white">User-Friendly Interface</h3>
             <p className="text-white">Enjoy a centralized dashboard with mobile access for managing inventories on the go.</p>
           </CardFooter>

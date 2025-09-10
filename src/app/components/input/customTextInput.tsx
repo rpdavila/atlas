@@ -26,7 +26,7 @@ export default function TextInput({
         {labelName}
       </label>
       <input
-        className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        className="shadow border rounded-sm w-full py-2 px-3 text-gray-700 leading-tight focus:outline-hidden focus:shadow-outline"
         type={type}
         name={name}
         value={value}
