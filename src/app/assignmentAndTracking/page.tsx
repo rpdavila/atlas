@@ -2,26 +2,26 @@ export default function AssignmentAndTracking() {
   return (
     <article className="flex flex-col place-items-start mb-5 h-full bg-slate-50 rounded-lg mt-2">
       <section className="flex flex-col justify-evenly place-items-start h-screen m-5">
-        <h3 className="text-lg underline ">
+        <h3 className="text-5xl underline ">
           <strong>Managing a Music Classroom Inventory and Assigning Instruments</strong>
         </h3>
-        <h4 className="text-xl underline">Instrument Assignment</h4>
-        <ol className="flex flex-col items-start justify-evenly">
+        <h4 className="text-2xl underline">Instrument Assignment</h4>
+        <ol className="flex flex-col items-start justify-start">
           <li>
             <strong>Login and Access:</strong>
-            A teacher logs into the Crescendo Cloud dashboard and navigates to the &quot;Student Assignments&quot; section.
+            {'A teacher logs into the Crescendo Cloud dashboard and navigates to the Student "Assignments" section.'}
           </li>
           <li>
             <strong>Student Selection:</strong>
-            Selects a student from the class roster.
+            {'Selects a student from the class roster.'}
           </li>
           <li>
             <strong>Instrument Assignment:</strong>
-            Chooses an available instrument from the classroom inventory, assigns it to the student, and sets a return date.
+            {'Chooses an available instrument from the classroom inventory, assigns it to the student, and sets a return date.'}
           </li>
           <li>
             <strong>Tracking:</strong>
-            The system updates the instruments status to &quot;Assigned&quot; and logs the assignment details, including the student&apos;s name, assignment date, and return date.
+            {'The system updates the instruments status to Assigned and logs the assignment details, including the student&apos;s name.'}
           </li>
         </ol>
 

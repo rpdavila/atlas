@@ -9,10 +9,7 @@ export default function Services() {
       <div className="flex justify-center p-2">
         <Card
           className="shadow-lg w-full max-w-sm shadow-black"
-          isFooterBlurred
-          isPressable
-          onPress={() => router.push('/assignmentAndTracking')} // Redirect to the desired page
-
+          isFooterBlurred        
         >
           <Image src="/images/instrument_assignment_and_tracking.jpeg" alt="Instrument Assignment" width={500} height={400} className="object-cover" />
           <CardFooter className="flex flex-col justify-between before:bg-white/5 border-white/20 border overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%-8px)] shadow-small ml-1 z-10">
@@ -26,8 +23,6 @@ export default function Services() {
         <Card
           className="shadow-lg w-full max-w-sm shadow-black"
           isFooterBlurred
-          isPressable
-          onPress={() => router.push('/viewingAndManagingInventory')}
         >
           <Image src="/images/inventory_management.jpeg" alt="Inventory Management" width={500} height={400} className="object-cover" />
           <CardFooter className="flex flex-col justify-between before:bg-white/5 border-white/20 border overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%-8px)] shadow-small ml-1 z-10">
@@ -42,7 +37,6 @@ export default function Services() {
           className="shadow-lg w-full max-w-sm shadow-black"
           radius='lg'
           isFooterBlurred
-          isPressable
         >
           <Image src="/images/resourcesharing_and_collaboration.jpeg" alt="Resource Sharing" width={500} height={400} className="object-cover" />
           <CardFooter className="flex flex-col justify-between before:bg-white/5 border-white/20 border overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%-8px)] shadow-small ml-1 z-10">
@@ -55,7 +49,6 @@ export default function Services() {
       <div className="flex justify-center p-2">
         <Card
           className="shadow-lg w-full max-w-sm shadow-black"
-          isPressable
           isFooterBlurred
         >
 
@@ -71,7 +64,6 @@ export default function Services() {
         <Card
           className="shadow-lg w-full max-w-sm shadow-black"
           isFooterBlurred
-          isPressable
         >
           <Image src="/images/Interface.jpeg" alt="User Interface" width={500} height={400} className="rounded-md" />
           <CardFooter className="flex flex-col justify-between before:bg-white/5 border-white/20 border overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%-8px)] shadow-small ml-1 z-10">
