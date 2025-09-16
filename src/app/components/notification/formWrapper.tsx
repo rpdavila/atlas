@@ -17,7 +17,7 @@ interface FormWrapperProps {
     onClick?: () => void
     pendingName?: string
   }
-  formRef?: React.RefObject<HTMLFormElement>
+  formRef?: React.RefObject<HTMLFormElement | null>
   className?: string
 }
 
