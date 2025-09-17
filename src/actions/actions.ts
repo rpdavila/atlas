@@ -49,7 +49,6 @@ export const createProfile = async (formData: FormData, userId: string): Promise
   let schools: Array<Omit<School, "districtId" | "district" | "instruments" | "profile" | "profileId" | "students" | "instrumentAssignments">> | null = null
   let schoolIds: Array<Omit<School, "name" | "districtId" | "district" | "instruments" | "profile" | "profileId" | "students" | "instrumentAssignments">> | null = null
   try {
-
     const response = await prisma.$transaction(async (tx) => {
       //find district
       console.log("Searching if District exists")
@@ -83,8 +82,32 @@ export const createProfile = async (formData: FormData, userId: string): Promise
           },
           districtId: districtId?.id
         },
-      })
+      })  
+      
+      // check for difference between the two arrays
+      const difference = schoolNamesArray.filter(name => !schools?.some(school => school.name === name));
+      // if difference found create the schools
+      if (difference.length > 0) {
+        console.log("Some schools not found in DB, creating schools")
+        await tx.school.createMany({
+          data: difference.map((name) => ({
+            name: name,
+            districtId: districtId?.id
+          })),
+        })
 
+        //find existing schools again if difference was found to get the ids
+        schools = await tx.school.findMany({
+          where: {
+            name: {
+              in: schoolNamesArray
+            },
+            districtId: districtId?.id
+          },
+        })  
+      }      
+
+      // map the school ids
       if (schools.length > 0) {
         schoolIds = schools.map(school => ({ id: school.id }));
       }
@@ -98,7 +121,7 @@ export const createProfile = async (formData: FormData, userId: string): Promise
             districtId: districtId?.id
           })),
         })
-      }
+      }      
 
       //find the newly created school
       if (!schools?.length) {
