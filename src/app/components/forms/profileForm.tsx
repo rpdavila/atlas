@@ -1,14 +1,17 @@
 "use client";
 //react imports
-import { useRef, useState } from "react";
+import { ChangeEvent, useRef, useState } from "react";
+//auth imports
+import { useSession } from "next-auth/react";
 //ui imports
-import { Input, Select, SelectItem } from "@heroui/react"
+import { Select, Selection, SelectItem } from "@heroui/react"
 import FormWrapper from "@/app/components/notification/formWrapper";
 // action imports
 import { createProfile } from "@/actions/actions";
 //data imports
 import { roles } from "@/app/data/roles";
-import { useSession } from "next-auth/react";
+import { schoolsData } from "@/app/data/schoolsData";
+
 // redux
 import { useAppDispatch } from "@/lib/ReduxSSR/hooks";
 import { setDistrict, setSchools } from "@/lib/ReduxSSR/features/userSlice";
@@ -19,9 +22,43 @@ export default function ProfileForm() {
   const ref = useRef<HTMLFormElement>(null);
   const session = useSession();
   const dispatch = useAppDispatch();
-
   if (session.status === "unauthenticated") {
     redirect("/");
+  }
+  
+  const [state, setStateName] = useState<string>("");
+  const [districtList, setDistrictList] = useState<{key:string, name:string}[]>([]);
+  const [schoolsList, setSchoolsList] = useState<{key:string, name:string}[]>([]);
+  const [districtName, setDistrictName] = useState<string>("");
+  const [schoolNames, setSchoolNames] = useState<string[]>([]);
+
+  function FindDistricts(state: string) {
+    const districts = schoolsData.find((data) => data.state.name === state);
+    if (!districts) return ;
+    setDistrictList(districts.state.district.map((district) => ({ key: district.key, name: district.name})));
+  }
+
+  function FindSchools(district: {
+    key: string;
+    name: string;
+    schools: {
+        key: string;
+        name: string;
+    }[] } | undefined) {
+      const schools = district?.schools.map(school => ({ key: school.key, name: school.name }));
+      if (!schools) return;
+      setSchoolsList(schools);
+  }
+
+  const handleStateSelect = (e: ChangeEvent<HTMLSelectElement>) => {
+    setStateName(e.target.value);
+    FindDistricts(e.target.value);  
+  }
+
+  const handleDistrictSelect = (e: ChangeEvent<HTMLSelectElement>) => {
+    setDistrictName(e.target.value); 
+    const district = schoolsData.find((data) => data.state.name === state)?.state.district.find((d) => d.name === e.target.value);
+    FindSchools(district);
   }
 
   const handleCreateProfile = async (formData: FormData) => {
@@ -43,7 +80,6 @@ export default function ProfileForm() {
     }
   }
 
-
   return (
     <FormWrapper
       className=" flex flex-col items-center gap-2 basis-3/4 ms:w-full"
@@ -56,35 +92,52 @@ export default function ProfileForm() {
         pendingName: "Creating Profile"
       }}
     >
-      <Input
-        label="School Name"
-        labelPlacement="inside"
-        type="text"
-        name="school/s"
-        placeholder="Enter School Name"
-        isClearable
-        isRequired
-      />
-
-      <Input
-        label="District Name"
-        labelPlacement="inside"
-        type="text"
-        name="district"
-        placeholder="Enter District Name"
-        isClearable
-        isRequired
-      />
-
-      <Input
+      <Select
         label="State Name"
         labelPlacement="inside"
-        type="text"
         name="state"
         placeholder="Enter State Name"
+        selectedKeys={[state]}
         isClearable
         isRequired
-      />
+        onChange={handleStateSelect}
+      >
+        {schoolsData.map((state) => (
+          <SelectItem key={state.state.name}>
+            {state.state.name} 
+          </SelectItem>
+        ))}
+      </Select> 
+
+      <Select
+        label="District"
+        labelPlacement="inside"
+        name="district"
+        placeholder="District"
+        items={districtList}
+        selectedKeys={[districtName]}
+        isClearable
+        isRequired
+        onChange={handleDistrictSelect}
+      >
+        {(district) => <SelectItem key={district.key}>{district.name}</SelectItem>}
+      </Select>
+
+      <Select
+        label="Schools"
+        labelPlacement="inside"
+        name="schools"
+        placeholder="Select a School or Schools"
+        selectionMode="multiple"
+        isClearable
+        isRequired
+      >
+        {schoolsList.map((school) => (
+          <SelectItem key={school.key}>
+            {school.name}
+          </SelectItem>
+        ))}
+      </Select>
 
       <Select
         label="Role"

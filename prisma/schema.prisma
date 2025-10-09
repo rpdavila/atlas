@@ -60,8 +60,9 @@ model District {
   schools     School[]
   instruments Instrument[]
   profile     Profile[]
-  profileId   String?      @unique @db.ObjectId
+  profileId   String?      @db.ObjectId
 }
+
 
 model Student {
   id                   String                @id @default(auto()) @map("_id") @db.ObjectId

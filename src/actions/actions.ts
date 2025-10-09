@@ -7,6 +7,8 @@ import { revalidatePath } from "next/cache";
 import { signIn, signOut } from "../auth";
 import { School, District } from "@/app/types/formTypes";
 import { RentStatus } from "@prisma/client";
+import { Selection } from "@heroui/react";
+import { RxAccessibility } from "react-icons/rx";
 
 export const handleSignIn = async (provider?: (string & {}) | undefined, options?: FormData | ({
   redirectTo?: string;
@@ -21,6 +23,8 @@ export const handleSignOut = async (options?: {
 } | undefined) => {
   await signOut(options);
 }
+
+
 // user Profile Actions
 export const createProfile = async (formData: FormData, userId: string): Promise<{
   success: boolean, message: string, profileData: {
@@ -36,197 +40,144 @@ export const createProfile = async (formData: FormData, userId: string): Promise
     }[];
   }
 }> => {
-  const schoolNames = formData.get("school/s") as string;
+  const schoolNames = formData.getAll("schools") as string[];
   const districtName = formData.get("district") as string;
   let role = formData.get("role") as string;
-  const state = formData.get("state") as string;
-
-  const schoolNamesArray: Array<string> = schoolNames.includes(",")
-    ? schoolNames.split(", ").map((name) => name.trim())
-    : [schoolNames];
+  const state = formData.get("state") as string; 
   role = role.charAt(0).toUpperCase() + role.slice(1);
-  let districtId: Omit<District, "name" | "state" | "schools" | "instruments" | "profile" | "profileId"> | null = null
-  let schools: Array<Omit<School, "districtId" | "district" | "instruments" | "profile" | "profileId" | "students" | "instrumentAssignments">> | null = null
-  let schoolIds: Array<Omit<School, "name" | "districtId" | "district" | "instruments" | "profile" | "profileId" | "students" | "instrumentAssignments">> | null = null
   try {
     const response = await prisma.$transaction(async (tx) => {
-      //find district
-      console.log("Searching if District exists")
-      districtId = await tx.district.findFirst({
-        where: {
-          name: districtName,
-          state: state
-        },
-        select: {
-          id: true
-        }
-      });
-
-      // if district not found create the district
-      if (!districtId?.id) {
-        console.log("District not found, creating district")
-        await tx.district.create({
-          data: {
-            name: districtName,
-            state: state
-          },
-        })
-      }
-
-      //find existing schools
-      console.log("finding schools")
-      schools = await tx.school.findMany({
-        where: {
-          name: {
-            in: schoolNamesArray
-          },
-          districtId: districtId?.id
-        },
-      })  
-      
-      // check for difference between the two arrays
-      const difference = schoolNamesArray.filter(name => !schools?.some(school => school.name === name));
-      // if difference found create the schools
-      if (difference.length > 0) {
-        console.log("Some schools not found in DB, creating schools")
-        await tx.school.createMany({
-          data: difference.map((name) => ({
-            name: name,
-            districtId: districtId?.id
-          })),
-        })
-
-        //find existing schools again if difference was found to get the ids
-        schools = await tx.school.findMany({
-          where: {
-            name: {
-              in: schoolNamesArray
-            },
-            districtId: districtId?.id
-          },
-        })  
-      }      
-
-      // map the school ids
-      if (schools.length > 0) {
-        schoolIds = schools.map(school => ({ id: school.id }));
-      }
-
-      // if no schools create the schools
-      if (!schools.length) {
-        console.log("No schools found in DB, creating schools")
-        await tx.school.createMany({
-          data: schoolNamesArray.map((name) => ({
-            name: name,
-            districtId: districtId?.id
-          })),
-        })
-      }      
-
-      //find the newly created school
-      if (!schools?.length) {
-        console.log("finding newly created schools")
-        schoolIds = await tx.school.findMany({
-          where: {
-            name: {
-              in: schoolNamesArray
-            },
-            districtId: districtId?.id
-          },
-          select: {
-            id: true
-          }
-        })
-      }
-
-      //find the newly created district if it was not found before
-      if (!districtId?.id) {
-        console.log("finding newly created district")
-        districtId = await tx.district.findFirst({
-          where: {
-            name: districtName
-          },
-          select: {
-            id: true
-          }
-        })
-      }
-
-      //get students if any
-      const studentIds = await tx.student.findMany({
-        where: {
-          school: {
-            name: {
-              in: schoolNamesArray
-            }
-          }
-        },
-        select: {
-          id: true
-        }
-      })
-
-      const instrumentIds = await tx.instrument.findMany({
-        where: {
-          school: {
-            name: {
-              in: schoolNamesArray
-            }
-          }
-        },
-        select: {
-          id: true
-        }
-      })
-
-      // create the user profile and connect all related records
-      const profileData = await tx.profile.create({
+      // create a profile
+      const profile = await tx.profile.create({
         data: {
-          role: role as string,
-          district: {
-            connect: {
-              id: districtId?.id
-            }
-          },
-          schools: {
-            connect: schoolIds ?? []
-          },
+          role: role,
           user: {
             connect: {
               id: userId
             }
-          },
-          students: {
-            connect: studentIds ?? []
-          },
-          instruments: {
-            connect: instrumentIds ?? []
           }
         },
-        // return newly created profile
         select: {
-          district: {
-            select: {
-              name: true,
+          id: true,
+        }
+      });
+
+      // Check if the district exists and update if it doesnt then district
+      const district = await tx.district.upsert({
+        where: {
+          name: districtName,
+          state: state 
+        },
+        update: {
+          profile: {
+            connect: {
+              id: profile.id
             }
-          },
-          schools: {
-            select: {
-              name: true,
-              id: true
+          }
+        },
+        create: {
+          name: districtName,
+          state: state,
+          profile: {
+            connect: {
+              id: profile.id
             }
+          }        
+        },
+        select: {
+          id: true,
+        }
+      })
+
+      // find all schools that match the school names
+     const existingSchools = await tx.school.findMany({
+        where: {
+          name: {
+            in: schoolNames
+          }
+        },
+        select: {
+          id: true,
+          name: true
+        }
+      })
+
+      // update the schools to connect to the profile and district
+      const existingSchoolNames = existingSchools.map(school => school.name)
+      existingSchools.map(async school => {
+        await tx.school.update({
+          where: {
+            id: school.id
           },
+          data: {
+            district: {
+              connect: {
+                id: district.id
+              }
+            },
+            profile: {
+              connect: {
+                id: profile.id
+              }
+            }
+          }
+        })
+      })
+      
+      // filter out the school names that dont exist
+      const newSchoolNames = schoolNames.filter(name => !existingSchoolNames.includes(name))
+
+      // create new schools if they dont exist
+      await Promise.all(newSchoolNames.map(async (schoolName) => {
+        return await tx.school.create({
+          data: {
+            name: schoolName,
+            district: {
+              connect: {
+                id: district.id
+              }
+            },
+            profile: {
+              connect: {
+                id: profile.id
+              }
+            }
+          }
+        })
+      }))
+
+      // fetch profiledata to return
+      const profileData = await tx.profile.findUnique({
+        where: {
+          id: profile.id
+        },
+        include: {
           user: {
             select: {
               email: true
             }
+          },
+          district: {
+            select: {
+              name: true
+            }
+          },
+          schools: {
+            select: {
+              id: true,
+              name: true
+            }
           }
         }
-      });
+      })
+      if (!profileData) {
+        throw new Error("Profile data not found")
+      }
+
       revalidatePath("/userProfile")
       return { profileData: profileData, success: true, message: "Profile successfully created" }
-    })
-    return response;
+    })    
+    return response
   } catch (error) {
     console.error(error);
     return { success: false, message: "Failed to create profile", profileData: { user: { email: null }, district: null, schools: [] } };
