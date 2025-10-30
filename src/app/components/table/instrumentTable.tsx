@@ -77,8 +77,6 @@ export default function DistrictTable({
         return
       }
 
-      const { teacherName, teacherEmail } = teacherData;
-
       const sendingTeacherEmail = session.data?.user?.email
       const sendingTeacherName = session.data?.user?.name
 
@@ -90,19 +88,19 @@ export default function DistrictTable({
         body: JSON.stringify({
           sendingTeacherName: sendingTeacherName,
           sendingTeacherEmail: sendingTeacherEmail,
-          recievingTeacherName: teacherName,
+          recievingTeacherName: teacherData.teacherName,
           instrumentType: instrumentType,
           instrumentSerialNumber: instrumentSerialNumber,
-          receivingTeacherEmail: teacherEmail
+          receivingTeacherEmail: teacherData.teacherEmail
         }),
       });
 
       const result = await response.json();
       if (response.ok) {
-        setEmailSent(true)
+        setEmailSent(true);
         setTimeout(() => {
-          setEmailSent(false)
-        }, 3000)
+          setEmailSent(false);
+        }, 3000);
       } else {
         console.error('Error sending email:', result.error);
       }
@@ -114,6 +112,11 @@ export default function DistrictTable({
   return (
     <>
       {emailSent && <p className="text-white text-center bg-green-800">Email Sent</p>}
+      <section
+       className=" flex justify-center items-center place-items-center bg-slate-700 p-4 rounded-md mb-4 border-1.5 border-slate-500 w-full"
+      >
+        <h2 className="text-white text-lg mb-4">Click on the row to send a request to the receiving teacher</h2>
+      </section>
       <Table
         aria-label="District Instruments Table"
         className="hidden sm:table"
@@ -133,9 +136,9 @@ export default function DistrictTable({
           className="bg-slate-700">
           {filteredSchools.map((item) => (
             <TableRow
-              className="hover:cursor-pointer hover:bg-slate-400 rounded-lg"
+              className="hover:cursor-pointer hover:bg-slate-400 rounded-lg "
               key={`${item?.id}-${item?.serialNumber}`}
-            // onClick={() => handleClick(item?.school?.name as string, item?.id as string, item?.classification as string, item?.serialNumber as string)}
+              onClick={() => handleClick(item?.school?.name as string, item?.id as string, item?.classification as string, item?.serialNumber as string)}
             >
               <TableCell>{item?.classification}</TableCell>
               <TableCell>{item?.brand}</TableCell>

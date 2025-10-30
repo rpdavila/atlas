@@ -7,21 +7,24 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export async function POST(request: NextRequest) {
   try {
     const {
-      sendingteacherEmail,
+      sendingTeacherEmail,
       recievingTeacherName,
       instrumentType,
       instrumentSerialNumber,
-      receivingTeacherEmail
+      receivingTeacherEmail,
+      sendingTeacherName
     } = await request.json()
     const { data, error } = await resend.emails.send({
-      from: `rafael.pietri@gmail.com`,
-      to: [`rpietridavila@gmail.com`],
+      from: `Crescendo Cloud <admin@crescendocloud.app>`,
+      to: [`${receivingTeacherEmail}`],
       subject: 'Available Instrument for transfer',
       react: React.createElement(EmailTemplate, {
         receivingTeacherName: recievingTeacherName,
+        receivingTeacherEmail: receivingTeacherEmail,
         instrumentType: instrumentType,
         serialNumber: instrumentSerialNumber,
-        senderName: sendingteacherEmail
+        senderName: sendingTeacherName,
+        senderEmail: sendingTeacherEmail
       }),
     });
 

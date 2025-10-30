@@ -724,7 +724,7 @@ export async function getTeacherEmailByInstrument(instrumentId: string, school: 
         userId: true
       }
     })
-
+    
     const teacherData = await prisma.user.findFirst({
       where: {
         id: userId?.userId,
@@ -734,8 +734,11 @@ export async function getTeacherEmailByInstrument(instrumentId: string, school: 
         name: true
       }
     })
+    if (!teacherData) {
+      throw new Error("Teacher data not found")
+    }
 
-    return { teacherName: teacherData?.name, teacherEmail: teacherData?.email }
+    return { teacherName: teacherData.name, teacherEmail: teacherData.email }
   } catch (error) {
     console.log("Error retrieving teacher email", error)
   }
