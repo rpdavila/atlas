@@ -20,7 +20,6 @@ export async function POST(request: NextRequest) {
       subject: 'Available Instrument for transfer',
       react: React.createElement(EmailTemplate, {
         receivingTeacherName: recievingTeacherName,
-        receivingTeacherEmail: receivingTeacherEmail,
         instrumentType: instrumentType,
         serialNumber: instrumentSerialNumber,
         senderName: sendingTeacherName,
