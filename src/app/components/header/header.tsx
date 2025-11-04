@@ -138,7 +138,7 @@ export default function Header() {
               <Button
                 data-cy="sign-in"
                 className="hover:bg-sky-700 hover:text-white" color="primary" variant="flat"
-                onPress={() => signIn()}
+                onPress={() => signIn(undefined, { callbackUrl: '/dashboard'})}
               >
                 Sign In
               </Button>
