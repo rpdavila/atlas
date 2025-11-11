@@ -10,6 +10,7 @@ export default async function InstrumentTransfers() {
 
   return (
     <>
+     {/* <InstrumentTransferList /> goes here */}
       Transfers go Here!
     </>
   )
