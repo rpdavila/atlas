@@ -1,5 +1,4 @@
 import * as React from 'react';
-
 interface EmailTemplateProps {
   receivingTeacherName: string;
   instrumentType: string;
@@ -8,13 +7,13 @@ interface EmailTemplateProps {
   senderEmail: string;
 }
 
-export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
+export const EmailTemplate = ({
   receivingTeacherName,
   instrumentType,
   serialNumber,
   senderName,
   senderEmail,
-}) => (
+}: EmailTemplateProps) => (
   <div>
     <h1>Hello, {receivingTeacherName},</h1>
     <br />

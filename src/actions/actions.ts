@@ -5,10 +5,11 @@ import prisma from "@/lib/prisma";
 //nextauth imports
 import { revalidatePath } from "next/cache";
 import { signIn, signOut } from "../auth";
-import { School, District } from "@/app/types/formTypes";
 import { RentStatus } from "@prisma/client";
-import { Selection } from "@heroui/react";
-import { RxAccessibility } from "react-icons/rx";
+import { Resend } from "resend";
+import { EmailTemplate } from "@/app/components/email-template/emailTemplate";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const handleSignIn = async (provider?: (string & {}) | undefined, options?: FormData | ({
   redirectTo?: string;

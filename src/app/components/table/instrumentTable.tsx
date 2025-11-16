@@ -16,7 +16,11 @@ import {
   TableColumn,
   TableRow,
   TableCell,
-} from "@heroui/react"
+  Button,
+  Spinner
+} from "@heroui/react";
+import Loading from "../loading/loading";
+import {toast} from "react-hot-toast";
 
 
 type DistrictInstrument = {
@@ -48,6 +52,10 @@ const columns = [
   {
     key: "school",
     label: "School"
+  },
+  { 
+    key: "Send Request",
+    label: "Send Email Request"
   }
 ]
 
@@ -57,7 +65,7 @@ export default function DistrictTable({
   districtInstrumentSearchResults: DistrictInstruments
 }) {
   const session = useSession()
-  const [emailSent, setEmailSent] = useState<boolean>(false)
+  const [sendingEmail, setSendingEmail] = useState<boolean>(false)
 
   const excludeSchools = useAppSelector(state => state.userInfo.schools).map((school: { name: string; }) => school.name)
   const filteredSchools = districtInstrumentSearchResults.filter(school =>
@@ -71,6 +79,7 @@ export default function DistrictTable({
     instrumentSerialNumber: string
   ) => {
     try {
+      setSendingEmail(true)
       const teacherData = await getTeacherEmailByInstrument(instrumentId, school)
       if (!teacherData || !teacherData.teacherEmail) {
         console.error("Teacher email not found")
@@ -97,23 +106,24 @@ export default function DistrictTable({
 
       const result = await response.json();
       if (response.ok) {
-        setEmailSent(true);
-        setTimeout(() => {
-          setEmailSent(false);
-        }, 3000);
+        setSendingEmail(false)
+        toast.success('Email sent successfully!');
       } else {
-        console.error('Error sending email:', result.error);
+        setSendingEmail(false)
+        toast.error(`Failed to send email: ${result.error}`);
       }
     } catch (error) {
-      console.log('Failed To sendEmail', error)
+      setSendingEmail(false)
+      toast.error('Failed to send email');
+    } finally {
+      setSendingEmail(false)
     }
   }
 
   return (
-    <>
-      {emailSent && <p className="text-white text-center bg-green-800">Email Sent</p>}
+    <>      
       <section
-       className=" flex justify-center items-center place-items-center bg-slate-700 p-4 rounded-md mb-4 border-1.5 border-slate-500 w-full"
+       className=" flex justify-center items-center place-items-center p-4 rounded-md mb-4 border-1.5 border-slate-500 w-full"
       >
         <h2 className="text-white text-lg mb-4">Click on the row to send a request to the receiving teacher</h2>
       </section>
@@ -136,14 +146,33 @@ export default function DistrictTable({
           className="bg-slate-700">
           {filteredSchools.map((item) => (
             <TableRow
-              className="hover:cursor-pointer hover:bg-slate-400 rounded-lg "
-              key={`${item?.id}-${item?.serialNumber}`}
-              onClick={() => handleClick(item?.school?.name as string, item?.id as string, item?.classification as string, item?.serialNumber as string)}
+              key={`${item?.id}-${item?.serialNumber}`}              
             >
               <TableCell>{item?.classification}</TableCell>
               <TableCell>{item?.brand}</TableCell>
               <TableCell>{item?.serialNumber}</TableCell>
               <TableCell>{item?.school?.name}</TableCell>
+              <TableCell>             
+                <Button
+                  type="button"
+                  name="request"
+                  isDisabled={sendingEmail}
+                  isLoading={sendingEmail}
+                  spinner={<Spinner size="sm" color="white"  />} 
+                  spinnerPlacement="start"
+                  color={sendingEmail ? "danger" : "primary"}
+                  onPress={
+                    () => handleClick(
+                      item?.school?.name as string, 
+                      item?.id as string, 
+                      item?.classification as string, 
+                      item?.serialNumber as string
+                    )}                
+                >
+                  {sendingEmail ? 'Sending...' : 'Send Request'}
+                </Button> 
+                               
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
