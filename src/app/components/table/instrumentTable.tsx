@@ -170,8 +170,7 @@ export default function DistrictTable({
                     )}                
                 >
                   {sendingEmail ? 'Sending...' : 'Send Request'}
-                </Button> 
-                               
+                </Button>                                
               </TableCell>
             </TableRow>
           ))}
