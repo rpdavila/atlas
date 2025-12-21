@@ -17,7 +17,7 @@
     "@reduxjs/toolkit": "^2.2.3",
     "@types/redux-logger": "^3.0.10",
     "framer-motion": "^12.23.12",
-    "next": "^15.3.5",
+    "next": "15.3.8",
     "next-auth": "^5.0.0-beta.29",
     "punycode": "^2.3.1",
     "punycode.js": "^2.3.1",
