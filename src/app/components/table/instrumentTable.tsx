@@ -110,6 +110,7 @@ export default function DistrictTable({
         toast.success('Email sent successfully!');
       } else {
         setSendingEmail(false)
+        console.error("Full error:", result)
         toast.error(`Failed to send email: ${result.error}`);
       }
     } catch (error) {

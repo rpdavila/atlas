@@ -1,10 +1,9 @@
 import { EmailTemplate } from '@/app/components/email-template/emailTemplate';
-import { NextRequest } from 'next/server';
-import React from 'react';
 import { Resend } from 'resend';
+
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
     const {
       sendingTeacherEmail,
@@ -14,11 +13,12 @@ export async function POST(request: NextRequest) {
       receivingTeacherEmail,
       sendingTeacherName
     } = await request.json()
+
     const { data, error } = await resend.emails.send({
       from: `Crescendo Cloud <admin@crescendocloud.app>`,
-      to: [`${receivingTeacherEmail}`],
+      to: [receivingTeacherEmail],
       subject: 'Available Instrument for transfer',
-      react: React.createElement(EmailTemplate, {
+      react: EmailTemplate({
         receivingTeacherName: recievingTeacherName,
         instrumentType: instrumentType,
         serialNumber: instrumentSerialNumber,
@@ -28,10 +28,13 @@ export async function POST(request: NextRequest) {
     });
 
     if (error) {
+      console.error('Resend error:', error)
       return Response.json({ error }, { status: 500 });
     }
+    console.error('Resend data:', data)
     return Response.json(data);
   } catch (error) {
+    console.error('Resend error:', error)
     return Response.json({ error }, { status: 500 });
   }
 }
