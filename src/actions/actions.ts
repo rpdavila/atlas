@@ -790,12 +790,20 @@ export async function getAvailableInstrumentCountByDistrict(userId: string) {
       }
     })
 
+    if (!districtId?.district?.id) {
+      return 0
+    }
+    
     const availableInstruments = await prisma.instrument.count({
       where: {
-        districtId: districtId?.district?.id,
+        school: {
+          districtId: districtId?.district?.id,
+        },
         rentStatus: "Available"
       }
     })
+
+    
     return availableInstruments
   } catch (error) {
     console.error("Error retrieving number of instruments", error)
