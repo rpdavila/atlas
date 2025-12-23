@@ -1,11 +1,12 @@
 "use client";
 import { Spinner } from "@heroui/react";
+import React from "react";
 
 type ButtonProps = {
   name: string;
   marginTop?: '1' | '2' | '4' | '8'; // restrict to valid values;
   type: "submit" | "reset" | "button";
-  onClick?: () => void;
+  onClickAction?: () => void;
   icon?: React.JSX.Element;
   danger?: boolean;
   isPending?: boolean;
@@ -16,7 +17,7 @@ export default function Button({
   name,
   type,
   marginTop,
-  onClick,
+  onClickAction,
   icon,
   danger,
   isPending,
@@ -39,7 +40,7 @@ export default function Button({
     <button
       className={isPending ? greyColor : danger ? dangerColor : buttonClass}
       type={type}
-      onClick={onClick}
+      onClick={onClickAction}
       disabled={isPending}
       data-cy={type}
     >
