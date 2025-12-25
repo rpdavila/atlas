@@ -10,7 +10,7 @@ import Image from "next/image";
 import { useAppDispatch } from "@/lib/ReduxSSR/hooks";
 import { setType } from "@/lib/ReduxSSR/features/searchOptionsSlice";
 
-//nextui components
+//heroui components
 import {
   Navbar,
   NavbarContent,
@@ -64,7 +64,7 @@ export default function Header() {
             className="md:hidden"
           />
           <NavbarBrand className="flex flex-col">
-            <Image src="/images/CrescendoCloudLogo.png" alt="Cescendo Cloud Logo" height={75} width={75}></Image>
+            <Image priority src="/images/CrescendoCloudLogo.png" alt="Cescendo Cloud Logo" height={75} width={75}></Image>
           </NavbarBrand>
 
         </NavbarContent>
@@ -138,7 +138,7 @@ export default function Header() {
               <Button
                 data-cy="sign-in"
                 className="hover:bg-sky-700 hover:text-white" color="primary" variant="flat"
-                onPress={() => signIn(undefined, { callbackUrl: '/dashboard'})}
+                onPress={() => signIn(undefined, { redirectTo: '/dashboard'})}
               >
                 Sign In
               </Button>

@@ -16,8 +16,7 @@ type DistrictInstrument = {
 
 type DistrictInstruments = Array<DistrictInstrument>
 export default function DistrictCard({ districtInstrumentSearchResults }: { districtInstrumentSearchResults: DistrictInstruments }) {
-  // Get the schools that the user is associated with from the Redux store
-  // This is used to filter out instruments that are not associated with the user's schools
+
   const userSchools = useAppSelector(state => state.userInfo.schools);
 
   const filteredSchools = useMemo(() =>
@@ -32,7 +31,6 @@ export default function DistrictCard({ districtInstrumentSearchResults }: { dist
   }
 
   return (
-    // Map through the districtInstrumentSearchResults and create a card for each instrument
     <>
       {filteredSchools.map((instrument) => (
         <Card key={instrument?.id} className="sm:hidden w-full shadow-md hover:shadow-lg transition-shadow bg-slate-100 border border-slate-600">

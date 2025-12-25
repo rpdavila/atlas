@@ -7,7 +7,7 @@ export async function POST(request: Request) {
   try {
     const {
       sendingTeacherEmail,
-      recievingTeacherName,
+      receivingTeacherName,
       instrumentType,
       instrumentSerialNumber,
       receivingTeacherEmail,
@@ -19,7 +19,7 @@ export async function POST(request: Request) {
       to: [receivingTeacherEmail],
       subject: 'Available Instrument for transfer',
       react: EmailTemplate({
-        receivingTeacherName: recievingTeacherName,
+        receivingTeacherName: receivingTeacherName,
         instrumentType: instrumentType,
         serialNumber: instrumentSerialNumber,
         senderName: sendingTeacherName,

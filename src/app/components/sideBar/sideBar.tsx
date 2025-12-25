@@ -50,7 +50,7 @@ export default function SideBar() {
       }
     };
 
-    fetchSchools();
+    void fetchSchools()
   }, [session.data?.user?.id, dispatch])
 
   return (

@@ -39,7 +39,7 @@ export default function ProfileData({ profile }: { profile: ProfileData }) {
       const response = await deleteAccount(session.data?.user?.id as string)
       if (response.success) {
         setTimeout(async () => {
-          await signOut({ redirect: true, callbackUrl: "/" })
+          await signOut({ redirect: true, redirectTo: "/" })
         }, 3000);
         return { success: response.success, message: response.message }
       }

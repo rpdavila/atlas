@@ -4,7 +4,7 @@ import { ChangeEvent, useRef, useState } from "react";
 //auth imports
 import { useSession } from "next-auth/react";
 //ui imports
-import { Select, Selection, SelectItem } from "@heroui/react"
+import { Select, SelectItem } from "@heroui/react"
 import FormWrapper from "@/app/components/notification/formWrapper";
 // action imports
 import { createProfile } from "@/actions/actions";
@@ -30,7 +30,6 @@ export default function ProfileForm() {
   const [districtList, setDistrictList] = useState<{key:string, name:string}[]>([]);
   const [schoolsList, setSchoolsList] = useState<{key:string, name:string}[]>([]);
   const [districtName, setDistrictName] = useState<string>("");
-  const [schoolNames, setSchoolNames] = useState<string[]>([]);
 
   function FindDistricts(state: string) {
     const districts = schoolsData.find((data) => data.state.name === state);

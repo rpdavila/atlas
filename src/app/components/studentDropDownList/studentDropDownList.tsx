@@ -2,11 +2,9 @@
 import { Select, SelectItem } from "@heroui/react";
 import { getDropDownList } from "@/actions/actions";
 import { useSession } from "next-auth/react";
-import { RentStatus } from "@/app/types/formTypes";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useAppDispatch } from "@/lib/ReduxSSR/hooks";
 import { setDropDownList } from "@/lib/ReduxSSR/features/studentListSlice";
-
 
 type Student = {
   id: string;
@@ -23,25 +21,25 @@ type Student = {
 
 type StudentList = Student[]
 
-type Instrument = {
-  id: string;
-  classification: string;
-  brand: string;
-  serialNumber: string;
-  rentStatus: RentStatus;
-  instrumentAssignment: {
-    id: string;
-    student: {
-      id: string;
-      firstName: string;
-      lastName: string;
-      studentIdNumber: string;
-    };
-  } | null;
-  school: {
-    name: string;
-  };
-} | undefined
+// type Instrument = {
+//   id: string;
+//   classification: string;
+//   brand: string;
+//   serialNumber: string;
+//   rentStatus: RentStatus;
+//   instrumentAssignment: {
+//     id: string;
+//     student: {
+//       id: string;
+//       firstName: string;
+//       lastName: string;
+//       studentIdNumber: string;
+//     };
+//   } | null;
+//   school: {
+//     name: string;
+//   };
+// } | undefined
 
 type ComponentProps = {
   studentDropDownList: StudentList,
@@ -49,18 +47,17 @@ type ComponentProps = {
 export default function StudentDropDownList({ studentDropDownList }: ComponentProps) {
   const session = useSession();
   const dispatch = useAppDispatch();
-  const [student, setStudent] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       const students = await getDropDownList(session.data?.user?.id as string)
       dispatch(setDropDownList(students))
     }
-    fetchData()
+    void fetchData()
   }, [dispatch, session.data?.user?.id])
   return (
-
     <Select
+      aria-label={`Select Student`}
       name="student"
       placeholder="Assign Student"
       className="max-w-lg"
@@ -69,7 +66,7 @@ export default function StudentDropDownList({ studentDropDownList }: ComponentPr
       {studentDropDownList.map((student) => {
         return (
           <SelectItem
-            onClick={() => setStudent(student?.id as string)}
+            // onClick={() => setStudent(student?.id as string)}
             key={student?.id as string}
             textValue={`${student?.firstName} ${student?.lastName}`}
           >

@@ -1,7 +1,7 @@
 "use client";
 //react
-import { useEffect, useState } from "react";
-//nextui
+import React, { useEffect } from "react";
+//heroui imports
 import { RadioGroup, Radio } from "@heroui/react";
 // redux
 import { useAppDispatch, useAppSelector } from "@/lib/ReduxSSR/hooks";

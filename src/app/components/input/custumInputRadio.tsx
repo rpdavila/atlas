@@ -1,3 +1,5 @@
+import React from "react";
+
 type CheckProps = {
   labelName: string;
   checked: boolean;

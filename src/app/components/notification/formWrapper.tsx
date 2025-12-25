@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import React, { useActionState } from "react";
 import { useTransition } from "react";
 import { toast } from "react-hot-toast";
 import Button from "@/app/components/button/button";
@@ -29,7 +29,7 @@ export default function FormWrapper({
   className,
 }: FormWrapperProps) {
   const [isPending, startTransition] = useTransition()
-  const [state, formAction] = useActionState(async (prevState: any, formData: FormData) => {
+  const [_, formAction] = useActionState(async (_prevState: any, formData: FormData) => {
     const result = await action(formData)
     if (result.success) {
       toast.success(result.message)

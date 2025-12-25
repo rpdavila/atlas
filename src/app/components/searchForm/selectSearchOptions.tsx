@@ -1,15 +1,15 @@
 "use client";
 //next import
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 // redux imports
-import { useAppSelector, useAppDispatch } from "@/lib/ReduxSSR/hooks";
-import { RootState } from "@/lib/ReduxSSR/store";
+import { useAppDispatch } from "@/lib/ReduxSSR/hooks";
 import { setType } from "@/lib/ReduxSSR/features/searchOptionsSlice";
 //component imports
 
 import { Select, SelectItem } from "@heroui/react";
 import { tools } from "@/app/data/tools";
+import React from "react";
 
 type SearchOptionProps = {
   children: React.ReactNode;
@@ -17,12 +17,9 @@ type SearchOptionProps = {
 
 export default function SelectSearchOptions({ children }: SearchOptionProps) {
   const dispatch = useAppDispatch();
-  const pathName = usePathname();
   const router = useRouter();
 
-  const selectOption = useAppSelector(
-    (state: RootState) => state.searchOptions.type
-  );
+
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;

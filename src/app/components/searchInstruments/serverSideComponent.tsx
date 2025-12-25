@@ -7,7 +7,7 @@ import { auth } from "@/auth";
 // next imports
 import { redirect } from "next/navigation";
 
-export default async function AsyncServerCompnent() {
+export default async function AsyncServerComponent() {
   const session = await auth();
   // redirect to signIn page if user is not signed in
   if (!session?.user) {

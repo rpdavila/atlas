@@ -19,7 +19,6 @@ import {
   Button,
   Spinner
 } from "@heroui/react";
-import Loading from "../loading/loading";
 import {toast} from "react-hot-toast";
 
 
@@ -38,7 +37,7 @@ type DistrictInstruments = Array<DistrictInstrument>
 
 const columns = [
   {
-    key: "classifiaction",
+    key: "classification",
     label: "Classification"
   },
   {
@@ -97,7 +96,7 @@ export default function DistrictTable({
         body: JSON.stringify({
           sendingTeacherName: sendingTeacherName,
           sendingTeacherEmail: sendingTeacherEmail,
-          recievingTeacherName: teacherData.teacherName,
+          receivingTeacherName: teacherData.teacherName,
           instrumentType: instrumentType,
           instrumentSerialNumber: instrumentSerialNumber,
           receivingTeacherEmail: teacherData.teacherEmail
@@ -122,12 +121,7 @@ export default function DistrictTable({
   }
 
   return (
-    <>      
-      <section
-       className=" flex justify-center items-center place-items-center p-4 rounded-md mb-4 border-1.5 border-slate-500 w-full"
-      >
-        <h2 className="text-white text-lg mb-4">Click on the row to send a request to the receiving teacher</h2>
-      </section>
+    <>
       <Table
         aria-label="District Instruments Table"
         className="hidden sm:table"
