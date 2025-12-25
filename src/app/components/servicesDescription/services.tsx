@@ -1,9 +1,7 @@
 "use client";
 
 import { Card, CardFooter, Image } from "@heroui/react";
-import { useRouter } from 'next/navigation';
 export default function Services() {
-  const router = useRouter()
   return (
     <div className="flex flex-row flex-wrap items-stretch gap-6 mt-8 w-full justify-center">
       <div className="flex justify-center p-2">

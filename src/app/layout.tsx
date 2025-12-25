@@ -10,7 +10,7 @@ import Header from "./components/header/header";
 import { NextAuthProvider } from "./nextAuthProvider/nextAuthProvider";
 import { Link } from "@heroui/react";
 
-import { Toaster, toast } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,6 +28,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <title>Crescendo Cloud</title>
       </head>
       <body className={inter.className} suppressHydrationWarning={true}>
         <NextAuthProvider>

@@ -1,3 +1,5 @@
+import React from "react";
+
 type SelectProps = {
   category: string;
   options: Object | string[] | number[];

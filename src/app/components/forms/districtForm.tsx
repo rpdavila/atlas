@@ -1,16 +1,16 @@
 //react
-import { useEffect } from "react";
+import React, {useEffect} from "react";
 //components
-import { Checkbox } from "@heroui/react"
-import { useAppSelector, useAppDispatch } from "@/lib/ReduxSSR/hooks";
+import {Checkbox} from "@heroui/react"
+import {useAppDispatch, useAppSelector} from "@/lib/ReduxSSR/hooks";
 // server actions
-import { getDistrictFromUserId } from "@/actions/actions";
-//redux 
-import { setDistrict, } from "@/lib/ReduxSSR/features/userSlice"
-import { setDistrictSearch } from "@/lib/ReduxSSR/features/searchOptionsSlice";
+import {getDistrictFromUserId} from "@/actions/actions";
+//redux
+import {setDistrict,} from "@/lib/ReduxSSR/features/userSlice"
+import {setDistrictSearch} from "@/lib/ReduxSSR/features/searchOptionsSlice";
 // session
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import {useSession} from "next-auth/react";
+import {useRouter} from "next/navigation";
 
 export default function DistrictForm() {
   const dispatch = useAppDispatch();
@@ -35,8 +35,7 @@ export default function DistrictForm() {
       const userId = session.data?.user?.id;
       if (!userId) return;
       try {
-        const data = await getDistrictFromUserId(userId)
-        return data
+        return await getDistrictFromUserId(userId)
       } catch (error) {
         console.error(error)
         return null

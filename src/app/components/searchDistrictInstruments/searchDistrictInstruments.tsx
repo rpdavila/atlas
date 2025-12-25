@@ -35,11 +35,8 @@ export default function SearchDistrictInstruments(
 
   // get user search params
   const instrumentSearchResults: DistrictInstruments = displayInstruments?.filter((instrument: DistrictInstrument | undefined) => {
-    if (!instrument || !searchField.trim()) return !!instrument;
-    // convert search term to lowercase for case-insensitive comparison
-    // and check if it matches any of the instrument's fields
+    if (!instrument || !searchField.trim()) return !!instrument
     const searchTerm = searchField.toLowerCase();
-    // check if instrument matches search term in any of the fields
     return (
       instrument.classification.toLowerCase().includes(searchTerm) ||
       instrument.brand.toLowerCase().includes(searchTerm) ||

@@ -1,4 +1,5 @@
 import SideBar from "../components/sideBar/sideBar";
+import React from "react";
 export default async function DashboardLayout({
   children, // will be a page or nested layout
 }: {

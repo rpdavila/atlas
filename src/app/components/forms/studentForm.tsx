@@ -7,11 +7,10 @@ import { useAppSelector, useAppDispatch } from "@/lib/ReduxSSR/hooks";
 
 //component imports
 import { Input, Select, SelectItem } from "@heroui/react";
-import Button from "../button/button";
 import FormWrapper from "../notification/formWrapper";
 //hooks imports
 import StudentSearchForm from "./studentSearchForm";
-//sesison import
+//session import
 import { useSession } from "next-auth/react";
 //server actions
 import { addStudent, getDropDownList } from "@/actions/actions";
@@ -29,11 +28,7 @@ type StudentFormProps = {
   schools: School[];
 }
 
-export default function StudentForm({
-  formTitle,
-  schools
-}: StudentFormProps) {
-
+export default function StudentForm({schools}: StudentFormProps) {
   const ref = useRef<HTMLFormElement>(null)
   const selectOption = useAppSelector((state) => state.searchOptions.type);
   const session = useSession();

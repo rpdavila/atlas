@@ -5,7 +5,7 @@ import React, { useRef } from "react";
 //redux imports
 import { useAppSelector } from "@/lib/ReduxSSR/hooks";
 
-//compOnent imports
+//component imports
 import { Input, Select, SelectItem } from "@heroui/react";
 import InstrumentSearchForm from "./instrumentSearchForm";
 import { RentStatus } from "@/app/types/formTypes";
@@ -19,13 +19,9 @@ type School = {
   id: string;
 }
 
-export default function InstrumentForm({
-  formTitle,
-  schools
-}: {
+export default function InstrumentForm({schools}: {
   formTitle: string
   schools: School[]
-
 }) {
   const ref = useRef<HTMLFormElement>(null)
   const selectOption = useAppSelector(state => state.searchOptions.type)

@@ -42,7 +42,7 @@ type Students = Student[]
 export default function SearchStudents({ displayStudents }: { displayStudents: Students }) {
 
   let studentSearchResults: Students = [];
-  //grab searchfield
+  //grab search field
   const searchField: string = useAppSelector(
     (state: RootState) => state.searchOptions.search
   );

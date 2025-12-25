@@ -1,22 +1,22 @@
 "use client";
 //react import
-import { useMemo, useEffect } from "react";
+import {useEffect, useMemo} from "react";
 // next import
-import { redirect } from "next/navigation";
+import {redirect} from "next/navigation";
 //redux imports
-import { useAppSelector, useAppDispatch } from "@/lib/ReduxSSR/hooks";
-import { RootState } from "@/lib/ReduxSSR/store";
-import { setSchools } from "@/lib/ReduxSSR/features/userSlice";
+import {useAppDispatch, useAppSelector} from "@/lib/ReduxSSR/hooks";
+import {RootState} from "@/lib/ReduxSSR/store";
+import {setSchools} from "@/lib/ReduxSSR/features/userSlice";
 // types
-import { RentStatus } from "@prisma/client";
-import { useSession } from "next-auth/react";
+import {RentStatus} from "@prisma/client";
+import {useSession} from "next-auth/react";
 //component imports
 import InstrumentCardList from "@/app/components/card-list/instrumentCardList";
 import InstrumentSearchForm from "../forms/instrumentSearchForm";
 import SchoolSelectForm from "../forms/schoolSelectForm";
 
 // server actions
-import { getSchoolsByUserId } from "@/actions/actions";
+import {getSchoolsByUserId} from "@/actions/actions";
 
 
 type Instrument = {
@@ -49,7 +49,7 @@ export default function SearchInstrument(
   }) {
   const session = useSession()
   const dispatch = useAppDispatch();
-  // grab searchfield
+  // grab search field
   const searchField = useAppSelector(
     (state: RootState) => state.searchOptions.search
   );
@@ -90,8 +90,7 @@ export default function SearchInstrument(
       const userId = session.data?.user?.id
       if (!userId) redirect("/")
       try {
-        const schools = await getSchoolsByUserId(userId);
-        return schools
+        return await getSchoolsByUserId(userId)
       } catch (error) {
         console.warn("User not authenticated", error)
       }

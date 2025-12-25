@@ -11,7 +11,7 @@ export default async function SearchInstrumentPage() {
   const session = await auth()
   if (!session?.user) {
     redirect("/")
-  };
+  }
 
   return (
     <Suspense fallback={<Loading />}>
