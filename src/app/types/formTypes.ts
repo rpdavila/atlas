@@ -116,12 +116,6 @@ interface Session {
   updatedAt: Date
 }
 
-interface VerificationToken {
-  id: string
-  identifier: string
-  token: string
-  expires: Date
-}
 
 interface Authenticator {
   credentialID: string

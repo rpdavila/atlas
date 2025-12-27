@@ -2,7 +2,7 @@ import React from "react";
 
 type SelectProps = {
   category: string;
-  options: Object | string[] | number[];
+  options: object | string[] | number[];
   onChange: React.ChangeEventHandler;
   label?: string;
   placeHolder?: string;

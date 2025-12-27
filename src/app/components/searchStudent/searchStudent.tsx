@@ -49,7 +49,7 @@ export default function SearchStudents({ displayStudents }: { displayStudents: S
 
   const schoolList = useAppSelector((state: RootState) => state.userInfo.schools);
 
-  if (!!displayStudents) {
+  if (displayStudents) {
     studentSearchResults = displayStudents?.filter((student: Student) => {
       return (
         student?.firstName.includes(searchField) ||
