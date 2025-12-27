@@ -108,7 +108,7 @@ export const createProfile = async (formData: FormData, userId: string): Promise
 
       // create new schools if they don't exist
       await Promise.all(newSchoolNames.map(async (schoolName) => {
-        return await tx.school.create({
+        return tx.school.create({
           data: {
             name: schoolName,
             district: {
@@ -122,7 +122,7 @@ export const createProfile = async (formData: FormData, userId: string): Promise
               }
             }
           }
-        })
+        });
       }))
 
       // fetch profile data to return
@@ -163,7 +163,7 @@ export const createProfile = async (formData: FormData, userId: string): Promise
 }
 
 export const getSchoolsByUserId = async (userId: string) => {
-  return await prisma.school.findMany({
+  return prisma.school.findMany({
     where: {
       profile: {
         userId: userId
@@ -173,21 +173,21 @@ export const getSchoolsByUserId = async (userId: string) => {
       name: true,
       id: true
     }
-  })
+  });
 }
 
 export async function getUserProfile(userId: string) {
-  return await prisma.user.findFirst({
+  return prisma.user.findFirst({
     where: {
       id: userId
     },
     select: {
       profile: true
     }
-  })
+  });
 }
 export async function getDistrictFromUserId(userId: string) {
-  return await prisma.user.findFirst({
+  return prisma.user.findFirst({
     where: {
       id: userId
     },
@@ -202,7 +202,7 @@ export async function getDistrictFromUserId(userId: string) {
         }
       }
     }
-  })
+  });
 }
 // student actions
 export const getStudentsByUserId = async (userId: string) => {
@@ -255,7 +255,7 @@ export const addStudent = async (formData: FormData, userId: string,) => {
 
   try {
     await prisma.$transaction(async (tx) => {
-      const userProfile = await tx.profile.findUnique({
+      const profile = await tx.profile.findUnique({
         where: {
           userId: userId
         },
@@ -272,43 +272,31 @@ export const addStudent = async (formData: FormData, userId: string,) => {
         }
       });
 
-      if (!userProfile?.id) {
+      if (!profile) {
         throw new Error("Profile not found");
       }
 
-      if (!userProfile.schools?.length) {
+      const [school]= profile.schools;
+      if (!school) {
         throw new Error("School not found for user");
       }
-      const student = await tx.student.create({
+      await tx.student.create({
         data: {
           firstName: firstName,
           lastName: lastName,
           studentIdNumber: studentIdNumber,
           school: {
             connect: {
-              id: userProfile.schools[0].id
-            }
-          }
-        },
-        select: {
-          id: true
-        }
-      });
-
-      await tx.profile.update({
-        where: {
-          id: userProfile.id
-        },
-        data: {
-          students: {
-            connect: {
-              id: student.id
-            }
+              id: school.id
+            },
+          },
+          Profile: {
+            connect: {id: profile.id}
           }
         }
       });
-      revalidatePath("/searchStudent");
     })
+    revalidatePath("/searchStudent");
 
     return { success: true, message: "Student successfully added" };
   } catch (error) {
@@ -318,7 +306,7 @@ export const addStudent = async (formData: FormData, userId: string,) => {
 }
 
 // Instrument Actions
-export async function getInstrumentsByUserId(userId: string): Promise<any[] | { success: boolean; message: string }> {
+export async function getInstrumentsByUserId(userId: string) {
   try {
     const instruments = await prisma.profile.findUnique({
       where: {
@@ -366,77 +354,81 @@ export async function getInstrumentsByUserId(userId: string): Promise<any[] | { 
 }
 
 export async function addInstrument(formData: FormData, userId: string) {
-  const classification = formData.get("classification") as string;
-  const brand = formData.get("brand") as string;
-  const serialNumber = formData.get("serialNumber") as string;
-  const rentStatus = formData.get("rentStatus") as RentStatus;
-  const schoolId = formData.get("schoolId") as string;
-  console.log("Form Data is: ", classification, brand, serialNumber, rentStatus, schoolId)
-  if (!classification || !brand || !serialNumber || !rentStatus || !schoolId) {
-    return { success: false, message: "Missing required Fields" }
-  }
-  try {
+  const classification = formData.get("classification");
+  const brand = formData.get("brand");
+  const serialNumber = formData.get("serialNumber");
+  const rentStatus = formData.get("rentStatus");
+  const schoolId = formData.get("schoolId");
 
+  if (
+    typeof classification !== "string" ||
+    typeof brand !== "string" ||
+    typeof serialNumber !== "string" ||
+    typeof rentStatus !== "string" ||
+    typeof schoolId !== "string"
+  ) {
+    return { success: false, message: "Missing or invalid required fields" };
+  }
+
+  try {
     await prisma.$transaction(async (tx) => {
-      const userProfile = await tx.profile.findUnique({
+      const profile = await tx.profile.findUnique({
         where: { userId },
         select: {
+          id: true,
           schools: {
             where: { id: schoolId },
             select: { id: true }
           },
           district: {
             select: { id: true }
-          },
-          id: true
-        },
-      })
-      console.log("User Profile is: ", userProfile?.schools, userProfile?.district)
-      if (!userProfile?.schools?.length) {
-        throw new Error("School not found for user")
+          }
+        }
+      });
+
+      if (!profile) {
+        throw new Error("Profile not found");
       }
 
-      if (!userProfile.district?.id) {
-        throw new Error("District not Found for user")
+      const [school] = profile.schools;
+      if (!school) {
+        throw new Error("School not found for user");
+      }
+
+      if (!profile.district?.id) {
+        throw new Error("District not found for user");
       }
 
       await tx.instrument.create({
         data: {
-          classification: classification,
-          brand: brand,
-          serialNumber: serialNumber,
-          rentStatus: rentStatus,
+          classification,
+          brand,
+          serialNumber,
+          rentStatus: rentStatus as RentStatus,
           school: {
-            connect: {
-              id: userProfile.schools[0].id
-            }
+            connect: { id: school.id }
           },
           district: {
-            connect: {
-              id: userProfile.district.id
-            }
+            connect: { id: profile.district.id }
           },
           Profile: {
-            connect: {
-              id: userProfile.id
-            }
+            connect: { id: profile.id }
           }
-        },
-        select: {
-          id: true
         }
-      })
-      revalidatePath("/dashboard/searchInstrument")
-    })
-    return { success: true, message: `Instrument successfully added` }
+      });
+    });
+    revalidatePath("/dashboard/searchInstrument");
+
+    return { success: true, message: "Instrument successfully added" };
   } catch (error) {
-    console.error("Failed to add instrument", error)
+    console.error("Failed to add instrument", error);
     return {
       success: false,
       message: error instanceof Error ? error.message : "Failed to add instrument"
-    }
+    };
   }
 }
+
 
 export async function assignStudentToInstrument(formData: FormData, instrumentId: string) {
   const studentId = formData.get("student") as string;
@@ -673,7 +665,7 @@ export async function getAvailableInstrumentCount(userId: string) {
       }
     })
 
-    const schoolIds = schoolId?.schools.map((school: { id: any; }) => school.id);
+    const schoolIds = schoolId?.schools.map((school) => school.id);
 
     if (!schoolIds || schoolIds.length === 0) {
       return 0
