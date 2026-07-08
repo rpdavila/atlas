@@ -75,12 +75,14 @@ export default function InstrumentCardList({
     return safeDropDownList.filter(student => student?.school?.name === schoolName)
   }, [dropDownList, schoolName]);
   // Use table view for larger screens, card view for mobile
+
   const [isPending, startTransition] = useTransition()
 
-  const [state, formAction] = useActionState(async (prevState: any, formData: FormData) => {
-    const instrumentId = formData.get("instrumentId") as string;
-    const studentId = formData.get("studentId") as string;
-    const rentStatus = formData.get("rentStatus") as RentStatus;
+  const [, formAction] = useActionState(
+    async (_: void | null, formData: FormData) => {
+      const instrumentId = formData.get("instrumentId") as string;
+      const studentId = formData.get("studentId") as string;
+      const rentStatus = formData.get("rentStatus") as RentStatus;
 
     try {
       let response;
@@ -103,7 +105,7 @@ export default function InstrumentCardList({
       toast.error("Error processing request")
     }
   }, null)
-  
+
   // if (!filteredSchools.length) {
   //   return (
   //     <>
@@ -137,18 +139,24 @@ export default function InstrumentCardList({
                       <input type="hidden" name="instrumentId" value={item?.id} />
                       <input type="hidden" name="rentStatus" value={item?.rentStatus} />
                       <input type="hidden" name="studentId" value={item?.instrumentAssignment?.student.id} />
-                      <Button name={`Unassign ${item.instrumentAssignment?.student.firstName} ${item.instrumentAssignment?.student.lastName}`} type="submit" danger={true} isPending={isPending} />
+                      <Button 
+                        name={`Unassign ${item.instrumentAssignment?.student.firstName} ${item.instrumentAssignment?.student.lastName}`} 
+                        pendingName="Unassigning Student"
+                        type="submit" 
+                        danger={true} 
+                        isPending={isPending} 
+                      />
                     </form>
                   ) : (
                     <form action={(formData) => startTransition(() => formAction(formData))} className="flex gap-2">
                       <input type="hidden" name="instrumentId" value={item?.id} />
                       <input type="hidden" name="rentStatus" value="Available" />
                       <StudentDropDownList studentDropDownList={filteredDropDownList} />
-                      <Button name="Assign" type="submit" isPending={isPending} />
+                      <Button name="Assign" pendingName="Assigning Student" type="submit" isPending={isPending} />
                     </form>
                   )}
                 </TableCell>
-                <TableCell>                                    
+                <TableCell>
                   <FormWrapper
                     action={async (formData: FormData) => removeInstrument(formData)}
                     submitButton={{
