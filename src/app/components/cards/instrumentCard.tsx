@@ -1,23 +1,16 @@
 "use client";
-import { useActionState, useTransition } from "react";
-
 //component imports
 import Button from "../button/button";
 import FormWrapper from "../notification/formWrapper";
 // server actions
-import { assignStudentToInstrument, getDropDownList, unassignStudentFromInstrument, removeInstrument } from "@/actions/actions";
-// auth
-import { useSession } from "next-auth/react";
-//redux 
-import { useAppDispatch } from "@/lib/ReduxSSR/hooks";
-import { setDropDownList } from "@/lib/ReduxSSR/features/studentListSlice";
+import { removeInstrument } from "@/actions/actions";
+//hooks
+import { useInstrumentAssignmentAction } from "@/lib/hooks/useInstrumentAssignmentAction";
 import { Card, CardBody } from "@heroui/react";
 
-//type 
+//type
 import { RentStatus } from "@prisma/client";
 
-// hot toast import
-import { toast } from "react-hot-toast";
 import StudentDropDownList from "../studentDropDownList/studentDropDownList";
 
 type Student = {
@@ -62,36 +55,7 @@ type CardProps = {
 };
 
 export default function InstrumentCard({ instrument, studentDropDownList }: CardProps) {
-  const session = useSession()
-  const dispatch = useAppDispatch();
-  const [isPending, startTransition] = useTransition()
-  const [state, formAction] = useActionState(async (prevState: any, formData: FormData) => {
-    const instrumentId = formData.get("instrumentId") as string;
-    const studentId = formData.get("studentId") as string;
-    const rentStatus = formData.get("rentStatus") as RentStatus;
-
-    try {
-      let response;
-      if (rentStatus === "Rented") {
-        response = await unassignStudentFromInstrument(instrumentId, studentId);
-      } else {
-        response = await assignStudentToInstrument(formData, instrumentId);
-      }
-
-      const updatedDropDownList = await getDropDownList(session.data?.user?.id as string)
-      dispatch(setDropDownList(updatedDropDownList))
-
-      if (response.success) {
-        toast.success(response.message);
-      } else {
-        toast.error(response.message);
-      }
-    } catch (error) {
-      console.error("Error:", error)
-      toast.error("Error processing request")
-    }
-  }, null)
-
+  const { handleAssignmentAction, isPending } = useInstrumentAssignmentAction();
 
   return (
     <>
@@ -131,14 +95,14 @@ export default function InstrumentCard({ instrument, studentDropDownList }: Card
 
             <div className="pt-3 border-t">
               {instrument?.rentStatus === "Rented" ? (
-                <form action={(formData: FormData) => startTransition(() => formAction(formData))}>
+                <form action={handleAssignmentAction}>
                   <input type="hidden" name="instrumentId" value={instrument?.id} />
                   <input type="hidden" name="rentStatus" value={instrument?.rentStatus} />
                   <input type="hidden" name="studentId" value={instrument?.instrumentAssignment?.student.id} />
                   <Button name={`Unassign ${instrument.instrumentAssignment?.student.firstName} ${instrument.instrumentAssignment?.student.lastName}`} type="submit" danger={true} isPending={isPending} />
                 </form>
               ) : (
-                <form action={(formData: FormData) => startTransition(() => formAction(formData))} className="space-y-3">
+                <form action={handleAssignmentAction} className="space-y-3">
                   <input type="hidden" name="instrumentId" value={instrument?.id} />
                   <input type="hidden" name="rentStatus" value="Available" />
                   <StudentDropDownList studentDropDownList={studentDropDownList} />
